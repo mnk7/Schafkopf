@@ -14,6 +14,8 @@ public class Karte {
 	public enum farbe {EICHEL, GRAS, HERZ, SCHELLEN};
 	public enum wert {NEUN, ZEHN, KONIG, SAU, UNTER, OBER};
 	
+	private int[] punkte = {0, 10, 4, 11, 2, 3};
+	
 	private farbe f;
 	
 	private wert w;
@@ -42,6 +44,14 @@ public class Karte {
 	 */
 	public wert gibWert() {
 		return w;
+	}
+	
+	/**
+	 * Gibt den Punktewert der Karte zurück
+	 * @return Punkte
+	 */
+	public int gibPunkte() {
+		return punkte[w.ordinal()];
 	}
 
 }
