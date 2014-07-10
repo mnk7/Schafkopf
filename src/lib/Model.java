@@ -53,6 +53,26 @@ public class Model {
 	}
 	
 	/**
+	 * Erstellt ein Model aus übergebenen Daten (client)
+	 * @param spielerhand
+	 * @param tisch
+	 * @param letzerStich
+	 * @param punkte
+	 **/
+	public Model(ArrayList< ArrayList<Karte> > spielerhand, Karte[] tisch, Karte[] letzterStich, ArrayList<Integer> punkte) {
+		
+		kartendeck = new ArrayList<Karte>();
+		
+		this.spielerhand = spielerhand;
+		
+		this.tisch = tisch;
+		
+		this.letzterStich = letzterStich;
+		
+		this.punkte = punkte;
+	}
+	
+	/**
 	 * Erstellt alle Karten
 	 */
 	private void initKarten() {
@@ -146,6 +166,20 @@ public class Model {
 			
 		} else
 			throw new Exception("Der Spieler besitzt diese Karte nicht!");
+		
+		return spielerhand.get(spielerID);
+	}
+	
+	/**
+	 * Karte vom Tisch zurücknehmen
+	 * @param spielerID
+	 * @return Die aktuelle Hand des Spielers
+	 **/
+	public ArrayList<Karte> undo(int spielerID) {
+		//Gibt dem Spieler seine Karte wieder zurück
+		//Wichtig für Prüfung der Legalität eines Spielzugs
+		spielerhand.get(spielerID).add(tisch[spielerID]);
+		tisch[spielerID] = null;
 		
 		return spielerhand.get(spielerID);
 	}
