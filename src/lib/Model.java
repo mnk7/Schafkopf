@@ -54,14 +54,19 @@ public class Model {
 	
 	/**
 	 * Erstellt ein Model aus übergebenen Daten (client)
+	 * @param kartendeck
 	 * @param spielerhand
 	 * @param tisch
 	 * @param letzerStich
 	 * @param punkte
 	 **/
-	public Model(ArrayList< ArrayList<Karte> > spielerhand, Karte[] tisch, Karte[] letzterStich, ArrayList<Integer> punkte) {
+	public Model(ArrayList<Karte> kartendeck, 
+			ArrayList< ArrayList<Karte> > spielerhand,
+			Karte[] tisch,
+			Karte[] letzterStich,
+			ArrayList<Integer> punkte) {
 		
-		kartendeck = new ArrayList<Karte>();
+		this.kartendeck = kartendeck;
 		
 		this.spielerhand = spielerhand;
 		
