@@ -1,5 +1,7 @@
 package server;
 
+import lib.Netzwerk;
+
 public class Server {
         
         //hält alle 4 Spieler, ob Bot oder Mensch
