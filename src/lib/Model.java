@@ -60,13 +60,14 @@ public class Model {
 	 * @param letzerStich
 	 * @param punkte
 	 **/
-	public Model(ArrayList<Karte> kartendeck, 
+	public Model(
 			ArrayList< ArrayList<Karte> > spielerhand,
 			Karte[] tisch,
 			Karte[] letzterStich,
 			ArrayList<Integer> punkte) {
 		
-		this.kartendeck = kartendeck;
+		kartendeck = new ArrayList<Karte>();
+		initKarten();
 		
 		this.spielerhand = spielerhand;
 		
