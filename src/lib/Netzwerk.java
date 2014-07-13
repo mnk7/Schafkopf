@@ -1,6 +1,7 @@
 package lib;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -24,8 +25,10 @@ public abstract class Netzwerk {
 	/**
 	 * Sendet ein Model, bzw nicht die Karten der anderen Spieler
 	 * @param model
+	 * @throws IOException 
+	 * @throws NumberFormatException 
 	 */
-	public void senden(Model model) {
+	public void senden(Model model) throws NumberFormatException, IOException {
 		
 		//Speichert das Model
 		this.model = model;

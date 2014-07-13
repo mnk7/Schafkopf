@@ -33,7 +33,14 @@ public class Netzwerk extends lib.Netzwerk{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+	}
+	
+	/**
+	 * Sendet Antworten z.B. ob geklopft wird, oder was gespielt wird
+	 * @param modus
+	 */
+	public void answer(String modus) {
+		out.write(modus);
 	}
 
 }

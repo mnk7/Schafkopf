@@ -10,7 +10,7 @@ import java.net.Socket;
 
 public class Netzwerk extends lib.Netzwerk{
 	
-	public Netzwerk(int port) {
+	public Netzwerk(int port) throws Exception {
 		
 		//Verbindungsinformationen
 		this.port = port;
@@ -25,9 +25,17 @@ public class Netzwerk extends lib.Netzwerk{
 			in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new Exception("Verbindung mit Client fehlgeschlagen");
 		}
-		
+	}
+	
+	/**
+	 * frägt nach Antworten des Clients
+	 * @return
+	 * @throws IOException
+	 */
+	public String answer() throws IOException {
+		return in.readLine();
 	}
 
 }

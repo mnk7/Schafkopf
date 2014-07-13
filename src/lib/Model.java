@@ -11,6 +11,10 @@ import java.util.Random;
 
 public class Model {
 	
+	//Die verschiedenen Spielmodi
+	public enum modus {SAUSPIEL, HOCHZEIT, WENZ, GEIER,
+		SOLOeichel, SOLOgras, SOLOherz, SOLOschellen, SI};
+	
 	//Alle 24 Karten
 	private ArrayList<Karte> kartendeck;
 	
