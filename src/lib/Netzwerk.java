@@ -10,7 +10,7 @@ public abstract class Netzwerk {
 	protected int spielerID;
 	
 	//Addresse des Clients
-	protected InetAddress address;
+	protected String ip;
 	//Port am Client
 	protected int port;
 	

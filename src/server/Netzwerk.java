@@ -10,17 +10,16 @@ import java.net.Socket;
 
 public class Netzwerk extends lib.Netzwerk{
 	
-	public Netzwerk(InetAddress address, int port) {
+	public Netzwerk(int port) {
 		
 		//Verbindungsinformationen
-		this.address = address;
 		this.port = port;
 		
 		try {
 			//Erstellen eines Servers -> Input
 			ServerSocket server = new ServerSocket(port);
 			//Erstellen eines Clients -> Output
-			Socket client = new Socket(address, port);
+			Socket client = server.accept();
 			
 			out = new PrintWriter(client.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(client.getInputStream()));
