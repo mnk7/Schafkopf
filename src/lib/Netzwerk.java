@@ -150,4 +150,21 @@ public abstract class Netzwerk {
 		
 		return model;
 	}
+	
+	/**
+	 * frägt nach Antworten des Clients
+	 * @return
+	 * @throws IOException
+	 */
+	public String getAnswer() throws IOException {
+		return in.readLine();
+	}
+	
+	/**
+	 * Sendet Antworten z.B. ob geklopft wird, oder was gespielt wird
+	 * @param modus
+	 */
+	public void send(String modus) {
+		out.write(modus);
+	}
 }

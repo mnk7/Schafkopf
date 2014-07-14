@@ -28,15 +28,5 @@ public class Netzwerk extends lib.Netzwerk{
 			throw new Exception("Verbindung mit Client fehlgeschlagen");
 		}
 	}
-	
-	/**
-	 * frägt nach Antworten des Clients
-	 * @return
-	 * @throws IOException
-	 */
-	public String answer() throws IOException {
-		return in.readLine();
-	}
-
 }
 

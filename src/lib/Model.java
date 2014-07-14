@@ -12,8 +12,17 @@ import java.util.Random;
 public class Model {
 	
 	//Die verschiedenen Spielmodi
-	public enum modus {SAUSPIEL, HOCHZEIT, WENZ, GEIER,
-		SOLOeichel, SOLOgras, SOLOherz, SOLOschellen, SI};
+	public enum modus {
+		SAUSPIELeichel, SAUSPIELgras, SAUSPIELherz, SAUSPIELschellen,
+		HOCHZEIT,
+		GEIER,
+		WENZ,
+		SOLOeichel, SOLOgras, SOLOherz, SOLOschellen,
+		GEIERdu,
+		WENZdu,
+		SOLOeichelDU, SOLOgrasDU, SOLOherzDU, SOLOschellenDU,
+		SI
+	};
 	
 	//Alle 24 Karten
 	private ArrayList<Karte> kartendeck;
@@ -220,5 +229,36 @@ public class Model {
 	public Karte[] gibLetztenStich(){
 		return letzterStich;
 	}
+	
+	/**
+     * Stellt fest, wer spielt
+     * @param m1
+     * @param m2
+     * @return
+     */
+    public modus werSpielt(modus m1, modus m2) {
+    	//Ist einer der Modi null wird der andere zurückgegeben
+    	if(m1 == null) return m2;
+    	if(m2 == null) return m1;
+    	
+    	int nr1 = m1.ordinal();
+    	int nr2 = m2.ordinal();
+    	
+    	//stellt alle Sauspiele und Hochzeiten gleich
+    	if(nr1 < 5) nr1 = 0;
+    	if(nr2 < 5) nr2 = 0;
+    	
+    	//stellt alle Solos gleich
+    	if(nr1 > 6 && nr1 < 11) nr1 = 7;
+    	if(nr2 > 6 && nr2 < 11) nr2 = 7;
+    	
+    	//stellt alle SoloDu's gleich
+    	if(nr1 > 12 && nr1 < 17) nr1 = 13;
+    	if(nr2 > 12 && nr2 < 17) nr2 = 13;
+    	
+    	//Nur wenn der zweite Modus besser ist wird dieser zurückgegeben
+    	if(nr1 < nr2) return m1;
+    	else return m2;
+    }
 	
 }

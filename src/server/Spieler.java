@@ -6,6 +6,7 @@
 package server;
 
 import lib.Model;
+import lib.Model.modus;
 
 public interface Spieler {
 	
@@ -29,5 +30,12 @@ public interface Spieler {
 	 * @return
 	 */
 	public Model.modus spielstDu(Model model);
+	
+	/**
+	 * Übergibt den Spielern den Modus und fragt nach Kontra
+	 * @param m
+	 * @return Kontra
+	 */
+	public String modus(modus m);
 
 }

@@ -29,7 +29,7 @@ public class Mensch implements Spieler {
 		try {
 			netzwerk.senden(model);
 			//horcht nach der Antwort
-			return netzwerk.answer();
+			return netzwerk.getAnswer();
 		} catch(Exception e) {
 			return null;
 		}
@@ -44,7 +44,8 @@ public class Mensch implements Spieler {
 			//Empfangen des veränderten Models
 			m = netzwerk.empfangen();
 		} catch(Exception e) {
-			error(e);
+			e.printStackTrace();
+			m = null;
 		}
 		return m;
 	}
@@ -55,22 +56,27 @@ public class Mensch implements Spieler {
 		
 		try {
 			netzwerk.senden(model);
-			antwort = netzwerk.answer();
+			antwort = netzwerk.getAnswer();
+			
 			//Gibt den Spielmodus zurück, falls gespielt wird
 			return modus.valueOf(antwort);
 		} catch(Exception e) {
-			error(e);
+			e.printStackTrace();
 		}
 		//ansonsten wird nichts gespielt
 		return null;
 	}
-	
-	/**
-	 * Behandelt Fehler, die beim Verbindungsaufbau zustandekommen
-	 * @param e
-	 */
-	private void error(Exception e) {
-		e.printStackTrace();
+
+	public String modus(lib.Model.modus m) {
+		//Sendet den Modus
+		netzwerk.send(m.toString());
+		
+		//gibt zurück, ob Kontra gegeben wurde
+		try {
+			return netzwerk.getAnswer();
+		} catch(Exception e) {
+			return null;
+		}
 	}
 
 }
