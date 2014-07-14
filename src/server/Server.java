@@ -32,6 +32,7 @@ public class Server {
         Regelwahl regelwahl;
         
         private int spielt;
+        int mitspieler;
         
         //fragt ab, ob noch ein Spiel gemacht wird
         private boolean nocheins;
@@ -57,6 +58,7 @@ public class Server {
         	connect();
         	
         	while(nocheins) {
+
 	        	model.mischen();
 	        	model.ersteKartenGeben();
 	        	
@@ -83,6 +85,11 @@ public class Server {
 	        	
 	        	//will niemand spielen geht es zur nächsten Runde
 	        	if(mod == null) continue;
+	        	//Wenn ein Si gespielt wird
+	        	if(mod == modus.SI) {
+	        		rundeBeenden();
+	        		continue;
+	        	}
 	        	
 	        	//Sendet den Modus an alle Spieler und empfängt, ob kontra gegeben wurde
 	        	for(int i = 0; i < 4; i++) {
@@ -92,7 +99,11 @@ public class Server {
 	        		else kontra[i] = true;
 	        	}	    
 	        	
+	        	//legt die Regeln fest
 	        	regeln = regelwahl.wahl(mod);
+	        	
+	        	//bestimmt einen eventuellen Mitspieler
+	        	mitspieler = regeln.mitspieler(model);
 	        	
 	        	//Spielen
 	        	for(int i = 0; i < 6; i++) {
@@ -108,9 +119,12 @@ public class Server {
 	        		//Wenn ein Fehler aufgetreten ist
 	        		if(!nocheins) break;
 	        		
+	        		//einen Stich zuteilen
 	        		int sieger = regeln.sieger(model);
 	        		model.Stich(sieger);
 	        	}
+	        	
+	        	rundeBeenden();
 	        	
 	        	//neu Runde
 	        	naechster();
@@ -144,6 +158,17 @@ public class Server {
         	
         	//Setzt den ersten Spieler an die letzte Stelle
         	spieler[3] = s;
+        }
+        
+        /**
+         * Beendet die Runde
+         */
+        private void rundeBeenden() {
+        	for(int i = 0; i < 4; i++) {
+        		spieler[i].sieger(spielt, mitspieler);
+        	}
+        	
+        	//Den Spielern Geld abziehen oder hinzufügen
         }
 
 }

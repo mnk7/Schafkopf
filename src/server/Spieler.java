@@ -37,5 +37,10 @@ public interface Spieler {
 	 * @return Kontra
 	 */
 	public String modus(modus m);
+	
+	/**
+	 * Sendet die Sieger einer Runde
+	 */
+	public void sieger(int s1, int s2);
 
 }

@@ -29,4 +29,10 @@ public class Bot implements Spieler {
 		return null;
 	}
 
+	@Override
+	public void sieger(int s1, int s2) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

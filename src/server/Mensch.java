@@ -79,4 +79,9 @@ public class Mensch implements Spieler {
 		}
 	}
 
+	public void sieger(int s1, int s2) {
+		netzwerk.send(String.valueOf(s1));
+		netzwerk.send(String.valueOf(s2));
+	}
+
 }
