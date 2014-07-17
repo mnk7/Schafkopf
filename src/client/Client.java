@@ -1,8 +1,5 @@
 package client;
 
-import java.io.IOException;
-
-import lib.Model;
 import lib.Model.modus;
 
 import graphik.Graphik;

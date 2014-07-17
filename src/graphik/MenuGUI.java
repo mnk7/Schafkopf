@@ -1,9 +1,11 @@
 package graphik;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -30,18 +32,26 @@ public class MenuGUI extends JFrame{
 	private JButton connect;
 	private JLabel IPlabel;
 	private JLabel NAMElabel;
+	private JLabel hintergrund;
 	private JTextField IPtf;
 	private JTextField NAMEtf;
 	
+	private String logo = "./Logo.gif";
+	
 	public MenuGUI() {
 		super();
+		
+		//Grafiken einlesen
+		MenuGUI.class.getResource(logo);
 		
 		try {
 			initGUI();
 		} catch(Exception e) {
 			javax.swing.JOptionPane.showMessageDialog(null, "Fehler beim Programmstart");
+			e.printStackTrace();
 		}
 		
+		super.show();		
 	}
 	
 	/**
@@ -59,22 +69,22 @@ public class MenuGUI extends JFrame{
 		}
 	}
 	
-	private void fehler() {
-		
-	}
-	
 	/**
 	 * Erstellt die GUI
 	 */
-	public void initGUI() {
+	public void initGUI() {		
 		//Fenster
 		this.setSize(330, 150);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("SCHOAFKOPF-ÄPP");
 		this.setResizable(false);
-		//GUI.class.getResource("");
-		//ImageIcon icon = new ImageIcon(GUI.class.getResource(""));
-		//this.setIconImage(icon.getImage());
+		//this.setUndecorated(true);
+		//this.setState(ICONIFIED);
+		
+		//Icon der Anwendung setzen
+		ImageIcon icon = new ImageIcon(logo);
+		this.setIconImage(icon.getImage());
+		
 		this.setLayout(null);
 		//Lässt alles so aussehen wie im jeweiligen OS üblich
 		try {
@@ -85,41 +95,50 @@ public class MenuGUI extends JFrame{
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		
+		hintergrund = new JLabel();
+		getContentPane().add(hintergrund);
+		hintergrund.setBounds(0, 0, this.getWidth(), this.getHeight());
+		hintergrund.setVisible(true);
+		
 		//Beschriftung
 		IPlabel = new JLabel();
-		getContentPane().add(IPlabel);
+		hintergrund.add(IPlabel);
 		IPlabel.setText("IP-Adresse des Servers: ");
 		IPlabel.setBounds(10, 10, 180, 30);
 		IPlabel.setVisible(true);
 		
 		NAMElabel = new JLabel();
-		getContentPane().add(NAMElabel);
+		hintergrund.add(NAMElabel);
 		NAMElabel.setText("Name:");
 		NAMElabel.setBounds(200, 10, 120, 30);
 		NAMElabel.setVisible(true);
 		
 		//Eingabe
 		IPtf = new JTextField();
-		getContentPane().add(IPtf);
+		hintergrund.add(IPtf);
 		IPtf.setBounds(10, 50, 180, 30);
 		IPtf.setVisible(true);
 		
 		NAMEtf = new JTextField();
-		getContentPane().add(NAMEtf);
+		hintergrund.add(NAMEtf);
 		NAMEtf.setBounds(200, 50, 120, 30);
 		NAMEtf.setVisible(true);
 		
 		//Knopf
 		connect = new JButton();
-		getContentPane().add(connect);
+		hintergrund.add(connect);
 		connect.setBounds(10, 90, 310, 30);
 		connect.setText("Verbinde mit Server");
 		connect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
+				IPlabel.setForeground(Color.BLACK);
+				NAMElabel.setForeground(Color.BLACK);
 				verbinden();
 			}
 		});
 		connect.setVisible(true);
+		
+		repaint();
 	}
 
 }
