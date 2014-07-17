@@ -167,4 +167,12 @@ public abstract class Netzwerk {
 	public void send(String modus) {
 		out.write(modus);
 	}
+	
+	/**
+	 * ID des Spielers setzen
+	 * @param ID
+	 */
+	public void setID(int ID) {
+		spielerID = ID;
+	}
 }

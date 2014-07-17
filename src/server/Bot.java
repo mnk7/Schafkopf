@@ -47,4 +47,10 @@ public class Bot implements Spieler {
 		return "Bot";
 	}
 
+	@Override
+	public void setzeID(int ID) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

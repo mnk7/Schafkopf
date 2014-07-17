@@ -112,4 +112,10 @@ public class Mensch implements Spieler {
 		return name;
 	}
 
+	public void setzeID(int ID) {
+		//Steuerbefehl
+		netzwerk.send("!ID");		
+		netzwerk.send(String.valueOf(ID));
+	}
+
 }

@@ -54,5 +54,11 @@ public interface Spieler {
 	 * @return
 	 */
 	public String gibName();
+	
+	/**
+	 * Setzt vor jedem Spiel die ID der Spieler
+	 * @param ID
+	 */
+	public void setzeID(int ID);
 
 }

@@ -61,6 +61,11 @@ public class Server {
         	connect();
         	
         	while(nocheins) {
+        		
+        		//gibt jedem Spieler seine ID
+        		for(int i = 0; i < 4; i++) {
+        			spieler[i].setzeID(i);
+        		}
 
 	        	model.mischen();
 	        	model.ersteKartenGeben();

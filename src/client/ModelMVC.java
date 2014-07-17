@@ -9,14 +9,38 @@ import java.util.ArrayList;
 
 import lib.Model;
 
-public class ModelMVC extends Model{
+public class ModelMVC{
 	
 	//Enthält die Beobachter
 	private ArrayList<View> beobachter;
 	
+	//Ein Model, wie es im Server verwendet wird
+	private Model model;
+	
+	
+	public ModelMVC(Model model) {
+		beobachter = new ArrayList<View>();
+		this.model = model;
+	}
 	
 	public ModelMVC() {
-		beobachter = new ArrayList<View>();
+		this(new Model());
+	}
+	
+	/**
+	 * Ändert die Spieldaten
+	 * @param model
+	 */
+	public void setzeModel(Model model) {
+		this.model = model;
+	}
+	
+	/**
+	 * Gibt die Spieldaten
+	 * @return model
+	 */
+	public Model gibModel() {
+		return model;
 	}
 	
 	/**
@@ -28,10 +52,18 @@ public class ModelMVC extends Model{
 		}
 	}
 	
+	/**
+	 * Fügt einen Beobachter hinzu
+	 * @param view
+	 */
 	public void addBeobachter(View view) {
 		beobachter.add(view);
 	}
 	
+	/**
+	 * Entfernt einen Beobachter
+	 * @param view
+	 */
 	public void removeBeobachter(View view) {
 		beobachter.remove(view);
 	}
