@@ -33,6 +33,7 @@ public class ModelMVC{
 	 */
 	public void setzeModel(Model model) {
 		this.model = model;
+		update();
 	}
 	
 	/**

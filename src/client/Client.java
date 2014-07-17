@@ -78,21 +78,18 @@ public class Client implements View {
 				case "!ERSTE3":
 					//Model empfangen
 					model.setzeModel(netzwerk.empfangen());
-					model.update();
 					//Klopfen des Spielers abwarten
 					netzwerk.send(String.valueOf(graphik.klopfstDu()));
 					break;
 				case "!SPIEL":
 					//Model empfangen
 					model.setzeModel(netzwerk.empfangen());
-					model.update();
 					//Signal an Graphik
 					graphik.spiel();
 					break;
 				case "!SPIELSTDU":
 					//empfängt das neue Model
 					model.setzeModel(netzwerk.empfangen());
-					model.update();
 					//Sendet den Spielmodus
 					netzwerk.send(graphik.spielstDu().toString());
 					break;
