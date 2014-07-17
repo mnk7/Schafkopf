@@ -42,5 +42,17 @@ public interface Spieler {
 	 * Sendet die Sieger einer Runde
 	 */
 	public void sieger(int s1, int s2);
+	
+	/**
+	 * Gibt die IP des Clients zurück
+	 * @return IP
+	 */
+	public String gibIP();
+	
+	/**
+	 * Gibt den Namen des Spielers zurück
+	 * @return
+	 */
+	public String gibName();
 
 }

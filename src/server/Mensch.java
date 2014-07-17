@@ -13,11 +13,15 @@ public class Mensch implements Spieler {
 	
 	private Netzwerk netzwerk;
 	
+	private String name;
+	
 	public Mensch(int port) throws Exception {
 		
 		try {
 			//Errichtet neue Verbindung
 			netzwerk = new Netzwerk(port);
+			//Als erstes wird der Name übertragen
+			name = netzwerk.getAnswer();
 		} catch(Exception e) {
 			//Gibt den Fehler weiter
 			throw e;
@@ -27,6 +31,9 @@ public class Mensch implements Spieler {
 	public String erste3(Model model) {
 		//sendet das Model und erwartet antwort
 		try {
+			//Sendet erst Steuerbefehl
+			netzwerk.send("!ERSTE3");
+			
 			netzwerk.senden(model);
 			//horcht nach der Antwort
 			return netzwerk.getAnswer();
@@ -39,6 +46,9 @@ public class Mensch implements Spieler {
 		Model m = model;
 		
 		try {
+			//Steuerbefehl
+			netzwerk.send("!SPIEL");
+			
 			//Senden des Models und 
 			netzwerk.senden(m);
 			//Empfangen des veränderten Models
@@ -55,6 +65,9 @@ public class Mensch implements Spieler {
 		String antwort;
 		
 		try {
+			//Steuerbefehl
+			netzwerk.send("!SPIELSTDU");
+			
 			netzwerk.senden(model);
 			antwort = netzwerk.getAnswer();
 			
@@ -68,6 +81,9 @@ public class Mensch implements Spieler {
 	}
 
 	public String modus(lib.Model.modus m) {
+		//Steuerbefehl
+		netzwerk.send("!MODUS");
+		
 		//Sendet den Modus
 		netzwerk.send(m.toString());
 		
@@ -80,8 +96,20 @@ public class Mensch implements Spieler {
 	}
 
 	public void sieger(int s1, int s2) {
+		//Steuerbefehl
+		netzwerk.send("!SIEGER");
+		
 		netzwerk.send(String.valueOf(s1));
 		netzwerk.send(String.valueOf(s2));
+	}
+
+	public String gibIP() {
+		String ip = netzwerk.gibIP();
+		return ip;
+	}
+
+	public String gibName() {
+		return name;
 	}
 
 }

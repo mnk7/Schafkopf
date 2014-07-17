@@ -35,4 +35,16 @@ public class Bot implements Spieler {
 		
 	}
 
+	@Override
+	public String gibIP() {
+		// TODO Auto-generated method stub
+		return "127.0.0.1";
+	}
+
+	@Override
+	public String gibName() {
+		// TODO Auto-generated method stub
+		return "Bot";
+	}
+
 }

@@ -54,6 +54,9 @@ public class Server {
         	
         }
         
+        /**
+         * Erstellt ein neues Spiel, dass läuft bis ein Spieler austritt
+         */
         public void neuesSpiel() {
         	connect();
         	
@@ -169,6 +172,14 @@ public class Server {
         	}
         	
         	//Den Spielern Geld abziehen oder hinzufügen
+        }
+        
+        /**
+         * Gibt alle Spieler zurück, damit diese angezeigt werden können
+         * @return spieler
+         */
+        public Spieler[] gibSpieler() {
+        	return spieler;
         }
 
 }
