@@ -61,28 +61,16 @@ public class Graphik extends JFrame {
 			PlayerLabel [i].setVisible(true);
 		}
 		
+		//Referenz auf sich selbst
+		final Graphik g = this;
+		
 		start = new JButton();
 		getContentPane().add(start);
 		start.setBounds(10, 10, getWidth()/2 - 15, 30);
 		start.setText("Server starten");
 		start.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				server = new Server();
-				Thread t = new Thread(){
-					public void run(){
-						while(true){
-							textSetzen();
-							try {
-								Thread.sleep(500);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-					}
-				};
-			t.start();
-
+				server = new Server(g);
 			}
 		});
 		start.setVisible(true);
@@ -93,6 +81,7 @@ public class Graphik extends JFrame {
 		end.setText("Server stoppen");
 		end.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
+				server.beenden();
 				server = null;
 			}
 		});
@@ -101,7 +90,7 @@ public class Graphik extends JFrame {
 		repaint();
 	}
 	
-	private void textSetzen(){
+	public void textSetzen(){ 
 		ArrayList <Spieler> spieler = new ArrayList <Spieler> ();		
 		
 		try{
@@ -116,8 +105,6 @@ public class Graphik extends JFrame {
 		catch(Exception e) {
 			// e.printStackTrace();
 		}
-		
-
 	}
 }
 
