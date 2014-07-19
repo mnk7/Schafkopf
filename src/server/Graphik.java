@@ -90,11 +90,10 @@ public class Graphik extends JFrame {
 		repaint();
 	}
 	
-	public void textSetzen(){ 
-		ArrayList <Spieler> spieler = new ArrayList <Spieler> ();		
+	public void textSetzen(ArrayList<Spieler> s){ 
+		ArrayList <Spieler> spieler = s;		
 		
 		try{
-			spieler = server.gibSpieler();
 			for(int i=0; i<4; i++){
 				String aufschrift;
 				aufschrift = spieler.get(i).gibName();

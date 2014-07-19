@@ -82,7 +82,7 @@ public class Server implements Runnable{
         		while(true) {
 	        		Socket client = server.accept();
 	        		spieler.add(new Mensch(client));
-	        		graphik.textSetzen();
+	        		graphik.textSetzen(spieler);
 	        		
 	        		if(spieler.size() == 4 && nocheins) {
 	        			nocheins = false;
@@ -171,7 +171,7 @@ public class Server implements Runnable{
 					try {
 						k = spieler.get(i).modus(mod);
 					} catch (Exception e) {
-						e.printStackTrace();
+						e.printStackTrace(); 
 						k = null;
 					}
 	        		
@@ -248,7 +248,7 @@ public class Server implements Runnable{
          * Gibt alle Spieler zurück, damit diese angezeigt werden können
          * @return spieler
          */
-        public ArrayList<Spieler> gibSpieler() {
+        public synchronized ArrayList<Spieler> gibSpieler() {
         	return spieler;
         }
         
