@@ -9,20 +9,20 @@ public interface Controll {
 	 * @param model
 	 * @return SpielerID des Siegers
 	 */
-	public int sieger(Model model);
+	public int sieger(Model m);
 	
 	/**
 	 * Bestimmt, ob ein Spielzug erlaubt ist und gibt das Ergebnis zurück
 	 * @param model
 	 * @return erlaubt
 	 */
-	public boolean erlaubt(Model model);
+	public boolean erlaubt(Model m);
 	
 	/**
 	 * Bestimmt einen eventuellen Mitspieler
 	 * @param model
 	 * @return mitspieler oder null
 	 */
-	public int mitspieler(Model model);
+	public int mitspieler(Model m);
 
 }

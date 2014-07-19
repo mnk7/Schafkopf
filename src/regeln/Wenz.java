@@ -5,14 +5,8 @@ import lib.Karte;
 import lib.Model;
 
 public class Wenz implements Controll {
-	
-	private Model m;
-	
-	public Wenz(Model mNeu){
-		m = mNeu;
-	}
 	@Override
-	public int sieger(Model model) {
+	public int sieger(Model m) {
 		boolean unter = false;
 		Karte[] gespielt = new Karte[4];
 		gespielt = m.gibTisch();
@@ -76,7 +70,7 @@ public class Wenz implements Controll {
 	}
 	
 	@Override
-	public boolean erlaubt(Model model) {
+	public boolean erlaubt(Model m) {
 		// TODO Auto-generated method stub
 		Karte.wert angespielt;
 		angespielt = m.gibTisch()[0].gibWert();
@@ -84,29 +78,29 @@ public class Wenz implements Controll {
 			return true;
 		}
 		if(angespielt.equals(Karte.wert.UNTER)){
-		if(Karte.wert.UNTER == getWert()){
+		if(Karte.wert.UNTER == getWert(m)){
 			return true;
 		}
-		if(Karte.wert.UNTER != getWert() && keinTrumpf()){
+		if(Karte.wert.UNTER != getWert(m) && keinTrumpf(m)){
 			return true;
 		}
 		}
 		Karte.farbe angespielt2;
 		angespielt2 = m.gibTisch()[0].gibFarbe();
-		if(getFarbe().equals(angespielt2)){
+		if(getFarbe(m).equals(angespielt2)){
 			return true;
 		}
-		if(!getFarbe().equals(angespielt2) && keineFarbe(angespielt2)){
+		if(!getFarbe(m).equals(angespielt2) && keineFarbe(angespielt2, m)){
 			return true;
 		}
 		return false;
 	}
 	@Override
-	public int mitspieler(Model model) {
+	public int mitspieler(Model m) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	public Karte.wert getWert(){
+	public Karte.wert getWert(Model m){
 		Karte.wert x = null;
 		for(int i = 0; i < 4; i++){
 			if(m.gibTisch()[i] != null){
@@ -115,7 +109,7 @@ public class Wenz implements Controll {
 		}
 		return x;
 	}
-	public boolean keinTrumpf(){
+	public boolean keinTrumpf(Model m){
 		ArrayList<Karte> y;
 		int x = 0;
 		for(int i = 0; i < 4; i++){
@@ -131,7 +125,7 @@ public class Wenz implements Controll {
 	}
 		return true;
 }
-	public Karte.farbe getFarbe(){
+	public Karte.farbe getFarbe(Model m){
 		Karte.farbe x = null;
 		for(int i = 0; i < 4; i++){
 			if(m.gibTisch()[i] != null && m.gibTisch()[i].gibWert() != Karte.wert.UNTER){
@@ -140,7 +134,7 @@ public class Wenz implements Controll {
 		}		
 		return x;
 	}
-	public boolean keineFarbe(Karte.farbe z){
+	public boolean keineFarbe(Karte.farbe z, Model m){
 		ArrayList<Karte> y;
 		int x = 0;
 		for(int i = 0; i < 4; i++){
