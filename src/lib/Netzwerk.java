@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
-public abstract class Netzwerk{
+public abstract class Netzwerk {
 	
 	protected int spielerID;
 	
@@ -21,9 +21,6 @@ public abstract class Netzwerk{
 	
 	//Speichert ein gesendetes Model
 	protected Model model;
-	
-	//Beendet die Verbindung
-	public abstract void beenden();
 	
 	/**
 	 * Sendet ein Model, bzw nicht die Karten der anderen Spieler
@@ -63,11 +60,21 @@ public abstract class Netzwerk{
 		//Der letzte Stich
 		Karte[] letzterStich = model.gibLetztenStich();
 		for(int i = 0; i < 4; i++) {
-			out.write(letzterStich[i].gibFarbe().toString());
-			out.write(letzterStich[i].gibWert().toString());
+			String output;
+			try {
+				output = letzterStich[i].gibFarbe().toString();
+			} catch(Exception e) {
+				output = "";
+			}
+			out.write(output);
+			
+			try {
+				output = letzterStich[i].gibWert().toString();
+			} catch(Exception e) {
+				output = "";
+			}
+			out.write(output);
 		}
-		
-		beenden();
 	}
 	
 	/**
@@ -139,12 +146,12 @@ public abstract class Netzwerk{
 				String farbe = in.readLine();
 				String wert = in.readLine();
 				
-				//sollte hier nicht passieren
-				if(farbe.equals("")) throw new Exception();
-				
-				karte = new Karte(Karte.farbe.valueOf(farbe), Karte.wert.valueOf(wert));
-
-				letzterStich[i] = karte;
+				if(farbe.equals("")) letzterStich[i] = null;
+				else {
+					karte = new Karte(Karte.farbe.valueOf(farbe), Karte.wert.valueOf(wert));
+	
+					letzterStich[i] = karte;
+				}
 			} catch(Exception e) {
 				throw new Exception("!!!Fehler beim Empfangen von Daten!!");
 			}
@@ -152,8 +159,6 @@ public abstract class Netzwerk{
 
 		
 		model = new Model(spielerhand, tisch, letzterStich, punkte);
-		
-		beenden();
 		
 		return model;
 	}

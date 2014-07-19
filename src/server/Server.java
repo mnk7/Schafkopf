@@ -48,10 +48,15 @@ public class Server implements Runnable{
         	spieler = new ArrayList<Spieler>();
         	
         	geklopft = new String[4];
+        	for(int i = 0; i < 4; i++) {
+        		geklopft[i] = "";
+        	}
         	
         	kontra = new boolean[4];
         	
         	regelwahl = new Regelwahl();
+        	
+        	nocheins = true;
         	
         	try {
         		//Server für jeden Port
@@ -74,8 +79,13 @@ public class Server implements Runnable{
 	        		Socket client = server.accept();
 	        		spieler.add(new Mensch(client));
 	        		
-	        		if(spieler.size() == 4 && nocheins)
+	        		if(spieler.size() == 4 && nocheins) {
+	        			nocheins = false;
 	        			neuesSpiel();
+	        		}
+	        		
+	        		//Drossel
+	        		Thread.sleep(100);
         		}
         	} catch(Exception e) {
         		e.printStackTrace();
@@ -83,14 +93,13 @@ public class Server implements Runnable{
         }
         
         /**
-         * Erstellt ein neues Spiel, dass läuft bis ein Spieler austritt
+         * Erstellt ein neues Spiel
+         * @throws Exception 
          */
-        public void neuesSpiel() {
-        	
-        	System.out.println("JAAA");
+        private void neuesSpiel() throws Exception {
         	
         	//Spiel wurde gestartet
-        	nocheins = false;
+        	while(!nocheins) {
         		
         		//gibt jedem Spieler seine ID
         		for(int i = 0; i < 4; i++) {
@@ -109,7 +118,10 @@ public class Server implements Runnable{
 	        	for(int i = 0; i < 4; i++) {
 	        		//Speichert, ob ein Spieler geklopft hat etc.
 	        		spieler.get(i).erste3(model);
-	        		geklopft[i] = spieler.get(i).gibAntwort();
+	        		while(geklopft[i].equals("")) {
+	        			geklopft[i] = spieler.get(i).gibAntwort();
+	        			Thread.sleep(100);
+	        		}
 	        	}
 	        	
 	        	model.zweiteKartenGeben();
@@ -117,10 +129,17 @@ public class Server implements Runnable{
 	        	for(int i = 0; i < 4; i++) {
 	        		//speichert, was der Spieler spielen will
 	        		spieler.get(i).spielstDu(model);
-	        		modus m = Model.modus.valueOf(spieler.get(i).gibAntwort());
 	        		
-	        		//sollte der Spieler nichts spielen ist der nächste dran
-	        		if(m == null) continue;
+	        		modus m = null;
+	        		while(m == null) {
+	        			try {
+	        				m = Model.modus.valueOf(spieler.get(i).gibAntwort());
+	        			} catch(Exception e) {
+	        				nocheins = true;
+	        				continue;
+	        			}
+	        			Thread.sleep(100);
+	        		}
 	        		
 	        		//speichert, was gespielt wird
 	        		mod = model.werSpielt(m, mod);
@@ -130,10 +149,14 @@ public class Server implements Runnable{
 	        	}
 	        	
 	        	//will niemand spielen geht es zur nächsten Runde
-	        	if(mod == null) continue;
+	        	if(mod == null) {
+	        		nocheins = true;
+	        		continue;
+	        	}
 	        	//Wenn ein Si gespielt wird
 	        	if(mod == modus.SI) {
 	        		rundeBeenden();
+	        		nocheins = true;
 	        		continue;
 	        	}
 	        	
@@ -176,7 +199,7 @@ public class Server implements Runnable{
 	        		int sieger = regeln.sieger(model);
 	        		model.Stich(sieger);
 	        	}
-	        	
+
 	        	rundeBeenden();
 	        	
 	        	//neu Runde
@@ -184,6 +207,7 @@ public class Server implements Runnable{
 	        	
 	        	//Es darf ein neues Spiel gestartet werden
 	        	nocheins = true;
+        	}
         }
         
         /**

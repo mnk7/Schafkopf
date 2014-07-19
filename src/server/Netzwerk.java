@@ -26,17 +26,6 @@ public class Netzwerk extends lib.Netzwerk {
 		}
 	}
 	
-	public void beenden() {
-		try {
-			client.close();
-			
-			out.close();
-			in.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	/**
 	 * Gibt die IP des Clients zurück
 	 * @return IP

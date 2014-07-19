@@ -25,6 +25,8 @@ public class Mensch implements Spieler, Runnable {
 	
 	public Mensch(Socket client) throws Exception {
 		
+		antwort = "";
+		
 		try {
 			//Errichtet neue Verbindung
 			netzwerk = new Netzwerk(client);
