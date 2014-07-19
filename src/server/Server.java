@@ -180,7 +180,7 @@ public class Server implements Runnable{
 	        	}	    
 	        	
 	        	//legt die Regeln fest
-	        	regeln = regelwahl.wahl(mod);
+	        	regeln = regelwahl.wahl(mod, model, spielt);
 	        	if(regeln == null) {
 	        		nocheins = false;
 	        		break;

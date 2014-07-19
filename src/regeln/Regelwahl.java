@@ -1,6 +1,7 @@
 package regeln;
 
 import lib.Karte;
+import lib.Model;
 import lib.Model.modus;
 
 public class Regelwahl {
