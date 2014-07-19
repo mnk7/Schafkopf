@@ -13,9 +13,68 @@ public class Geier implements Controll {
 	}
 	@Override
 	public int sieger(Model model) {
-		// TODO Auto-generated method stub
-		return 0;
+		boolean ober = false;
+		Karte[] gespielt = new Karte[4];
+		gespielt = m.gibTisch();
+		for(int i = 0; i < 4; i++){
+			if(gespielt[i].gibWert() == Karte.wert.OBER){
+				ober = true;
+			}
+		}
+		if(ober) return keinOber(gespielt);
+		return schonOber(gespielt);
 	}
+	public int schonOber(Karte[] gespielt){
+		int spieler = 0;
+		Karte.farbe oberFarbe = null;
+		for(int i = 0; i < 4; i++){
+			if(gespielt[i].gibWert() == Karte.wert.OBER){
+				spieler = i;
+				switch(oberFarbe){
+				case HERZ: {
+				if(gespielt[i].gibFarbe() == Karte.farbe.SCHELLEN){}
+				else oberFarbe = gespielt[i].gibFarbe();
+				}break;
+				case GRAS:{
+					if(gespielt[i].gibFarbe() == Karte.farbe.EICHEL)oberFarbe = gespielt[i].gibFarbe();
+					else {}
+					}break;
+				case EICHEL:break;
+				default: oberFarbe = gespielt[i].gibFarbe();
+				}
+				}
+			}
+		return spieler;
+	}
+	public int keinOber(Karte[] gespielt){
+		int spieler = 0;
+		Karte.farbe farb = gespielt[0].gibFarbe();
+		Karte.wert farbwert = gespielt[0].gibWert();
+
+		for(int i = 0; i < 4; i++){
+			if(gespielt[i].gibFarbe() == farb){
+				spieler = i;
+				switch(farbwert){
+				case NEUN: farbwert = gespielt[i].gibWert();break;
+				case UNTER: {
+				if(gespielt[i].gibWert() == Karte.wert.NEUN){}
+				else farbwert = gespielt[i].gibWert();
+				}break;
+				case KONIG:{
+					if(gespielt[i].gibWert() == Karte.wert.NEUN || gespielt[i].gibWert() == Karte.wert.UNTER){}
+					else farbwert = gespielt[i].gibWert();
+					}break;
+				case ZEHN:{
+					if(gespielt[i].gibWert() == Karte.wert.SAU)farbwert = gespielt[i].gibWert();
+					else {}
+					}break;		
+				case SAU:break;
+					}
+				}
+			}
+		return spieler;
+	}
+	
 	@Override
 	public boolean erlaubt(Model model) {
 		// TODO Auto-generated method stub
