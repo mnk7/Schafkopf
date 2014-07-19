@@ -28,6 +28,8 @@ public class Netzwerk extends lib.Netzwerk {
 			out = new PrintWriter(client.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			
+	System.out.println("verbunden");
+			
 		} catch (IOException e) {
 			throw new Exception("Verbindung mit Client fehlgeschlagen");
 		}

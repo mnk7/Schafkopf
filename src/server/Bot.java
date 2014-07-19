@@ -9,7 +9,7 @@ public class Bot implements Spieler {
 	public String erste3(Model model) {
 		// TODO Auto-generated method stub
 		return "";
-	}
+	} 
 
 	@Override
 	public Model spielen(Model model) {

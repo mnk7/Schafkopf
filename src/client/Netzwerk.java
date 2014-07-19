@@ -30,6 +30,8 @@ public class Netzwerk extends lib.Netzwerk{
 			out = new PrintWriter(client.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			
+	System.out.println("Verbinde");
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

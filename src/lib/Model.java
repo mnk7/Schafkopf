@@ -59,7 +59,7 @@ public class Model {
 		//Erstellt den Punktezaehler
 		punkte = new ArrayList<Integer>();
 		for(int i = 0; i < 4; i++) {
-			punkte.set(i, 0);
+			punkte.add(0);
 		}
 		
 		initKarten();
