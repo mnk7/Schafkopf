@@ -74,7 +74,7 @@ public class MenuGUI extends JFrame{
 		//Fenster
 		this.setSize(330, 150);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setTitle("SCHOAFKOPF-ÄPP");
+		this.setTitle("SCHOAFKOPF-APP");
 		this.setResizable(false);
 		//this.setUndecorated(true);
 		//this.setState(ICONIFIED);
