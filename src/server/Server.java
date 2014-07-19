@@ -82,7 +82,6 @@ public class Server implements Runnable{
         		while(true) {
 	        		Socket client = server.accept();
 	        		spieler.add(new Mensch(client));
-	        		graphik.textSetzen(spieler);
 	        		
 	        		if(spieler.size() == 4 && nocheins) {
 	        			nocheins = false;
@@ -105,6 +104,8 @@ public class Server implements Runnable{
         	
         	//Spiel wurde gestartet
         	while(!nocheins) {
+        		//Anzeigen der Spieler
+        		graphik.textSetzen(spieler);
         		
         		//gibt jedem Spieler seine ID
         		for(int i = 0; i < 4; i++) {

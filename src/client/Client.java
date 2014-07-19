@@ -12,14 +12,6 @@ public class Client implements View {
 	//Hört auf Befehle des Servers
 	private Thread thread;
 	
-	//Speichert die verfügbaren Ports des Servers
-	private int[] ports = {
-			55555,
-			55556,
-			55557,
-			55558
-	};
-	
 	//IP des Servers
 	private String IP;
 	

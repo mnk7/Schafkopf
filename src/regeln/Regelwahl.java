@@ -31,6 +31,13 @@ public class Regelwahl {
 		}
 		return x;
 	}
-	public boolean sauspielMoeglich(Karte.)
+	
+	public boolean sauspielMoeglich(Karte.farbe f, Model m, int position) {
+		return true;
+	}
+	
+	public boolean hochzeitMoeglich(Model m, int position) {
+		return true;
+	}
 
 }
