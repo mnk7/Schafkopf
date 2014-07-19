@@ -1,10 +1,12 @@
 package regeln;
 
+import lib.Karte;
 import lib.Model;
 
 
 public class Sauspiel implements Controll {
 
+	public Sauspiel(Karte.farbe farb){}
 	@Override
 	public int sieger(Model model) {
 		// TODO Auto-generated method stub
