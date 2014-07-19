@@ -79,18 +79,21 @@ public class Client implements View {
 					//Model empfangen
 					model.setzeModel(netzwerk.empfangen());
 					//Klopfen des Spielers abwarten
+					netzwerk.send("!ERSTE3");
 					netzwerk.send(String.valueOf(graphik.klopfstDu()));
 					break;
 				case "!SPIEL":
 					//Model empfangen
 					model.setzeModel(netzwerk.empfangen());
 					//Signal an Graphik
+					netzwerk.send("!SPIEL");
 					graphik.spiel();
 					break;
 				case "!SPIELSTDU":
 					//empfängt das neue Model
 					model.setzeModel(netzwerk.empfangen());
 					//Sendet den Spielmodus
+					netzwerk.send("!SPIELSTDU");
 					netzwerk.send(graphik.spielstDu().toString());
 					break;
 				case "!MODUS":
@@ -110,6 +113,9 @@ public class Client implements View {
 					netzwerk.setID(ID);
 					break;
 				}
+				
+				//kleine Pause
+				Thread.sleep(100);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -129,14 +135,11 @@ public class Client implements View {
 	 * Erstellt die Verbindung zum Server
 	 */
 	public boolean connect() {
-		//Testen aller Ports
-		for(int i = 0; i < 4; i++) {
-			try {
-				//Verbindet sich mit dem Server mit falscher Spielernummer
-				netzwerk = new Netzwerk(ID, IP, ports[i]);
-				return true;
-			} catch(Exception e) {
-			}
+		try {
+			//Verbindet sich mit dem Server mit falscher Spielernummer
+			netzwerk = new Netzwerk(ID, IP);
+			return true;
+		} catch(Exception e) {
 		}
 		
 		//falls keine Verbindung hergestellt werden konnte

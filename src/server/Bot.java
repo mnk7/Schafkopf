@@ -6,21 +6,16 @@ import lib.Model.modus;
 public class Bot implements Spieler {
 
 	@Override
-	public String erste3(Model model) {
-		// TODO Auto-generated method stub
-		return "";
+	public void erste3(Model model) {
 	} 
 
 	@Override
-	public Model spielen(Model model) {
-		// TODO Auto-generated method stub
-		return null;
+	public void spielen(Model model) {
 	}
 
 	@Override
-	public modus spielstDu(Model model) {
+	public void spielstDu(Model model) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -51,6 +46,18 @@ public class Bot implements Spieler {
 	public void setzeID(int ID) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public String gibAntwort() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Model gibModel() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -14,24 +14,26 @@ public class Netzwerk extends lib.Netzwerk {
 	
 	private Socket client;
 	
-	public Netzwerk(int port) throws Exception {
-		
-		//Verbindungsinformationen
-		this.port = port;
-		
+	public Netzwerk(Socket client) throws Exception {
 		try {
-			//Erstellen eines Servers -> Input
-			server = new ServerSocket(port);
 			//Erstellen eines Clients -> Output
-			client = server.accept();
+			this.client = client;
 			
 			out = new PrintWriter(client.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+		} catch(Exception e) {
+			throw e;
+		}
+	}
+	
+	public void beenden() {
+		try {
+			client.close();
 			
-	System.out.println("verbunden");
-			
+			out.close();
+			in.close();
 		} catch (IOException e) {
-			throw new Exception("Verbindung mit Client fehlgeschlagen");
+			e.printStackTrace();
 		}
 	}
 	

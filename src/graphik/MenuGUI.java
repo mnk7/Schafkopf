@@ -49,9 +49,7 @@ public class MenuGUI extends JFrame{
 		} catch(Exception e) {
 			javax.swing.JOptionPane.showMessageDialog(null, "Fehler beim Programmstart");
 			e.printStackTrace();
-		}
-		
-		super.show();		
+		}	
 	}
 	
 	/**

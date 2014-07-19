@@ -8,20 +8,30 @@ package server;
 import lib.Model;
 import lib.Model.modus;
 
-public interface Spieler {
+public interface Spieler{
+	
+	/**
+	 * gibt die Antwort
+	 */
+	public String gibAntwort();
+	
+	/**
+	 * gibt das empfangene Model
+	 */
+	public Model gibModel();
 	
 	/**
 	 * Erhält die ersten 3 Karten und gibt zurück, ob gepklopft wird etc.
 	 * @param model
 	 * @return
 	 */
-	public String erste3(Model model);
+	public void erste3(Model model);
 	
 	/**
 	 * Führt einen Spielzug aus und gibt das aktualisierte Model zurück
 	 * @return
 	 */
-	public Model spielen(Model model);
+	public void spielen(Model model);
 	
 	/**
 	 * Übernimmt ein Model und gibt zurück, ob und was gespielt wird
@@ -29,19 +39,21 @@ public interface Spieler {
 	 * @param model
 	 * @return
 	 */
-	public Model.modus spielstDu(Model model);
+	public void spielstDu(Model model);
 	
 	/**
 	 * Übergibt den Spielern den Modus und fragt nach Kontra
 	 * @param m
 	 * @return Kontra
+	 * @throws Exception 
 	 */
-	public String modus(modus m);
+	public String modus(modus m) throws Exception;
 	
 	/**
 	 * Sendet die Sieger einer Runde
+	 * @throws Exception 
 	 */
-	public void sieger(int s1, int s2);
+	public void sieger(int s1, int s2) throws Exception;
 	
 	/**
 	 * Gibt die IP des Clients zurück
@@ -58,7 +70,8 @@ public interface Spieler {
 	/**
 	 * Setzt vor jedem Spiel die ID der Spieler
 	 * @param ID
+	 * @throws Exception 
 	 */
-	public void setzeID(int ID);
+	public void setzeID(int ID) throws Exception;
 
 }

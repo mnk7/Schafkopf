@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
-public abstract class Netzwerk {
+public abstract class Netzwerk{
 	
 	protected int spielerID;
 	
@@ -22,14 +22,16 @@ public abstract class Netzwerk {
 	//Speichert ein gesendetes Model
 	protected Model model;
 	
+	//Beendet die Verbindung
+	public abstract void beenden();
+	
 	/**
 	 * Sendet ein Model, bzw nicht die Karten der anderen Spieler
 	 * @param model
 	 * @throws IOException 
 	 * @throws NumberFormatException 
 	 */
-	public void senden(Model model) throws NumberFormatException, IOException {
-		
+	public void senden(Model model) throws Exception {
 		//Speichert das Model
 		this.model = model;
 		
@@ -64,6 +66,8 @@ public abstract class Netzwerk {
 			out.write(letzterStich[i].gibFarbe().toString());
 			out.write(letzterStich[i].gibWert().toString());
 		}
+		
+		beenden();
 	}
 	
 	/**
@@ -73,6 +77,7 @@ public abstract class Netzwerk {
 	 * @throws Exception 
 	 */
 	public Model empfangen() throws Exception {
+		
 		Model model;
 		
 		//Neue Karten werden hier zwischengespeichert
@@ -148,6 +153,8 @@ public abstract class Netzwerk {
 		
 		model = new Model(spielerhand, tisch, letzterStich, punkte);
 		
+		beenden();
+		
 		return model;
 	}
 	
@@ -156,15 +163,16 @@ public abstract class Netzwerk {
 	 * @return
 	 * @throws IOException
 	 */
-	public String getAnswer() throws IOException {
-		return in.readLine();
+	public String getAnswer() throws Exception {
+		String output = in.readLine();
+		return output;
 	}
 	
 	/**
 	 * Sendet Antworten z.B. ob geklopft wird, oder was gespielt wird
 	 * @param modus
 	 */
-	public void send(String modus) {
+	public void send(String modus) throws Exception{
 		out.write(modus);
 	}
 	

@@ -11,14 +11,14 @@ import java.net.SocketAddress;
 
 public class Netzwerk extends lib.Netzwerk{
 	
-	public Netzwerk(int spielerID, String ip, int port) {
+	public Netzwerk(int spielerID, String ip) {
 		
 		//ID des Spielers
 		this.spielerID = spielerID;
 		
 		//Verbindungsinformationen
 		this.ip = ip;
-		this.port = port;
+		this.port = 5555;
 		
 		try {
 			SocketAddress address = new InetSocketAddress(ip, port);
@@ -35,5 +35,13 @@ public class Netzwerk extends lib.Netzwerk{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void verbinden() throws Exception{
+		
+	}
+
+	public void beenden() {
+		
 	}
 }
