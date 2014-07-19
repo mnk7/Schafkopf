@@ -37,11 +37,13 @@ public class Server implements Runnable{
         
         //fragt ab, ob noch ein Spiel gemacht wird
         private boolean nocheins;
+        
+        private final Graphik graphik;
                 
         /**
          * Erstellt einen neuen Server
          **/
-        public Server() {
+        public Server(Graphik graphik) {
         	
         	model = new Model();
               
@@ -57,6 +59,8 @@ public class Server implements Runnable{
         	regelwahl = new Regelwahl();
         	
         	nocheins = true;
+        	
+        	this.graphik = graphik;
         	
         	try {
         		//Server für jeden Port
@@ -78,6 +82,7 @@ public class Server implements Runnable{
         		while(true) {
 	        		Socket client = server.accept();
 	        		spieler.add(new Mensch(client));
+	        		graphik.textSetzen();
 	        		
 	        		if(spieler.size() == 4 && nocheins) {
 	        			nocheins = false;
@@ -176,6 +181,10 @@ public class Server implements Runnable{
 	        	
 	        	//legt die Regeln fest
 	        	regeln = regelwahl.wahl(mod);
+	        	if(regeln == null) {
+	        		nocheins = false;
+	        		break;
+	        	}
 	        	
 	        	//bestimmt einen eventuellen Mitspieler
 	        	mitspieler = regeln.mitspieler(model);
@@ -241,6 +250,16 @@ public class Server implements Runnable{
          */
         public ArrayList<Spieler> gibSpieler() {
         	return spieler;
+        }
+        
+        public void beenden() {
+        	try {
+        		listener.stop();
+				server.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.exit(0);
+			}
         }
 
 }
