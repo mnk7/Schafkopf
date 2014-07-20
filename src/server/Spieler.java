@@ -5,6 +5,7 @@
 
 package server;
 
+import lib.Karte;
 import lib.Model;
 import lib.Model.modus;
 
@@ -73,5 +74,17 @@ public interface Spieler{
 	 * @throws Exception 
 	 */
 	public void setzeID(int ID) throws Exception;
+
+	/**
+	 * Gibt eine empfangene Karte
+	 * @return
+	 */
+	public Karte gibKarte();
+
+	/**
+	 * Frägt, ob eine Hochzeit angenommen wird
+	 * @throws Exception 
+	 */
+	public void hochzeit() throws Exception; 
 
 }

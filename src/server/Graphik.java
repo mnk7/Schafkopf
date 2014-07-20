@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 public class Graphik extends JFrame {
@@ -70,7 +71,10 @@ public class Graphik extends JFrame {
 		start.setText("Server starten");
 		start.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				server = new Server(g);
+				if(server == null)
+					server = new Server(g);
+				else
+					JOptionPane.showMessageDialog(null, "Server läuft schon");
 			}
 		});
 		start.setVisible(true);
@@ -81,8 +85,10 @@ public class Graphik extends JFrame {
 		end.setText("Server stoppen");
 		end.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				server.beenden();
-				server = null;
+				if(server != null) {
+					server.beenden();
+					server = null;
+				}
 			}
 		});
 		end.setVisible(true);

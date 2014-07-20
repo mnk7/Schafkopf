@@ -1,5 +1,6 @@
 package regeln;
 
+import lib.Karte;
 import lib.Model;
 
 
@@ -21,6 +22,15 @@ public class Hochzeit implements Controll {
 	public int mitspieler(Model model) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	/**
+	 * Gibt zurück, ob die angegebene Karte ein Trumpf ist
+	 * @param k
+	 * @return
+	 */
+	public boolean istTrumpf(Karte k) {
+		return true;
 	}
 
 }

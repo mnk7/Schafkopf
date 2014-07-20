@@ -7,6 +7,7 @@ import javax.swing.JTextField;
 
 import regeln.Controll;
 
+import lib.Karte;
 import lib.Model;
 import lib.Model.modus;
 
@@ -83,11 +84,31 @@ public class Graphik extends JFrame implements View
 	
 	/**
 	 * Zeigt den/die Sieger eines Spiels an
+	 * Wenn s2 4 ist, so gibt es keinen zweiten Sieger,
+	 * ist s1 negativ, so hat jemand seinen Geier/Wenz verloren
 	 * @param s1
 	 * @param s2
 	 */
 	public void sieger(int s1, int s2) {
 		
+	}
+
+	/**
+	 * Gibt "JA" zurück, wenn der Spieler heiraten will
+	 * @return
+	 */
+	public String hochzeit() {
+		return null;
+	}
+
+	/**
+	 * Gibt die Karte zurück, die der Spieler bei der Hochzeit tauschen will
+	 * Wird aufgerufen, wenn jmd. eine Hochzeit anbietet und wenn eine angenommen
+	 * wird
+	 * @return
+	 */
+	public Karte hochzeitKarte() {
+		return null;
 	}
 	
 

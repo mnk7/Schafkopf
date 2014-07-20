@@ -7,6 +7,7 @@ package server;
 
 import java.net.Socket;
 
+import lib.Karte;
 import lib.Model;
 import lib.Model.modus;
 import server.Netzwerk;
@@ -22,6 +23,7 @@ public class Mensch implements Spieler, Runnable {
 	//speichert neueste antworten
 	private String antwort;
 	private Model model;
+	private Karte karte;
 	
 	public Mensch(Socket client) throws Exception {
 		
@@ -60,6 +62,12 @@ public class Mensch implements Spieler, Runnable {
 					break;
 				case "!SPIELSTDU" :
 					antwort = netzwerk.getAnswer();
+					break;
+				case "!HOCHZEIT" :
+					antwort = netzwerk.getAnswer();
+				case "!KARTE" :	
+					karte = netzwerk.getKarte();
+					break;
 				default :
 					antwort = input;
 				}
@@ -150,10 +158,18 @@ public class Mensch implements Spieler, Runnable {
 		return name;
 	}
 
-	public void setzeID(int ID) throws Exception{
+	public void setzeID(int ID) throws Exception {
 		//Steuerbefehl
 		netzwerk.send("!ID");		
 		netzwerk.send(String.valueOf(ID));
+	}
+
+	public Karte gibKarte() {
+		return karte;
+	}
+
+	public void hochzeit() throws Exception {
+		netzwerk.send("!HOCHZEIT");
 	}
 
 }

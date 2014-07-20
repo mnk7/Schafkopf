@@ -1,5 +1,6 @@
 package server;
 
+import lib.Karte;
 import lib.Model;
 import lib.Model.modus;
 
@@ -58,6 +59,18 @@ public class Bot implements Spieler {
 	public Model gibModel() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Karte gibKarte() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void hochzeit() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

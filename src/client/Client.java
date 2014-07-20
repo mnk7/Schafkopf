@@ -1,5 +1,6 @@
 package client;
 
+import lib.Karte;
 import lib.Model.modus;
 
 import graphik.Graphik;
@@ -86,7 +87,14 @@ public class Client implements View {
 					model.setzeModel(netzwerk.empfangen());
 					//Sendet den Spielmodus
 					netzwerk.send("!SPIELSTDU");
-					netzwerk.send(graphik.spielstDu().toString());
+					String antwort = graphik.spielstDu().toString();
+					netzwerk.send(antwort);
+					if(antwort.equals("HOCHZEIT")) {
+						netzwerk.send("!KARTE");
+						Karte k = graphik.hochzeitKarte();
+						netzwerk.send(k.gibFarbe().toString());
+						netzwerk.send(k.gibWert().toString());
+					}
 					break;
 				case "!MODUS":
 					//Empfangen des Modus des Spiels
@@ -96,6 +104,7 @@ public class Client implements View {
 					//empfängt die Sieger
 					int s1 = Integer.parseInt(netzwerk.getAnswer());
 					int s2 = Integer.parseInt(netzwerk.getAnswer());
+
 					//und gibt sie an die Graphik weiter
 					graphik.sieger(s1, s2);
 					break;
@@ -103,6 +112,17 @@ public class Client implements View {
 					//ID des Spielers empfangen
 					ID = Integer.parseInt(netzwerk.getAnswer());
 					netzwerk.setID(ID);
+					break;
+				case "!HOCHZEIT" :
+					String answer = graphik.hochzeit();
+					
+					if(answer.equals("JA")) {
+						netzwerk.send(answer);
+						netzwerk.send("!KARTE");
+						Karte k = graphik.hochzeitKarte();
+						netzwerk.send(k.gibFarbe().toString());
+						netzwerk.send(k.gibWert().toString());
+					}
 					break;
 				}
 				
