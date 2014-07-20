@@ -106,8 +106,8 @@ public abstract class Netzwerk {
 		//Die Karten des Spielers
 		for(int i = 0; i < 6; i++) {
 			try {
-				String farbe = in.readLine();
-				String wert = in.readLine();
+				String farbe = einlesen();
+				String wert = einlesen();
 				
 				//Wurde keine Karte gesendet, keine hinzufügen
 				if(farbe.equals("")) throw new Exception();
@@ -124,8 +124,8 @@ public abstract class Netzwerk {
 		//Der Tisch
 		for(int i = 0; i < 4; i++) {
 			try {
-				String farbe = in.readLine();
-				String wert = in.readLine();
+				String farbe = einlesen();
+				String wert = einlesen();
 				
 				//Wurde keine Karte gesendet, keine hinzufügen
 				if(farbe.equals("")) throw new Exception();
@@ -143,8 +143,8 @@ public abstract class Netzwerk {
 		for(int i = 0; i < 4; i++) {
 			//Hier sind Fehler zum ersten mal unerwünscht
 			try {
-				String farbe = in.readLine();
-				String wert = in.readLine();
+				String farbe = einlesen();
+				String wert = einlesen();
 				
 				if(farbe.equals("")) letzterStich[i] = null;
 				else {
@@ -169,7 +169,7 @@ public abstract class Netzwerk {
 	 * @throws IOException
 	 */
 	public String getAnswer() throws Exception {
-		String output = in.readLine();
+		String output = einlesen();
 		return output;
 	}
 	
@@ -187,5 +187,18 @@ public abstract class Netzwerk {
 	 */
 	public void setID(int ID) {
 		spielerID = ID;
+	}
+	
+	/**
+	 * Liest vom Stream ein, bis etwas gesendet wurde
+	 * @return input
+	 */
+	public String einlesen() {
+		String input = in.readLine();
+		while(input != null || input != "") {
+			input = in.readLine();
+		}
+		
+		return input;
 	}
 }

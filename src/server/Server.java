@@ -127,10 +127,7 @@ public class Server implements Runnable{
 	        	for(int i = 0; i < 4; i++) {
 	        		//Speichert, ob ein Spieler geklopft hat etc.
 	        		spieler.get(i).erste3(model);
-	        		while(geklopft[i].equals("")) {
-	        			geklopft[i] = spieler.get(i).gibAntwort();
-	        			Thread.sleep(100);
-	        		}
+	        		geklopft[i] = spieler.get(i).gibAntwort();
 	        	}
 	        	
 	        	model.zweiteKartenGeben();
@@ -193,11 +190,7 @@ public class Server implements Runnable{
 	        	if(mod.equals(modus.HOCHZEIT)) {
 	        		Hochzeit h = (Hochzeit) regeln;
 	        		
-	        		Karte angebot = null;
-	        		while(angebot == null) {
-	        			angebot = spieler.get(spielt).gibKarte();
-	        			Thread.sleep(100);
-	        		}
+	        		Karte angebot = spieler.get(spielt).gibKarte();
 	        		
 	        		if(h.istTrumpf(angebot)) {
 		        		for(int i = 0; i < 4; i++) {
@@ -207,12 +200,8 @@ public class Server implements Runnable{
 		        				
 		        				if(spieler.get(i).gibAntwort().equals("JA")) {
 		        					//Wenn die Hochzeit angenommen wird
-		        					Karte k = null;
+		        					Karte k spieler.get(i).gibKarte();
 		        					
-		        					while(k == null) {
-		        						k = spieler.get(i).gibKarte();
-		        						Thread.sleep(100);
-		        					}
 		        					//Wenn die Karte ein Trumpf ist
 			        				if(!h.istTrumpf(k)) {
 			        					model.hochzeit(spielt, i, angebot, k);
