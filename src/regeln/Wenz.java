@@ -15,9 +15,10 @@ public class Wenz implements Controll {
 				unter = true;
 			}
 		}
-		if(unter) return keinUnter(gespielt);
+		if(!unter) return keinUnter(gespielt);
 		return schonUnter(gespielt);
 	}
+	
 	public int schonUnter(Karte[] gespielt){
 		int spieler = 0;
 		Karte.farbe unterFarbe = null;
@@ -40,6 +41,7 @@ public class Wenz implements Controll {
 			}
 		return spieler;
 	}
+	
 	public int keinUnter(Karte[] gespielt){
 		int spieler = 0;
 		Karte.farbe farb = gespielt[0].gibFarbe();
@@ -50,12 +52,12 @@ public class Wenz implements Controll {
 				spieler = i;
 				switch(farbwert){
 				case NEUN: farbwert = gespielt[i].gibWert();break;
-				case UNTER: {
+				case OBER: {
 				if(gespielt[i].gibWert() == Karte.wert.NEUN){}
 				else farbwert = gespielt[i].gibWert();
 				}break;
 				case KONIG:{
-					if(gespielt[i].gibWert() == Karte.wert.NEUN || gespielt[i].gibWert() == Karte.wert.UNTER){}
+					if(gespielt[i].gibWert() == Karte.wert.NEUN || gespielt[i].gibWert() == Karte.wert.OBER){}
 					else farbwert = gespielt[i].gibWert();
 					}break;
 				case ZEHN:{
@@ -98,7 +100,7 @@ public class Wenz implements Controll {
 	@Override
 	public int mitspieler(Model m) {
 		// TODO Auto-generated method stub
-		return 0;
+		return 4;
 	}
 	public Karte.wert getWert(Model m){
 		Karte.wert x = null;
