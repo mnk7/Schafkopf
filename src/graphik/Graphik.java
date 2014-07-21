@@ -85,7 +85,8 @@ public class Graphik extends JFrame implements View
 	/**
 	 * Zeigt den/die Sieger eines Spiels an
 	 * Wenn s2 4 ist, so gibt es keinen zweiten Sieger,
-	 * ist s1 negativ, so hat jemand seinen Geier/Wenz verloren
+	 * ist s1/s2 zwischen 10 und 13 (11 - 10 = 1 -> der zweite Spieler hat verloren), 
+	 * so hat jemand sein Spiel verloren
 	 * @param s1
 	 * @param s2
 	 */

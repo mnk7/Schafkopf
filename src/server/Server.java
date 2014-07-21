@@ -270,9 +270,9 @@ public class Server implements Runnable{
         	
         	if(pSpielt <= 60) {
         		//Anzeigen, dass er verloren hat
-        		spielt *= -1;
+        		spielt += 10;
         		if(mitspieler != 4)
-        			mitspieler *= -1;
+        			mitspieler += 10;
         	}
         	
         	for(int i = 0; i < 4; i++) {
@@ -288,7 +288,7 @@ public class Server implements Runnable{
         		if(i == spielt || i == mitspieler) {
         			
         		}
-        		if(i == spielt * -1 || i == mitspieler * -1) {
+        		if(i == spielt + 10 || i == mitspieler + 10) {
         			
         		}
         	}
