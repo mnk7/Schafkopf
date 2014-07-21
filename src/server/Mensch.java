@@ -48,7 +48,7 @@ public class Mensch implements Spieler, Runnable {
 	public void run() {
 		while(true) {
 			try {
-				String input = netzwerk.getAnswer();
+				String input = netzwerk.einlesen);
 				
 				switch(input) {
 				case "!NAME" :

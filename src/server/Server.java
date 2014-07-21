@@ -24,6 +24,7 @@ public class Server implements Runnable{
         
         //hält alle 4 Spieler, ob Bot oder Mensch
         private ArrayList<Spieler> spieler;
+        private int spielerzahl;
         
         private String[] geklopft;
         
@@ -51,6 +52,7 @@ public class Server implements Runnable{
         	model = new Model();
               
         	spieler = new ArrayList<Spieler>();
+        	spielerzahl = 4;
         	
         	geklopft = new String[4];
         	for(int i = 0; i < 4; i++) {
@@ -86,7 +88,7 @@ public class Server implements Runnable{
 	        		Socket client = server.accept();
 	        		spieler.add(new Mensch(client));
 	        		
-	        		if(spieler.size() == 4 && nocheins) {
+	        		if(spieler.size() == spielerzahl && nocheins) {
 	        			nocheins = false;
 	        			neuesSpiel();
 	        		}
@@ -300,6 +302,25 @@ public class Server implements Runnable{
         	return spieler;
         }
         
+        /**
+         * Setzt die Spielerzahl
+         * @param spielerzahl
+         */
+        public void setSpielerzahl(int spielerzahl) {
+        	this.spielerzahl = spielerzahl;
+        }
+        
+        /**
+         * Gibt die Spielerzahl zurück
+         * @return
+         */
+        public String gibSpielerzahl() {
+        	return spielerzahl;
+        }
+        
+        /**
+         * Beendet den Server
+         */
         public void beenden() {
         	try {
         		listener.stop();

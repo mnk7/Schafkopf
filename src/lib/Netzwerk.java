@@ -164,16 +164,6 @@ public abstract class Netzwerk {
 	}
 	
 	/**
-	 * frägt nach Antworten des Clients
-	 * @return
-	 * @throws IOException
-	 */
-	public String getAnswer() throws Exception {
-		String output = einlesen();
-		return output;
-	}
-	
-	/**
 	 * Sendet Antworten z.B. ob geklopft wird, oder was gespielt wird
 	 * @param modus
 	 */
