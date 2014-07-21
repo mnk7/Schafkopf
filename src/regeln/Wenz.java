@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 import lib.Karte;
 import lib.Model;
-
+//rttlbrmpf
 public class Wenz implements Controll {
 	@Override
 	public int sieger(Model m) {
