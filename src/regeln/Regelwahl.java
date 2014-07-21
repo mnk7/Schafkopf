@@ -28,6 +28,7 @@ public class Regelwahl {
 		}
 		return x;
 	}
+<<<<<<< HEAD
 	public boolean sauspielMoeglich(Karte.farbe farb, Model m, int position){
 		ArrayList<Karte> y;
 		y = m.gibSpielerKarten(position);
@@ -48,4 +49,15 @@ public class Regelwahl {
 		return true;
 	}
 	
+=======
+	
+	public boolean sauspielMoeglich(Karte.farbe f, Model m, int position) {
+		return true;
+	}
+	
+	public boolean hochzeitMoeglich(Model m, int position) {
+		return true;
+	}
+
+>>>>>>> e36f21a39a237ea534d3d0f9866387aedf68f07f
 }

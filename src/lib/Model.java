@@ -260,5 +260,43 @@ public class Model {
     	if(nr1 < nr2) return m1;
     	else return m2;
     }
+    
+    /**
+     * Gibt die Punkte aller Spieler zurück
+     * @return
+     */
+    public ArrayList<Integer> gibPunkte() {
+    	return punkte;
+    }
+
+    /**
+     * Führt eine Hochzeit durch
+     * @param spielt
+     * @param mitspieler
+     * @param angebot
+     * @param angenommen
+     */
+	public void hochzeit(int spielt, int mitspieler, Karte angebot, Karte angenommen) {
+		Karte test;
+		for(int i = 0; i < 6; i++) {
+			test = spielerhand.get(spielt).get(i);
+			if(test.gibFarbe().equals(angebot.gibFarbe()) ||
+					test.gibWert().equals(angebot.gibWert())) {
+				//Karte von der Hand des Spielers nehmen
+				spielerhand.get(spielt).remove(test);
+				spielerhand.get(mitspieler).add(test);
+			}
+		}
+		Karte gegenTest;
+		for(int i = 0; i < 6; i++) {
+			gegenTest = spielerhand.get(mitspieler).get(i);
+			if(gegenTest.gibFarbe().equals(angenommen.gibFarbe()) ||
+					gegenTest.gibWert().equals(angenommen.gibWert())) {
+				//Karte von der Hand des Spielers nehmen
+				spielerhand.get(mitspieler).remove(gegenTest);
+				spielerhand.get(spielt).add(gegenTest);
+			}
+		}
+	}
 	
 }

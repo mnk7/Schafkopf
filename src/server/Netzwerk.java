@@ -8,6 +8,8 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import lib.Karte;
+
 public class Netzwerk extends lib.Netzwerk {
 	
 	private ServerSocket server;
@@ -32,6 +34,18 @@ public class Netzwerk extends lib.Netzwerk {
 	 */
 	public String gibIP() {
 		return client.getInetAddress().getHostAddress();
+	}
+
+	public Karte getKarte() {
+		Karte karte;
+		try {
+			karte = new Karte(Karte.farbe.valueOf(einlesen()), Karte.wert.valueOf(einlesen()));
+			return karte;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 }
 

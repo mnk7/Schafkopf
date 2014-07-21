@@ -5,8 +5,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import regeln.Hochzeit;
+
 import regeln.Controll;
 import regeln.Regelwahl;
+import lib.Karte;
 import lib.Model;
 import lib.Model.modus;
 
@@ -21,6 +24,7 @@ public class Server implements Runnable{
         
         //hält alle 4 Spieler, ob Bot oder Mensch
         private ArrayList<Spieler> spieler;
+        private int spielerzahl;
         
         private String[] geklopft;
         
@@ -48,6 +52,7 @@ public class Server implements Runnable{
         	model = new Model();
               
         	spieler = new ArrayList<Spieler>();
+        	spielerzahl = 4;
         	
         	geklopft = new String[4];
         	for(int i = 0; i < 4; i++) {
@@ -82,9 +87,8 @@ public class Server implements Runnable{
         		while(true) {
 	        		Socket client = server.accept();
 	        		spieler.add(new Mensch(client));
-	        		graphik.textSetzen(spieler);
 	        		
-	        		if(spieler.size() == 4 && nocheins) {
+	        		if(spieler.size() == spielerzahl && nocheins) {
 	        			nocheins = false;
 	        			neuesSpiel();
 	        		}
@@ -105,6 +109,8 @@ public class Server implements Runnable{
         	
         	//Spiel wurde gestartet
         	while(!nocheins) {
+        		//Anzeigen der Spieler
+        		graphik.textSetzen(spieler);
         		
         		//gibt jedem Spieler seine ID
         		for(int i = 0; i < 4; i++) {
@@ -123,10 +129,7 @@ public class Server implements Runnable{
 	        	for(int i = 0; i < 4; i++) {
 	        		//Speichert, ob ein Spieler geklopft hat etc.
 	        		spieler.get(i).erste3(model);
-	        		while(geklopft[i].equals("")) {
-	        			geklopft[i] = spieler.get(i).gibAntwort();
-	        			Thread.sleep(100);
-	        		}
+	        		geklopft[i] = spieler.get(i).gibAntwort();
 	        	}
 	        	
 	        	model.zweiteKartenGeben();
@@ -154,15 +157,21 @@ public class Server implements Runnable{
 	        	}
 	        	
 	        	//will niemand spielen geht es zur nächsten Runde
-	        	if(mod == null) {
+	        	if(mod.equals(null)) {
 	        		nocheins = true;
 	        		continue;
 	        	}
 	        	//Wenn ein Si gespielt wird
-	        	if(mod == modus.SI) {
+	        	if(mod.equals(modus.SI)) {
 	        		rundeBeenden();
 	        		nocheins = true;
 	        		continue;
+	        	}
+	        	//legt die Regeln fest
+	        	regeln = regelwahl.wahl(mod, model, spielt);
+	        	if(regeln == null) {
+	        		nocheins = false;
+	        		break;
 	        	}
 	        	
 	        	//Sendet den Modus an alle Spieler und empfängt, ob kontra gegeben wurde
@@ -177,17 +186,36 @@ public class Server implements Runnable{
 	        		
 	        		if(k == null || k == "") kontra[i] = false;
 	        		else kontra[i] = true;
-	        	}	    
+	        	}	
 	        	
-	        	//legt die Regeln fest
-	        	regeln = regelwahl.wahl(mod, model, spielt);
-	        	if(regeln == null) {
-	        		nocheins = false;
-	        		break;
-	        	}
-	        	
-	        	//bestimmt einen eventuellen Mitspieler
-	        	mitspieler = regeln.mitspieler(model);
+	        	//Wenn eine Hochzeit gespielt wird
+	        	if(mod.equals(modus.HOCHZEIT)) {
+	        		Hochzeit h = (Hochzeit) regeln;
+	        		
+	        		Karte angebot = spieler.get(spielt).gibKarte();
+	        		
+	        		if(h.istTrumpf(angebot)) {
+		        		for(int i = 0; i < 4; i++) {
+		        			
+		        			if(i != spielt) {
+		        				spieler.get(i).hochzeit();
+		        				
+		        				if(spieler.get(i).gibAntwort().equals("JA")) {
+		        					//Wenn die Hochzeit angenommen wird
+		        					Karte k spieler.get(i).gibKarte();
+		        					
+		        					//Wenn die Karte ein Trumpf ist
+			        				if(!h.istTrumpf(k)) {
+			        					model.hochzeit(spielt, i, angebot, k);
+			        					mitspieler = i;
+			        				}
+		        				}
+		        			}
+		        		}
+	        		}
+	        	} else 
+	        		//bestimmt einen eventuellen Mitspieler
+		        	mitspieler = regeln.mitspieler(model);   
 	        	
 	        	//Spielen
 	        	for(int i = 0; i < 6; i++) {
@@ -233,15 +261,37 @@ public class Server implements Runnable{
          * Beendet die Runde
          */
         private void rundeBeenden() {
+        	ArrayList<Integer> punkte = model.gibPunkte();
+        	//Die Punkte des Spielers
+        	int pSpielt = punkte.get(spielt);
+        	//und vielleicht des Mitspielers
+        	if(mitspieler != 4)
+        		pSpielt += punkte.get(mitspieler);
+        	
+        	if(pSpielt <= 60) {
+        		//Anzeigen, dass er verloren hat
+        		spielt *= -1;
+        		if(mitspieler != 4)
+        			mitspieler *= -1;
+        	}
+        	
         	for(int i = 0; i < 4; i++) {
         		try {
-					spieler.get(i).sieger(spielt, mitspieler);
+        			spieler.get(i).sieger(spielt, mitspieler);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
         	}
         	
         	//Den Spielern Geld abziehen oder hinzufügen
+        	for(int i = 0; i < 4; i++) {
+        		if(i == spielt || i == mitspieler) {
+        			
+        		}
+        		if(i == spielt * -1 || i == mitspieler * -1) {
+        			
+        		}
+        	}
         }
         
         /**
@@ -252,6 +302,25 @@ public class Server implements Runnable{
         	return spieler;
         }
         
+        /**
+         * Setzt die Spielerzahl
+         * @param spielerzahl
+         */
+        public void setSpielerzahl(int spielerzahl) {
+        	this.spielerzahl = spielerzahl;
+        }
+        
+        /**
+         * Gibt die Spielerzahl zurück
+         * @return
+         */
+        public String gibSpielerzahl() {
+        	return spielerzahl;
+        }
+        
+        /**
+         * Beendet den Server
+         */
         public void beenden() {
         	try {
         		listener.stop();
