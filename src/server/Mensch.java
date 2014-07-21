@@ -48,23 +48,23 @@ public class Mensch implements Spieler, Runnable {
 	public void run() {
 		while(true) {
 			try {
-				String input = netzwerk.einlesen);
+				String input = netzwerk.einlesen();
 				
 				switch(input) {
 				case "!NAME" :
 					this.name = input;
 					break;
 				case "!ERSTE3" :
-					antwort = netzwerk.getAnswer();
+					antwort = netzwerk.einlesen();
 					break;
 				case "!SPIEL" :
 					model = netzwerk.empfangen();
 					break;
 				case "!SPIELSTDU" :
-					antwort = netzwerk.getAnswer();
+					antwort = netzwerk.einlesen();
 					break;
 				case "!HOCHZEIT" :
-					antwort = netzwerk.getAnswer();
+					antwort = netzwerk.einlesen();
 				case "!KARTE" :	
 					karte = netzwerk.getKarte();
 					break;
@@ -135,7 +135,7 @@ public class Mensch implements Spieler, Runnable {
 		
 		//gibt zurück, ob Kontra gegeben wurde
 		try {
-			return netzwerk.getAnswer();
+			return netzwerk.einlesen();
 		} catch(Exception e) {
 			return null;
 		}

@@ -65,7 +65,7 @@ public class Client implements View {
 	private void listen() {
 		while(true) {
 			try {
-				String steuerung = netzwerk.getAnswer();
+				String steuerung = netzwerk.einlesen();
 				
 				switch (steuerung) {
 				case "!ERSTE3":
@@ -98,19 +98,19 @@ public class Client implements View {
 					break;
 				case "!MODUS":
 					//Empfangen des Modus des Spiels
-					mod = modus.valueOf(netzwerk.getAnswer());
+					mod = modus.valueOf(netzwerk.einlesen());
 					break;
 				case "!SIEGER":
 					//empfängt die Sieger
-					int s1 = Integer.parseInt(netzwerk.getAnswer());
-					int s2 = Integer.parseInt(netzwerk.getAnswer());
+					int s1 = Integer.parseInt(netzwerk.einlesen());
+					int s2 = Integer.parseInt(netzwerk.einlesen());
 
 					//und gibt sie an die Graphik weiter
 					graphik.sieger(s1, s2);
 					break;
 				case "!ID":
 					//ID des Spielers empfangen
-					ID = Integer.parseInt(netzwerk.getAnswer());
+					ID = Integer.parseInt(netzwerk.einlesen());
 					netzwerk.setID(ID);
 					break;
 				case "!HOCHZEIT" :

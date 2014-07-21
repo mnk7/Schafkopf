@@ -38,14 +38,8 @@ public class Netzwerk extends lib.Netzwerk {
 
 	public Karte getKarte() {
 		Karte karte;
-		try {
-			karte = new Karte(Karte.farbe.valueOf(einlesen()), Karte.wert.valueOf(einlesen()));
-			return karte;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return null;
+		karte = new Karte(Karte.farbe.valueOf(einlesen()), Karte.wert.valueOf(einlesen()));
+		return karte;
 	}
 }
 

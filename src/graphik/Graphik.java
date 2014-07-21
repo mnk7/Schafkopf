@@ -8,9 +8,9 @@ import javax.swing.JTextField;
 import regeln.Controll;
 
 import lib.Karte;
-import lib.Model;
+import lib.Model;  
 import lib.Model.modus;
-
+ 
 import client.ModelMVC;
 import client.View;
 
@@ -34,8 +34,7 @@ public class Graphik extends JFrame implements View
 	//Das Model
 	private ModelMVC model;
 	
-	public Graphik()
-	{
+	public Graphik() {
 		super();
 		start = new JButton();
 		spieler1 = new JTextField();

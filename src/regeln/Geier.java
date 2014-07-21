@@ -15,7 +15,7 @@ public class Geier implements Controll {
 				ober = true;
 			}
 		}
-		if(!ober) return keinOber(gespielt);
+		if(ober) return keinOber(gespielt);
 		return schonOber(gespielt);
 	}
 	public int schonOber(Karte[] gespielt){
@@ -98,7 +98,7 @@ public class Geier implements Controll {
 	@Override
 	public int mitspieler(Model m) {
 		// TODO Auto-generated method stub
-		return 4;
+		return 0;
 	}
 	public Karte.wert getWert(Model m){
 		Karte.wert x = null;

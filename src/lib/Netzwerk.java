@@ -184,9 +184,13 @@ public abstract class Netzwerk {
 	 * @return input
 	 */
 	public String einlesen() {
-		String input = in.readLine();
-		while(input != null || input != "") {
+		String input = null;
+		try {
 			input = in.readLine();
+			while(input != null || input != "") {
+				input = in.readLine();
+			}
+		} catch(Exception e) {
 		}
 		
 		return input;

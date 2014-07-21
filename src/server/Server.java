@@ -202,7 +202,7 @@ public class Server implements Runnable{
 		        				
 		        				if(spieler.get(i).gibAntwort().equals("JA")) {
 		        					//Wenn die Hochzeit angenommen wird
-		        					Karte k spieler.get(i).gibKarte();
+		        					Karte k = spieler.get(i).gibKarte();
 		        					
 		        					//Wenn die Karte ein Trumpf ist
 			        				if(!h.istTrumpf(k)) {
@@ -314,7 +314,7 @@ public class Server implements Runnable{
          * Gibt die Spielerzahl zurück
          * @return
          */
-        public String gibSpielerzahl() {
+        public int gibSpielerzahl() {
         	return spielerzahl;
         }
         
