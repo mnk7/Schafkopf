@@ -7,10 +7,12 @@ import lib.Model;
 
 
 public class Sauspiel implements Controll {
-
+	Karte.farbe rufsau;
 	Karte.farbe farbe = Karte.farbe.HERZ;
-	public Sauspiel(Karte.farbe rufsau){}
-	@Override
+	public Sauspiel(Karte.farbe saufarbe){
+		rufsau = saufarbe;
+	}
+
 	public int sieger(Model m) {
 		boolean trumpf = false;
 		Karte[] gespielt = new Karte[4];
@@ -23,7 +25,8 @@ public class Sauspiel implements Controll {
 		if(trumpf) return koaTrumpf(gespielt);
 		return schonTrumpf(gespielt);
 	}
-	public int schonTrumpf(Karte[] gespielt){ 
+	
+	public int schonTrumpf(Karte[] gespielt){
 		boolean ober = false;
 		for(int i = 0; i < 4; i++){
 			if(gespielt[i].gibWert() == Karte.wert.OBER){
@@ -63,6 +66,7 @@ public class Sauspiel implements Controll {
 
 		
 	}
+	
 	public int schonUnter(Karte[] gespielt){
 		int spieler = 0;
 		Karte.farbe unterFarbe = null;
@@ -85,6 +89,7 @@ public class Sauspiel implements Controll {
 			}
 		return spieler;
 	}
+	
 	public int schonOber(Karte[] gespielt){
 		int spieler = 0;
 		Karte.farbe oberFarbe = null;
@@ -107,6 +112,7 @@ public class Sauspiel implements Controll {
 			}
 		return spieler;
 	}	
+	
 	public int koaTrumpf(Karte[] gespielt){
 		int spieler = 0;
 		Karte.farbe farb = gespielt[0].gibFarbe();
@@ -131,6 +137,7 @@ public class Sauspiel implements Controll {
 			}
 		return spieler;
 	}
+	
 	public boolean istTrumpf(Karte.wert angespielt, Karte.farbe angespielt2) {
 		if (angespielt.equals(Karte.wert.OBER) || angespielt.equals(Karte.wert.UNTER) || angespielt2.equals(farbe))return true;
 		return false;
@@ -150,19 +157,20 @@ public class Sauspiel implements Controll {
 			if (istTrumpf(getWert(m), getFarbe(m))) {
 				return true;
 			}
-			if (keinTrumpf(m)) {
+			if (keinTrumpf(m) && !sau(m)) {
 				return true;
 			}
 			return false;
 		}
-		if(getFarbe(m).equals(angespielt2)){
+		if(getFarbe(m).equals(angespielt2) && sau(m)){
 			return true;
 		}
-		if(!getFarbe(m).equals(angespielt2) && keineFarbe(angespielt2, m)){
+		if(!getFarbe(m).equals(angespielt2) && keineFarbe(angespielt2, m) && !sau(m)){
 			return true;
 		}
 		return false;
 	}
+	
 	public boolean keineFarbe(Karte.farbe z, Model m){
 		ArrayList<Karte> y;
 		int x = 0;
@@ -217,11 +225,36 @@ public class Sauspiel implements Controll {
 		return true;
 	}
 
+	public boolean sau(Model m){
+		int spieler = -1;
+		for (int i = 0; i < 4; i++) {
+			if (m.gibTisch()[i] != null) {
+				spieler = i;
+			}
+		}
+		ArrayList<Karte> hand;
+		hand = m.gibSpielerKarten(spieler);
+		for(int i = 0; i < hand.size(); i++){
+			if (hand.get(i).gibWert().equals(Karte.wert.SAU) && hand.get(i).gibFarbe().equals(rufsau)){
+				return true;
+			} 
+		}
+		return false;
+	}
 
-	@Override
-	public int mitspieler(Model model) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+
+	public int mitspieler(Model m) {
+		ArrayList<Karte> hand;
+		for(int i = 0; i < 4; i++){
+			hand = m.gibSpielerKarten(i);
+			for(int j = 0; j < hand.size(); j++){
+				if(hand.get(j).gibWert().equals(Karte.wert.SAU) && hand.get(j).gibFarbe().equals(rufsau)){
+					return i;
+				}
+			}
+		}
+		return -1;
 	}
 
 }

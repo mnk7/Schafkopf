@@ -191,7 +191,7 @@ public class Server implements Runnable{
 		        					Karte k = spieler.get(i).gibKarte();
 		        					
 		        					//Wenn die Karte ein Trumpf ist
-			        				if(!h.istTrumpf(k)) {
+			        				if(!h.istTrumpf(k.gibWert(), k.gibFarbe())) {
 			        					model.hochzeit(spielt, i, angebot, k);
 			        					mitspieler = i;
 			        				}

@@ -24,7 +24,7 @@ public class Regelwahl {
 		case SAUSPIELgras: if(sauspielMoeglich(Karte.farbe.GRAS, m, position)) x = new Sauspiel(Karte.farbe.GRAS);break;
 		case SAUSPIELherz: if(sauspielMoeglich(Karte.farbe.HERZ, m, position)) x = new Sauspiel(Karte.farbe.HERZ);break;
 		case SAUSPIELschellen: if(sauspielMoeglich(Karte.farbe.SCHELLEN, m, position)) x = new Sauspiel(Karte.farbe.SCHELLEN);break;
-		case HOCHZEIT: if(hochzeitMoeglich(m, position)) x = new Hochzeit();
+		case HOCHZEIT: x = new Hochzeit();
 		}
 		return x;
 	}
@@ -45,7 +45,4 @@ public class Regelwahl {
 		return false;
 	}
 	
-	public boolean hochzeitMoeglich(Model m, int position){
-		return true;
-	}
 }

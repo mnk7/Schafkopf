@@ -11,7 +11,7 @@ public class Geier implements Controll {
 		Karte[] gespielt = new Karte[4];
 		gespielt = m.gibTisch();
 		for(int i = 0; i < 4; i++){
-			if(gespielt[i].gibWert() == Karte.wert.OBER){
+			if(gespielt[i].gibWert() == Karte.wert.OBER){ 
 				ober = true;
 			}
 		}
