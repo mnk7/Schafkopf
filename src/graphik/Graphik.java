@@ -1,22 +1,23 @@
 package graphik;
 
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import regeln.Controll;
-
 import lib.Karte;
 import lib.Model;  
 import lib.Model.modus;
- 
 import client.ModelMVC;
 import client.View;
 
 public class Graphik extends JFrame implements View
-{
-	public JButton start;     //Startknopf
+{	
 	private JTextField spieler1;  //Name Spieler 1
 	private JTextField spieler2;  //Name Spieler 2
 	private JTextField spieler3;  //Name Spieler 3
@@ -37,9 +38,14 @@ public class Graphik extends JFrame implements View
 	public Graphik() {
 		super();
 		this.setSize(500, 500);
-		start = new JButton();
-		spieler1 = new JTextField();
+		this.initGui();
+		
 	}
+	
+	public static void main(String[] args) {
+		Graphik inst = new Graphik();
+	}
+	
 	
 	/**
 	 * aktualisiert das Model
@@ -111,5 +117,22 @@ public class Graphik extends JFrame implements View
 		return null;
 	}
 	
+	public void initGui()
+	{
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setTitle("SCHOAFKOPF-APP");
+		this.setResizable(false);
+		spieler1 = new JTextField();
+		spieler1.setBounds(200, 200, 100, 50);
+		spieler2 = new JTextField();
+		spieler2.setBounds(600, 600, 100, 50);
+		spieler3 = new JTextField();
+		spieler3.setBounds(200, 800, 100, 50);
+		spieler4 = new JTextField();		
+		spieler4.setBounds(0, 600, 100, 50);
+		
+	}
+	
 
 }
+
