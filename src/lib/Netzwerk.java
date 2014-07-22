@@ -37,11 +37,11 @@ public abstract class Netzwerk {
 		for(int i = 0; i < 6; i++) {
 			try {
 			Karte karte = spielerhand.get(i);
-			out.write(karte.gibFarbe().toString());
-			out.write(karte.gibWert().toString());
+			send(karte.gibFarbe().toString());
+			send(karte.gibWert().toString());
 			} catch(Exception e) {
-				out.write("");
-				out.write("");
+				send("");
+				send("");
 			}
 		}
 		
@@ -49,11 +49,11 @@ public abstract class Netzwerk {
 		Karte[] tisch = model.gibTisch();
 		for(int i = 0; i < 4; i++) {
 			try {
-			out.write(tisch[i].gibFarbe().toString());
-			out.write(tisch[i].gibWert().toString());
+			send(tisch[i].gibFarbe().toString());
+			send(tisch[i].gibWert().toString());
 			} catch(Exception e) {
-				out.write("");
-				out.write("");
+				send("");
+				send("");
 			}
 		}
 		
@@ -66,14 +66,14 @@ public abstract class Netzwerk {
 			} catch(Exception e) {
 				output = "";
 			}
-			out.write(output);
+			send(output);
 			
 			try {
 				output = letzterStich[i].gibWert().toString();
 			} catch(Exception e) {
 				output = "";
 			}
-			out.write(output);
+			send(output);
 		}
 	}
 	
@@ -169,6 +169,7 @@ public abstract class Netzwerk {
 	 */
 	public void send(String output) throws Exception{
 		out.write(output);
+		out.newLine();
 	}
 	
 	/**
@@ -187,9 +188,9 @@ public abstract class Netzwerk {
 		String input = "error";
 		try {
 			//Solange nichts gesendet wird
-			do {
+		//	do {
 				input = in.readLine();
-			} while(input.equals(""));
+		//	} while(input.equals(""));
 			System.out.println(input);
 		} catch(Exception e) {
 		}

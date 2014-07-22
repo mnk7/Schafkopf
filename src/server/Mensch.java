@@ -36,7 +36,6 @@ public class Mensch implements Spieler, Runnable {
 			//Lauscher aufsperren
 			t = new Thread(this);
 			
-			//Aufforderung zur Identifikation
 			netzwerk.send("!NAME");
 			
 		} catch(Exception e) {
@@ -49,6 +48,7 @@ public class Mensch implements Spieler, Runnable {
 	 * Horcht auf Befehle vom Server
 	 */
 	public void run() {
+		
 		while(true) {
 			try {
 				String input = netzwerk.einlesen();
