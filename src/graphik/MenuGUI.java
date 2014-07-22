@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -23,7 +24,11 @@ public class MenuGUI extends JFrame{
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		MenuGUI menu = new MenuGUI();
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				MenuGUI inst = new MenuGUI();
+			}
+		});
 	}
 	
 	private Client client;

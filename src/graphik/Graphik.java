@@ -39,13 +39,7 @@ public class Graphik extends JFrame implements View
 		super();
 		this.setSize(500, 500);
 		this.initGui();
-		
-	}
-	
-	public static void main(String[] args) {
-		Graphik inst = new Graphik();
-	}
-	
+	}	
 	
 	/**
 	 * aktualisiert das Model

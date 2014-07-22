@@ -1,6 +1,5 @@
 package server;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -9,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 public class Graphik extends JFrame {
@@ -17,7 +17,11 @@ public class Graphik extends JFrame {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Graphik inst = new Graphik();
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				Graphik inst = new Graphik();
+			}
+		});
 	}
 	
 	private JButton start;
@@ -37,7 +41,7 @@ public class Graphik extends JFrame {
 		}	
 	}
 	
-	public void initGUI(){
+	public void initGUI() {
 		this.setSize(330, 240);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("SCHOAFKOPF-SERVER");
@@ -71,9 +75,11 @@ public class Graphik extends JFrame {
 		start.setText("Server starten");
 		start.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				if(server == null)
+				if(server == null) {
 					server = new Server(g);
-				else
+					clear();
+					PlayerLabel[0].setText("Server gestartet");
+				} else
 					JOptionPane.showMessageDialog(null, "Server läuft schon");
 			}
 		});
@@ -88,6 +94,8 @@ public class Graphik extends JFrame {
 				if(server != null) {
 					server.beenden();
 					server = null;
+					clear();
+					PlayerLabel[0].setText("Server beendet");
 				}
 			}
 		});
@@ -96,19 +104,25 @@ public class Graphik extends JFrame {
 		repaint();
 	}
 	
-	public void textSetzen(ArrayList<Spieler> s){ 
+	public synchronized void textSetzen(ArrayList<Spieler> s) { 
 		ArrayList <Spieler> spieler = s;		
 		
-		try{
-			for(int i=0; i<4; i++){
+		try {
+			for(int i = 0; i < 4; i++){
 				String aufschrift;
 				aufschrift = spieler.get(i).gibName();
 				aufschrift += " - ";
 				aufschrift += spieler.get(i).gibIP();
+				PlayerLabel[i].setText(aufschrift);
 			}
-		}
-		catch(Exception e) {
+		} catch(Exception e) {
 			// e.printStackTrace();
+		}
+	}
+	
+	public void clear() {
+		for(int i = 0; i < 4; i++) {
+			PlayerLabel[i].setText("");
 		}
 	}
 }
