@@ -180,7 +180,7 @@ public class Server implements Runnable{
 	        		
 	        		Karte angebot = spieler.get(spielt).gibKarte();
 	        		
-	        		if(h.hochzeitMoeglich(model, spielt)) {
+	        		if(h.hochzeitMoeglich(model, spielt, angebot)) {
 		        		for(int i = 0; i < 4; i++) {
 		        			
 		        			if(i != spielt) {

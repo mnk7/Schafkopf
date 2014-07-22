@@ -33,7 +33,7 @@ public class Hochzeit implements Controll {
 		return true;
 	}
 
-	public boolean hochzeitMoeglich(Model model, int spielt) {
+	public boolean hochzeitMoeglich(Model model, int spielt, Karte angebot) {
 		return false;
 	}
 
