@@ -1,9 +1,9 @@
 package lib;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.util.ArrayList;
 
 public abstract class Netzwerk {
@@ -16,8 +16,8 @@ public abstract class Netzwerk {
 	protected int port;
 	
 	//Lesen und Schreiben
-	protected PrintWriter out;
-	protected BufferedReader in;
+	protected BufferedWriter out;
+	protected BufferedReader in; 
 	
 	//Speichert ein gesendetes Model
 	protected Model model;
@@ -167,8 +167,8 @@ public abstract class Netzwerk {
 	 * Sendet Antworten z.B. ob geklopft wird, oder was gespielt wird
 	 * @param modus
 	 */
-	public void send(String modus) throws Exception{
-		out.write(modus);
+	public void send(String output) throws Exception{
+		out.write(output);
 	}
 	
 	/**
@@ -184,12 +184,13 @@ public abstract class Netzwerk {
 	 * @return input
 	 */
 	public String einlesen() {
-		String input = null;
+		String input = "error";
 		try {
-			input = in.readLine();
-			while(input != null || input != "") {
+			//Solange nichts gesendet wird
+			do {
 				input = in.readLine();
-			}
+			} while(input.equals(""));
+			System.out.println(input);
 		} catch(Exception e) {
 		}
 		

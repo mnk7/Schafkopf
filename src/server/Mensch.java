@@ -36,6 +36,9 @@ public class Mensch implements Spieler, Runnable {
 			//Lauscher aufsperren
 			t = new Thread(this);
 			
+			//Aufforderung zur Identifikation
+			netzwerk.send("!NAME");
+			
 		} catch(Exception e) {
 			//Gibt den Fehler weiter
 			throw e;
@@ -52,7 +55,7 @@ public class Mensch implements Spieler, Runnable {
 				
 				switch(input) {
 				case "!NAME" :
-					this.name = input;
+					name = input;
 					break;
 				case "!ERSTE3" :
 					antwort = netzwerk.einlesen();

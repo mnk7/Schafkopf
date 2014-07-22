@@ -47,9 +47,6 @@ public class Client implements View {
 		
 		if(!connect()) throw new Exception("Verbindung gescheitert");
 		
-		//Senden des Namens
-		netzwerk.send(name);
-		
 		thread = new Thread() {
 			public void run() {
 				listen();
@@ -68,6 +65,11 @@ public class Client implements View {
 				String steuerung = netzwerk.einlesen();
 				
 				switch (steuerung) {
+				case "!NAME":
+					//Senden des Namens
+					netzwerk.send("!NAME");
+					netzwerk.send(name);
+					break;
 				case "!ERSTE3":
 					//Model empfangen
 					model.setzeModel(netzwerk.empfangen());
@@ -150,7 +152,7 @@ public class Client implements View {
 	/**
 	 * Erstellt die Verbindung zum Server
 	 */
-	public boolean connect() {
+	public boolean connect() { 
 		try {
 			//Verbindet sich mit dem Server mit falscher Spielernummer
 			netzwerk = new Netzwerk(ID, IP);

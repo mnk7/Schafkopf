@@ -1,6 +1,7 @@
 package client;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -21,13 +22,10 @@ public class Netzwerk extends lib.Netzwerk{
 		this.port = 5555;
 		
 		try {
-			SocketAddress address = new InetSocketAddress(ip, port);
-			//Erstellen eines Clients -> Output
-			Socket client = new Socket();
-			//Verbinden mit dem Server
-			client.connect(address);
+			//Verbindung mit dem Server
+			Socket client = new Socket(ip, port);
 			
-			out = new PrintWriter(client.getOutputStream(), true);
+			out = new BufferedWriter(new PrintWriter(client.getOutputStream(), true));
 			in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			
 		} catch (IOException e) {

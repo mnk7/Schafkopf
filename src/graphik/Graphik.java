@@ -16,18 +16,7 @@ import lib.Model.modus;
 import client.ModelMVC;
 import client.View;
 
-public class Graphik extends JFrame implements View
-{	
-	private JTextField spieler1;  //Name Spieler 1
-	private JTextField spieler2;  //Name Spieler 2
-	private JTextField spieler3;  //Name Spieler 3
-	private JTextField spieler4;  //Name Spieler 4
-	private JLabel score1;  //Spielstand Spieler1
-	private JLabel score2;  //Spielstand Spieler2
-	private JLabel score3;  //Spielstand Spieler3
-	private JLabel score4;  //Spielstand Spieler4
-	private JLabel hintergrund; //Hintergrund (optional)
-	private JLabel anzeige;  //zeigt aktuelles Spiel an
+public class Graphik extends JFrame implements View {	
 	
 	//Enthält die Controll -> kontrolliert einen Spielzug
 	private Controll controll;
@@ -44,8 +33,7 @@ public class Graphik extends JFrame implements View
 	/**
 	 * aktualisiert das Model
 	 */
-	public void update(ModelMVC model)
-	{
+	public void update(ModelMVC model) {
 		this.model = model;		
 	}
 	
@@ -119,19 +107,7 @@ public class Graphik extends JFrame implements View
 		
 	}
 	
-	public void initGui()
-	{
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setTitle("SCHOAFKOPF-APP");
-		this.setResizable(false);
-		spieler1 = new JTextField();
-		spieler1.setBounds(200, 200, 100, 50);
-		spieler2 = new JTextField();
-		spieler2.setBounds(600, 600, 100, 50);
-		spieler3 = new JTextField();
-		spieler3.setBounds(200, 800, 100, 50);
-		spieler4 = new JTextField();		
-		spieler4.setBounds(0, 600, 100, 50);
+	public void initGui() {
 		
 	}
 	

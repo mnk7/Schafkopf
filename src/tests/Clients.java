@@ -13,7 +13,7 @@ public class Clients {
 			t[i] = new Thread() {
 				public void run() {
 					try {
-						Client c = new Client("127.0.0.1", "M");
+						Client c = new Client("127.0.0.1", "Michael");
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
