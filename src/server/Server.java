@@ -180,7 +180,7 @@ public class Server implements Runnable{
 	        		
 	        		Karte angebot = spieler.get(spielt).gibKarte();
 	        		
-	        		if(h.istTrumpf(angebot)) {
+	        		if(h.hochzeitMoeglich(model, spielt)) {
 		        		for(int i = 0; i < 4; i++) {
 		        			
 		        			if(i != spielt) {
