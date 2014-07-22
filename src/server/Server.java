@@ -174,20 +174,6 @@ public class Server implements Runnable{
 	        		break;
 	        	}
 	        	
-	        	//Sendet den Modus an alle Spieler und empfängt, ob kontra gegeben wurde
-	        	for(int i = 0; i < 4; i++) {
-	        		String k;
-					try {
-						k = spieler.get(i).modus(mod);
-					} catch (Exception e) {
-						e.printStackTrace(); 
-						k = null;
-					}
-	        		
-	        		if(k == null || k == "") kontra[i] = false;
-	        		else kontra[i] = true;
-	        	}	
-	        	
 	        	//Wenn eine Hochzeit gespielt wird
 	        	if(mod.equals(modus.HOCHZEIT)) {
 	        		Hochzeit h = (Hochzeit) regeln;
@@ -216,6 +202,21 @@ public class Server implements Runnable{
 	        	} else 
 	        		//bestimmt einen eventuellen Mitspieler
 		        	mitspieler = regeln.mitspieler(model);   
+	        	
+	        	//Sendet den Modus an alle Spieler und empfängt, ob kontra gegeben wurde
+	        	for(int i = 0; i < 4; i++) {
+	        		String k;
+					try {
+						k = spieler.get(i).modus(mod);
+						spieler.get(i).spieler(spielt);
+					} catch (Exception e) {
+						e.printStackTrace(); 
+						k = null;
+					}
+	        		
+	        		if(k == null || k == "") kontra[i] = false;
+	        		else kontra[i] = true;
+	        	}	
 	        	
 	        	//Spielen
 	        	for(int i = 0; i < 6; i++) {

@@ -12,8 +12,6 @@ import lib.Karte;
 
 public class Netzwerk extends lib.Netzwerk {
 	
-	private ServerSocket server;
-	
 	private Socket client;
 	
 	public Netzwerk(Socket client) throws Exception {

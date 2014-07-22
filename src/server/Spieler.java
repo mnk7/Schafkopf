@@ -85,6 +85,8 @@ public interface Spieler{
 	 * Frägt, ob eine Hochzeit angenommen wird
 	 * @throws Exception 
 	 */
-	public void hochzeit() throws Exception; 
+	public void hochzeit() throws Exception;
+
+	public void spieler(int spielt); 
 
 }

@@ -110,6 +110,14 @@ public class Graphik extends JFrame implements View
 	public Karte hochzeitKarte() {
 		return null;
 	}
+
+	/**
+	 * Empfängt, wer spielt 
+	 * @param spielt
+	 */
+	public void spielt(int spielt) {
+		
+	}
 	
 
 }

@@ -125,6 +125,14 @@ public class Mensch implements Spieler, Runnable {
 			e.printStackTrace();
 		}
 	}
+	
+	public void spieler(int spielt) {
+		try {
+			netzwerk.send("!SPIELT");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public String modus(lib.Model.modus m) throws Exception{
 		//Steuerbefehl

@@ -43,7 +43,6 @@ public class Solo implements Controll {
 		}
 		if(unter) return schonUnter(gespielt);
 		int spieler = 0;
-		Karte.farbe farb = gespielt[0].gibFarbe();
 		Karte.wert farbwert = gespielt[0].gibWert();
 
 		for(int i = 0; i < 4; i++){

@@ -100,6 +100,10 @@ public class Client implements View {
 					//Empfangen des Modus des Spiels
 					mod = modus.valueOf(netzwerk.einlesen());
 					break;
+				case "!SPIELT":
+					int spielt = Integer.parseInt(netzwerk.einlesen());
+					graphik.spielt(spielt);
+					break;
 				case "!SIEGER":
 					//empfängt die Sieger
 					int s1 = Integer.parseInt(netzwerk.einlesen());

@@ -73,4 +73,10 @@ public class Bot implements Spieler {
 		
 	}
 
+	@Override
+	public void spieler(int spielt) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
