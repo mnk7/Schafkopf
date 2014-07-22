@@ -36,9 +36,9 @@ public class Graphik extends JFrame implements View
 	
 	public Graphik() {
 		super();
+		this.setSize(500, 500);
 		start = new JButton();
 		spieler1 = new JTextField();
-		
 	}
 	
 	/**

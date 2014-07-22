@@ -19,11 +19,7 @@ public class Clients {
 					}
 				}
 			};
-<<<<<<< HEAD
 			 
-=======
-			
->>>>>>> f25c3e51b6e42fb9fccc95e99aefda1effc81689
 			t[i].start();
 		}
 
