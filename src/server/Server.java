@@ -69,7 +69,7 @@ public class Server implements Runnable{
         	
         	try {
         		//Server für jeden Port
-				server = new ServerSocket(5555);
+				server = new ServerSocket(15555);
 				listener = new Thread(this);
 				
 				listener.start();
@@ -87,6 +87,7 @@ public class Server implements Runnable{
         		while(true) {
 	        		Socket client = server.accept();
 	        		client.setTcpNoDelay(true);
+	        		
 	        		spieler.add(new Mensch(client));
 	        		
 	        		if(spieler.size() == spielerzahl && nocheins) {

@@ -19,7 +19,7 @@ public abstract class Netzwerk {
 	protected BufferedReader in; 
 	
 	//Speichert ein gesendetes Model
-	protected Model model;
+	protected Model model = new Model();
 	
 	/**
 	 * Sendet ein Model, bzw nicht die Karten der anderen Spieler
@@ -152,10 +152,9 @@ public abstract class Netzwerk {
 					letzterStich[i] = karte;
 				}
 			} catch(Exception e) {
-				throw new Exception("!!!Fehler beim Empfangen von Daten!!");
+				e.printStackTrace();
 			}
 		}
-
 		
 		model = new Model(spielerhand, tisch, letzterStich, punkte);
 		
@@ -169,6 +168,7 @@ public abstract class Netzwerk {
 	public void send(String output) throws Exception{
 		out.write(output);
 		out.newLine();
+		out.flush();
 	}
 	
 	/**
@@ -191,6 +191,7 @@ public abstract class Netzwerk {
 				input = in.readLine();
 			} while(input.equals("") || input.equals(null));
 		} catch(Exception e) {
+			e.printStackTrace();
 		}
 		
 		return input;

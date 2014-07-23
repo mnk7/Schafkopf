@@ -19,7 +19,7 @@ public class Netzwerk extends lib.Netzwerk{
 		
 		//Verbindungsinformationen
 		this.ip = ip;
-		this.port = 5555;
+		this.port = 15555;
 		
 		try {
 			//Verbindung mit dem Server
