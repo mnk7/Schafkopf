@@ -3,7 +3,6 @@ package lib;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public abstract class Netzwerk {
@@ -188,10 +187,9 @@ public abstract class Netzwerk {
 		String input = "error";
 		try {
 			//Solange nichts gesendet wird
-		//	do {
+			do {
 				input = in.readLine();
-		//	} while(input.equals(""));
-			System.out.println(input);
+			} while(input.equals("") || input.equals(null));
 		} catch(Exception e) {
 		}
 		

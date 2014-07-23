@@ -55,7 +55,7 @@ public class Mensch implements Spieler, Runnable {
 				
 				switch(input) {
 				case "!NAME" :
-					name = input;
+					name = netzwerk.einlesen();
 					break;
 				case "!ERSTE3" :
 					antwort = netzwerk.einlesen();
@@ -166,6 +166,13 @@ public class Mensch implements Spieler, Runnable {
 	}
 
 	public String gibName() {
+		while(name.equals(null) || name.equals("")) {
+			try {
+				netzwerk.send("!NAME");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		return name;
 	}
 

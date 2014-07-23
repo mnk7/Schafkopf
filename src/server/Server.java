@@ -86,6 +86,7 @@ public class Server implements Runnable{
         	try {
         		while(true) {
 	        		Socket client = server.accept();
+	        		client.setTcpNoDelay(true);
 	        		spieler.add(new Mensch(client));
 	        		
 	        		if(spieler.size() == spielerzahl && nocheins) {

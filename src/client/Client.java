@@ -63,7 +63,7 @@ public class Client implements View {
 		while(true) {
 			try {
 				String steuerung = netzwerk.einlesen();
-				
+				System.out.println("-");
 				switch (steuerung) {
 				case "!NAME":
 					//Senden des Namens
