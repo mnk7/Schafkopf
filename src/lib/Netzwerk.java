@@ -48,8 +48,8 @@ public abstract class Netzwerk {
 		Karte[] tisch = model.gibTisch();
 		for(int i = 0; i < 4; i++) {
 			try {
-			send(tisch[i].gibFarbe().toString());
-			send(tisch[i].gibWert().toString());
+				send(tisch[i].gibFarbe().toString());
+				send(tisch[i].gibWert().toString());
 			} catch(Exception e) {
 				send("");
 				send("");
