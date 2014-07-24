@@ -25,7 +25,7 @@ public class Netzwerk extends lib.Netzwerk{
 			//Verbindung mit dem Server
 			Socket client = new Socket(ip, port);
 			
-			out = new BufferedWriter(new PrintWriter(client.getOutputStream(), true));
+			out = new PrintWriter(client.getOutputStream());
 			in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			
 		} catch (IOException e) {

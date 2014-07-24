@@ -36,7 +36,7 @@ public class Mensch implements Spieler, Runnable {
 			//Lauscher aufsperren
 			t = new Thread(this);
 			
-			netzwerk.send("!NAME");
+			t.start();
 			
 		} catch(Exception e) {
 			//Gibt den Fehler weiter
@@ -165,17 +165,23 @@ public class Mensch implements Spieler, Runnable {
 		return ip;
 	}
 
-	public String gibName() {
+	public synchronized String gibName() {
+		try {
+			netzwerk.send("!NAME");
+			Thread.sleep(100);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return name;
 	}
 
-	public void setzeID(int ID) throws Exception {
+	public synchronized void setzeID(int ID) throws Exception {
 		//Steuerbefehl
 		netzwerk.send("!ID");		
 		netzwerk.send(String.valueOf(ID));
 	}
 
-	public Karte gibKarte() {
+	public synchronized Karte gibKarte() {
 		return karte;
 	}
 

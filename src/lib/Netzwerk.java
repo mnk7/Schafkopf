@@ -1,12 +1,12 @@
 package lib;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public abstract class Netzwerk {
-	
+	 
 	protected int spielerID;
 	
 	//Addresse des Clients
@@ -15,7 +15,7 @@ public abstract class Netzwerk {
 	protected int port;
 	
 	//Lesen und Schreiben
-	protected BufferedWriter out;
+	protected PrintWriter out;
 	protected BufferedReader in; 
 	
 	//Speichert ein gesendetes Model
@@ -166,8 +166,7 @@ public abstract class Netzwerk {
 	 * @param modus
 	 */
 	public void send(String output) throws Exception{
-		out.write(output);
-		out.newLine();
+		out.print(output + "\n");
 		out.flush();
 	}
 	
