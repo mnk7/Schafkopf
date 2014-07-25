@@ -57,7 +57,7 @@ public class Client implements View {
 	}
 	
 	/**
-	 * Empfänt Daten vom Server
+	 * Empfängt Daten vom Server 
 	 */
 	private void listen() {
 		while(true) {
@@ -135,17 +135,18 @@ public class Client implements View {
 				//kleine Pause
 				Thread.sleep(100);
 			} catch (Exception e) {
-				e.printStackTrace();
+				//Wenn ein Fehler auftritt aus der Schleife ausbrechen
+				break;
 			}
 		}
 	}
 	
-	public void update(ModelMVC model) {
+	public void update(ModelMVC model) throws Exception {
 		this.model = model;
 		try {
 			netzwerk.senden(model.gibModel());
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
 	}
 	

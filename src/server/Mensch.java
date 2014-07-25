@@ -90,7 +90,7 @@ public class Mensch implements Spieler, Runnable {
 		return model;
 	}
 
-	public void erste3(Model model) {
+	public void erste3(Model model) throws Exception {
 		//sendet das Model und erwartet antwort
 		try {
 			//Sendet erst Steuerbefehl
@@ -99,11 +99,11 @@ public class Mensch implements Spieler, Runnable {
 			netzwerk.senden(model);
 			//horcht nach der Antwort
 		} catch(Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
 	}
 
-	public void spielen(Model model) {
+	public void spielen(Model model) throws Exception {
 		Model m = model;
 		
 		try {
@@ -113,11 +113,11 @@ public class Mensch implements Spieler, Runnable {
 			//Senden des Models und 
 			netzwerk.senden(m);
 		} catch(Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
 	}
 
-	public void spielstDu(Model model) {
+	public void spielstDu(Model model) throws Exception {
 		try {
 			//Steuerbefehl
 			netzwerk.send("!SPIELSTDU");
@@ -125,15 +125,15 @@ public class Mensch implements Spieler, Runnable {
 			netzwerk.senden(model);
 
 		} catch(Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
-	}
+	} 
 	
-	public void spieler(int spielt) {
+	public void spieler(int spielt) throws Exception {
 		try {
 			netzwerk.send("!SPIELT");
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
 	}
 
@@ -165,12 +165,12 @@ public class Mensch implements Spieler, Runnable {
 		return ip;
 	}
 
-	public synchronized String gibName() {
+	public synchronized String gibName() throws Exception {
 		try {
 			netzwerk.send("!NAME");
 			Thread.sleep(100);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
 		return name;
 	}

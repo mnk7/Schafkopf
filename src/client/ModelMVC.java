@@ -30,8 +30,9 @@ public class ModelMVC{
 	/**
 	 * Ändert die Spieldaten
 	 * @param model
+	 * @throws Exception 
 	 */
-	public void setzeModel(Model model) {
+	public void setzeModel(Model model) throws Exception {
 		this.model = model;
 		update();
 	}
@@ -46,8 +47,9 @@ public class ModelMVC{
 	
 	/**
 	 * Sendet ein aktualisiertes Model an alle Beobachter
+	 * @throws Exception 
 	 */
-	public void update() {
+	public void update() throws Exception {
 		for(int i = 0; i < beobachter.size(); i++) {
 			beobachter.get(i).update(this);
 		}

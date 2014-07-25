@@ -25,22 +25,25 @@ public interface Spieler{
 	 * Erhält die ersten 3 Karten und gibt zurück, ob gepklopft wird etc.
 	 * @param model
 	 * @return
+	 * @throws Exception  
 	 */
-	public void erste3(Model model);
+	public void erste3(Model model) throws Exception;
 	
 	/**
 	 * Führt einen Spielzug aus und gibt das aktualisierte Model zurück
 	 * @return
+	 * @throws Exception 
 	 */
-	public void spielen(Model model);
+	public void spielen(Model model) throws Exception;
 	
 	/**
 	 * Übernimmt ein Model und gibt zurück, ob und was gespielt wird
 	 * Bei keinem Spiel wird >> null << zurückgegeben
 	 * @param model
 	 * @return
+	 * @throws Exception 
 	 */
-	public void spielstDu(Model model);
+	public void spielstDu(Model model) throws Exception;
 	
 	/**
 	 * Übergibt den Spielern den Modus und fragt nach Kontra
@@ -65,8 +68,9 @@ public interface Spieler{
 	/**
 	 * Gibt den Namen des Spielers zurück
 	 * @return
+	 * @throws Exception 
 	 */
-	public String gibName();
+	public String gibName() throws Exception;
 	
 	/**
 	 * Setzt vor jedem Spiel die ID der Spieler
@@ -87,6 +91,6 @@ public interface Spieler{
 	 */
 	public void hochzeit() throws Exception;
 
-	public void spieler(int spielt); 
+	public void spieler(int spielt) throws Exception;  
 
 }

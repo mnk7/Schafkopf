@@ -35,12 +35,12 @@ public abstract class Netzwerk {
 		ArrayList<Karte> spielerhand = model.gibSpielerKarten(spielerID);
 		for(int i = 0; i < 6; i++) {
 			try {
-			Karte karte = spielerhand.get(i);
-			send(karte.gibFarbe().toString());
-			send(karte.gibWert().toString());
+				Karte karte = spielerhand.get(i);
+				send(karte.gibFarbe().toString());
+				send(karte.gibWert().toString());
 			} catch(Exception e) {
-				send("");
-				send("");
+				send("§");
+				send("§");
 			}
 		}
 		
@@ -51,8 +51,8 @@ public abstract class Netzwerk {
 				send(tisch[i].gibFarbe().toString());
 				send(tisch[i].gibWert().toString());
 			} catch(Exception e) {
-				send("");
-				send("");
+				send("§");
+				send("§");
 			}
 		}
 		
@@ -63,14 +63,14 @@ public abstract class Netzwerk {
 			try {
 				output = letzterStich[i].gibFarbe().toString();
 			} catch(Exception e) {
-				output = "";
+				output = "§";
 			}
 			send(output);
 			
 			try {
 				output = letzterStich[i].gibWert().toString();
 			} catch(Exception e) {
-				output = "";
+				output = "§";
 			}
 			send(output);
 		}
@@ -109,11 +109,10 @@ public abstract class Netzwerk {
 				String wert = einlesen();
 				
 				//Wurde keine Karte gesendet, keine hinzufügen
-				if(farbe.equals("")) throw new Exception();
-				
-				karte = new Karte(Karte.farbe.valueOf(farbe), Karte.wert.valueOf(wert));
-				
-				spielerhand.get(spielerID).add(karte);
+				if(!farbe.equals("§")) {
+					karte = new Karte(Karte.farbe.valueOf(farbe), Karte.wert.valueOf(wert));
+					spielerhand.get(spielerID).add(karte);
+				}
 			} catch(Exception e) {
 				//gibt es keine neuen Karten, dann beenden
 				break;
@@ -127,7 +126,7 @@ public abstract class Netzwerk {
 				String wert = einlesen();
 				
 				//Wurde keine Karte gesendet, keine hinzufügen
-				if(farbe.equals("")) throw new Exception();
+				if(farbe.equals("§")) throw new Exception();
 				
 				karte = new Karte(Karte.farbe.valueOf(farbe), Karte.wert.valueOf(wert));
 				
@@ -145,7 +144,7 @@ public abstract class Netzwerk {
 				String farbe = einlesen();
 				String wert = einlesen();
 				
-				if(farbe.equals("")) letzterStich[i] = null;
+				if(farbe.equals("§")) letzterStich[i] = null;
 				else {
 					karte = new Karte(Karte.farbe.valueOf(farbe), Karte.wert.valueOf(wert));
 	
