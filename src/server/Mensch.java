@@ -129,9 +129,11 @@ public class Mensch implements Spieler, Runnable {
 		}
 	} 
 	
-	public void spieler(int spielt) throws Exception {
+	public void spieler(int spielt, int mitspieler) throws Exception {
 		try {
 			netzwerk.send("!SPIELT");
+			netzwerk.send(String.valueOf(spielt));
+			netzwerk.send(String.valueOf(mitspieler));
 		} catch (Exception e) {
 			throw e;
 		}
@@ -187,6 +189,24 @@ public class Mensch implements Spieler, Runnable {
 
 	public void hochzeit() throws Exception {
 		netzwerk.send("!HOCHZEIT");
+	}
+
+	public void geklopft(boolean[] geklopft) throws Exception {
+		netzwerk.send("!GEKLOPFT");
+		for(int i = 0; i < 4; i++) {
+			if(geklopft[i])
+				netzwerk.send("true");
+			netzwerk.send("false");
+		}
+	}
+
+	public void kontra(boolean[] kontra) throws Exception {
+		netzwerk.send("!KONTRA");
+		for(int i = 0; i < 4; i++) {
+			if(kontra[i])
+				netzwerk.send("true");
+			netzwerk.send("false");
+		}
 	}
 
 }

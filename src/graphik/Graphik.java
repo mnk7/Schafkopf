@@ -15,6 +15,9 @@ import lib.Model;
 import lib.Model.modus;
 import client.ModelMVC;
 import client.View;
+import java.awt.BorderLayout;
+import javax.swing.JPanel;
+import javax.swing.border.EtchedBorder;
 
 public class Graphik extends JFrame implements View {	
 	
@@ -26,9 +29,18 @@ public class Graphik extends JFrame implements View {
 	
 	public Graphik() {
 		super();
-		this.setSize(500, 500);
-		this.initGui();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("Schoafkopf-Äpp");
+		this.setSize(825, 620);
+		this.initGUI();
 	}	
+	
+	/**
+	 * Erstellt eine neue GUI
+	 */
+	private void initGUI() {
+		
+	}
 	
 	/**
 	 * aktualisiert das Model
@@ -100,17 +112,29 @@ public class Graphik extends JFrame implements View {
 	}
 
 	/**
-	 * Empfängt, wer spielt 
+	 * Empfängt, wer spielt. Wird keine Hochzeit gespielt ist mitspieler gleich 4
 	 * @param spielt
+	 * @param mitspieler 
 	 */
-	public void spielt(int spielt) {
+	public void spielt(int spielt, int mitspieler) { 
+		 
+	}
+
+	/**
+	 * Zeigt an, wer Kontra gegeben hat
+	 * @param kontra
+	 */
+	public void kontra(boolean[] kontra) {
 		
 	}
-	
-	public void initGui() {
+
+	/**
+	 * Zeigt an, wer geklopft hat
+	 * @param geklopft
+	 */
+	public void geklopft(boolean[] geklopft) {
 		
-	}
-	
+	}	
 
 }
 

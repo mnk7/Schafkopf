@@ -104,7 +104,8 @@ public class Client implements View {
 					break;
 				case "!SPIELT":
 					int spielt = Integer.parseInt(netzwerk.einlesen());
-					graphik.spielt(spielt);
+					int mitspieler = Integer.parseInt(netzwerk.einlesen());
+					graphik.spielt(spielt, mitspieler);
 					break;
 				case "!SIEGER":
 					//empfängt die Sieger
@@ -129,6 +130,26 @@ public class Client implements View {
 						netzwerk.send(k.gibFarbe().toString());
 						netzwerk.send(k.gibWert().toString());
 					}
+					break;
+				case "!KONTRA" :
+					boolean[] kontra = new boolean[4];
+					for(int i = 0; i < 4; i++) {
+						if(netzwerk.einlesen().equals("true"))
+							kontra[i] = true;
+						else 
+							kontra[i] = false;
+					}
+					graphik.kontra(kontra);
+					break;
+				case "!GEKLOPFT" :
+					boolean[] geklopft = new boolean[4];
+					for(int i = 0; i < 4; i++) {
+						if(netzwerk.einlesen().equals("true"))
+							geklopft[i] = true;
+						else
+							geklopft[i] = false;
+					}
+					graphik.geklopft(geklopft);
 					break;
 				}
 				

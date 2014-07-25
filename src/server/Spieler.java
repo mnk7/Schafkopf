@@ -91,6 +91,26 @@ public interface Spieler{
 	 */
 	public void hochzeit() throws Exception;
 
-	public void spieler(int spielt) throws Exception;  
+	/**
+	 * Gibt die Spielenden an alle weiter
+	 * @param spielt
+	 * @param mitspieler
+	 * @throws Exception
+	 */
+	public void spieler(int spielt, int mitspieler) throws Exception;
+
+	/**
+	 * Sendet, welche Spieler geklopft haben
+	 * @param geklopft
+	 * @throws Exception 
+	 */
+	public void geklopft(boolean[] geklopft) throws Exception;
+
+	/**
+	 * Sendet, welche Spieler Kontra geben
+	 * @param kontra
+	 * @throws Exception
+	 */
+	public void kontra(boolean[] kontra) throws Exception;  
 
 }

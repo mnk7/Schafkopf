@@ -24,6 +24,8 @@ public class Model {
 		SI
 	};
 	
+	private String[] spielernamen;
+	
 	//Alle 24 Karten
 	private ArrayList<Karte> kartendeck;
 	
@@ -43,6 +45,8 @@ public class Model {
 	 * Initialisiert alle Listen und befüllt das Kartendeck
 	 */
 	public Model() {
+		
+		spielernamen = new String[4];
 		
 		kartendeck = new ArrayList<Karte>();
 		
@@ -297,6 +301,23 @@ public class Model {
 				spielerhand.get(spielt).add(gegenTest);
 			}
 		}
+	}
+	
+	/**
+	 * Setzt den Namen eines Spielers
+	 * @param ID
+	 * @param name
+	 */
+	public void setzeName(int ID, String name) {
+		spielernamen[ID] = name;
+	}
+	
+	/**
+	 * Gibt alle Spielernamen zurück
+	 * @return
+	 */
+	public String[] gibNamen() {
+		return spielernamen;
 	}
 	
 }

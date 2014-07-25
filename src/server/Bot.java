@@ -74,7 +74,19 @@ public class Bot implements Spieler {
 	}
 
 	@Override
-	public void spieler(int spielt) {
+	public void spieler(int spielt, int mitspieler) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void geklopft(boolean[] geklopft) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void kontra(boolean[] kontra) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}

@@ -27,18 +27,18 @@ public class Server implements Runnable{
         private ArrayList<Spieler> spieler;
         private int spielerzahl;
         
-        private String[] geklopft;
+        private boolean[] geklopft;
         
         private boolean[] kontra;
         
         //speichert den Spielmodus
         private modus mod;
         
-        Controll regeln;
-        Regelwahl regelwahl;
+        private Controll regeln;
+        private Regelwahl regelwahl;
         
         private int spielt;
-        int mitspieler;
+        private int mitspieler;
         
         //fragt ab, ob noch ein Spiel gemacht wird
         private boolean nocheins;
@@ -55,9 +55,9 @@ public class Server implements Runnable{
         	spieler = new ArrayList<Spieler>();
         	spielerzahl = 4;
         	
-        	geklopft = new String[4];
+        	geklopft = new boolean[4];
         	for(int i = 0; i < 4; i++) {
-        		geklopft[i] = "";
+        		geklopft[i] = false;
         	}
         	
         	kontra = new boolean[4];
@@ -113,6 +113,9 @@ public class Server implements Runnable{
         	//Spiel wurde gestartet
         	while(!nocheins) {
         		//Anzeigen der Spieler
+	        	for(int i = 0; i < 4; i++) {
+	        		model.setzeName(i, spieler.get(i).gibName());
+	        	}
         		graphik.textSetzen(spieler);
         		
         		//gibt jedem Spieler seine ID
@@ -132,7 +135,13 @@ public class Server implements Runnable{
 	        	for(int i = 0; i < 4; i++) {
 	        		//Speichert, ob ein Spieler geklopft hat etc.
 	        		spieler.get(i).erste3(model);
-	        		geklopft[i] = spieler.get(i).gibAntwort();
+	        		if(spieler.get(i).gibAntwort().equals("JA"))
+	        			geklopft[i] = true;
+	        	}
+	        	
+	        	//Spieler benachrichtigen, wer geklopft hat
+	        	for(int i = 0; i < 4; i++) {
+	        		spieler.get(i).geklopft(geklopft);
 	        	}
 	        	
 	        	model.zweiteKartenGeben();
@@ -211,7 +220,11 @@ public class Server implements Runnable{
 	        		String k;
 					try {
 						k = spieler.get(i).modus(mod);
-						spieler.get(i).spieler(spielt);
+						//Wenn eine Hochzeit gespielt wird, werden beide spielenden gesendet
+						int mit = 4;
+						if(mod.equals(modus.HOCHZEIT))
+							mit = mitspieler;
+						spieler.get(i).spieler(spielt, mit);
 					} catch (Exception e) {
 						e.printStackTrace(); 
 						k = null;
@@ -220,6 +233,10 @@ public class Server implements Runnable{
 	        		if(k == null || k == "") kontra[i] = false;
 	        		else kontra[i] = true;
 	        	}	
+	        	
+	        	for(int i = 0; i < 4; i++) {
+	        		spieler.get(i).kontra(kontra); 
+	        	}
 	        	
 	        	//Spielen
 	        	for(int i = 0; i < 6; i++) {
