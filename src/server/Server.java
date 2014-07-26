@@ -90,6 +90,7 @@ public class Server implements Runnable{
 	        		client.setTcpNoDelay(true);
 	        		
 	        		spieler.add(new Mensch(client));
+	        		graphik.textSetzen(spieler);
 	        		
 	        		if(spieler.size() == spielerzahl && nocheins) {
 	        			nocheins = false;
@@ -346,6 +347,7 @@ public class Server implements Runnable{
         	try {
         		listener.stop();
 				server.close();
+				spieler = null;
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.exit(0);
