@@ -283,13 +283,30 @@ public class Server implements Runnable{
          * Beendet die Runde
          */
         private void rundeBeenden() {
+        	int pSpielt;
+        	if(mod.equals(modus.SI)) {
+        		//Der Spieler hat alle Punkte
+        		pSpielt = 120;
+        	}
+        	
         	ArrayList<Integer> punkte = model.gibPunkte();
         	//Die Punkte des Spielers
-        	int pSpielt = punkte.get(spielt);
+        	pSpielt = punkte.get(spielt);
         	//und vielleicht des Mitspielers
         	if(mitspieler != 4)
         		pSpielt += punkte.get(mitspieler);
         	
+        	//Wenn ein Du gespielt wurde
+        	String modString = mod.toString();
+        	//Die letzten zwei Buchstaben werden verglichen
+        	if(modString.substring(modString.length() - 3, modString.length() - 1)
+        			.toLowerCase()
+        			.equals("du")) {
+        		if(pSpielt != 120)
+        			//Wenn der Du verloren wurde
+        			spielt += 10;
+        	} else 
+        	//Ansonsten wird normal verrechnet
         	if(pSpielt <= 60) {
         		//Anzeigen, dass er verloren hat
         		spielt += 10;
