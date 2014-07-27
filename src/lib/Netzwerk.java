@@ -180,8 +180,9 @@ public abstract class Netzwerk {
 	/**
 	 * Liest vom Stream ein, bis etwas gesendet wurde
 	 * @return input
+	 * @throws Exception 
 	 */
-	public String einlesen() {
+	public String einlesen() throws Exception {
 		String input = "error";
 		try {
 			//Solange nichts gesendet wird
@@ -189,7 +190,7 @@ public abstract class Netzwerk {
 				input = in.readLine();
 			} while(input.equals("") || input.equals(null));
 		} catch(Exception e) {
-			e.printStackTrace();
+			throw e;
 		}
 		
 		return input;

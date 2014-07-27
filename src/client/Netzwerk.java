@@ -12,6 +12,8 @@ import java.net.SocketAddress;
 
 public class Netzwerk extends lib.Netzwerk{
 	
+	public static final int PORT = 15555;
+	
 	public Netzwerk(int spielerID, String ip) {
 		
 		//ID des Spielers
@@ -19,7 +21,7 @@ public class Netzwerk extends lib.Netzwerk{
 		
 		//Verbindungsinformationen
 		this.ip = ip;
-		this.port = 15555;
+		this.port = PORT;
 		
 		try {
 			//Verbindung mit dem Server

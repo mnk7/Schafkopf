@@ -17,7 +17,6 @@ import client.ModelMVC;
 import client.View;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
-import javax.swing.border.EtchedBorder;
 
 public class Graphik extends JFrame implements View {	
 	

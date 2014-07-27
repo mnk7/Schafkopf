@@ -62,7 +62,9 @@ public class MenuGUI extends JFrame{
 	 */
 	public void verbinden() {
 		try {
-			client = new Client(IPtf.getText(), NAMEtf.getText());
+			client = new Client(IPtf.getText(), NAMEtf.getText(), this);
+			//unsichtbar machen
+			this.setVisible(false);
 		} catch(Exception e) {
 			javax.swing.JOptionPane.showMessageDialog(null, "Fehler beim Verbindungsaufbau");
 			//Fehlende Einträge markieren
@@ -81,6 +83,7 @@ public class MenuGUI extends JFrame{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("SCHOAFKOPF-APP");
 		this.setResizable(false);
+		//this.setCursor(CROSSHAIR_CURSOR);
 		//this.setUndecorated(true);
 		//this.setState(ICONIFIED);
 		

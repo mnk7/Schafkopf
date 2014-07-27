@@ -18,6 +18,10 @@ public class Mensch implements Spieler, Runnable {
 	
 	Thread t;
 	
+	//Hält eine Referenz auf den Server, um diesen zu benachrichtigen, wenn
+	//die Verbindung abgebrochen wurde
+	Server server;
+	
 	private String name;
 	
 	//speichert neueste antworten
@@ -25,9 +29,11 @@ public class Mensch implements Spieler, Runnable {
 	private Model model;
 	private Karte karte;
 	
-	public Mensch(Socket client) throws Exception {
+	public Mensch(Socket client, Server server) throws Exception {
 		
 		antwort = "";
+		
+		this.server = server;
 		
 		try {
 			//Errichtet neue Verbindung
@@ -77,7 +83,9 @@ public class Mensch implements Spieler, Runnable {
 				
 				Thread.sleep(100);
 			} catch (Exception e) {
-				e.printStackTrace();
+				//Benachrichtige Server, dass ein Spieler entfernt wurde
+				server.entferneSpieler(this);
+				break;
 			}
 		}
 	}

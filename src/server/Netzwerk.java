@@ -32,9 +32,14 @@ public class Netzwerk extends lib.Netzwerk {
 		return client.getInetAddress().getHostAddress();
 	}
 
-	public Karte getKarte() {
+	public Karte getKarte() throws Exception {
 		Karte karte;
-		karte = new Karte(Karte.farbe.valueOf(einlesen()), Karte.wert.valueOf(einlesen()));
+		try {
+			karte = new Karte(Karte.farbe.valueOf(einlesen()),
+							Karte.wert.valueOf(einlesen())); 
+		} catch(Exception e) {
+			throw e;
+		}
 		return karte;
 	}
 }

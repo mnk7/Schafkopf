@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
 
 import regeln.Hochzeit;
 
@@ -15,6 +14,8 @@ import lib.Model;
 import lib.Model.modus;
 
 public class Server implements Runnable{
+	
+		private static final int PORT = 15555;
 	
 		//Server, der die Verbindungen verwaltet
 		private ServerSocket server;
@@ -31,6 +32,9 @@ public class Server implements Runnable{
         
         private boolean[] kontra;
         
+        //Speichert die Höhe des Stocks
+        private int stock;
+        
         //speichert den Spielmodus
         private modus mod;
         
@@ -40,7 +44,7 @@ public class Server implements Runnable{
         private int spielt;
         private int mitspieler;
         
-        //fragt ab, ob noch ein Spiel gemacht wird
+        //fragt ab, ob gerade kein Spiel läuft
         private boolean nocheins;
         
         private final Graphik graphik;
@@ -64,13 +68,15 @@ public class Server implements Runnable{
         	
         	regelwahl = new Regelwahl();
         	
+        	stock = 0;
+        	
         	nocheins = true;
         	
         	this.graphik = graphik;
         	
         	try {
         		//Server für jeden Port
-				server = new ServerSocket(15555);
+				server = new ServerSocket(PORT);
 				listener = new Thread(this);
 				
 				listener.start();
@@ -78,7 +84,7 @@ public class Server implements Runnable{
 				e.printStackTrace();
 			}
         	
-        }
+        } 
         
         /**
          * Nimmt die Verbindungen auf
@@ -86,10 +92,10 @@ public class Server implements Runnable{
         public void run() {
         	try {
         		while(true) {
+        			//Akzeptiert die Verbindung
 	        		Socket client = server.accept();
-	        		client.setTcpNoDelay(true);
 	        		
-	        		spieler.add(new Mensch(client));
+	        		spieler.add(new Mensch(client, this));
 	        		graphik.textSetzen(spieler);
 	        		
 	        		if(spieler.size() == spielerzahl && nocheins) {
@@ -102,6 +108,7 @@ public class Server implements Runnable{
         		}
         	} catch(Exception e) {
         		e.printStackTrace();
+        		graphik.textSetzen(spieler);
         	}
         }
         
@@ -113,6 +120,10 @@ public class Server implements Runnable{
         	
         	//Spiel wurde gestartet
         	while(!nocheins) {
+        		
+        		//Am Anfang jeder Runde ein neues Model erzeugen
+        		model = new Model();
+        		
         		//Anzeigen der Spieler
 	        	for(int i = 0; i < 4; i++) {
 	        		model.setzeName(i, spieler.get(i).gibName());
@@ -171,19 +182,13 @@ public class Server implements Runnable{
 	        	
 	        	//will niemand spielen geht es zur nächsten Runde
 	        	if(mod.equals(null)) {
-	        		nocheins = true;
-	        		continue;
-	        	}
-	        	//Wenn ein Si gespielt wird
-	        	if(mod.equals(modus.SI)) {
-	        		rundeBeenden();
-	        		nocheins = true;
+	        		stock();
 	        		continue;
 	        	}
 	        	//legt die Regeln fest
 	        	regeln = regelwahl.wahl(mod, model, spielt);
 	        	if(regeln == null) {
-	        		nocheins = false;
+	        		stock();
 	        		break;
 	        	}
 	        	
@@ -239,20 +244,28 @@ public class Server implements Runnable{
 	        		spieler.get(i).kontra(kontra); 
 	        	}
 	        	
+	        	//Wenn ein Si gespielt wird die Runde gar nicht ers spielen
+	        	if(mod.equals(modus.SI)) {
+	        		rundeBeenden();
+	        		continue;
+	        	}
+	        	
 	        	//Spielen
 	        	for(int i = 0; i < 6; i++) {
 	        		for(int j = 0; j < 4; j++) {
+	        			//Übergibt dem Spieler das aktuelle Model und...
 	        			spieler.get(i).spielen(model);
+	        			//...empfängt das aktualisierte
 	        			model = spieler.get(i).gibModel();
 	        			
 	        			//Wenn ein Fehler auftritt beenden
 	        			if(model == null) {
-	        				nocheins = false;
+	        				nocheins = true;
 	        				break;
 	        			}
 	        		}
 	        		//Wenn ein Fehler aufgetreten ist
-	        		if(!nocheins) break;
+	        		if(nocheins) break;
 	        		
 	        		//einen Stich zuteilen
 	        		int sieger = regeln.sieger(model);
@@ -263,9 +276,6 @@ public class Server implements Runnable{
 	        	
 	        	//neu Runde
 	        	naechster();
-	        	
-	        	//Es darf ein neues Spiel gestartet werden
-	        	nocheins = true;
         	}
         }
         
@@ -334,11 +344,27 @@ public class Server implements Runnable{
         }
         
         /**
+         * Füllt den Stock auf
+         */
+        private void stock() {
+        	
+        }
+        
+        /**
          * Gibt alle Spieler zurück, damit diese angezeigt werden können
          * @return spieler
          */
         public synchronized ArrayList<Spieler> gibSpieler() {
         	return spieler;
+        }
+        
+        /**
+         * Entfernt einen Spieler und sorgt dafür, dass das Spiel unterbrochen wird
+         * @param s
+         */
+        public synchronized void entferneSpieler(Spieler s) {
+        	spieler.remove(s);
+        	nocheins = true;
         }
         
         /**
@@ -367,6 +393,7 @@ public class Server implements Runnable{
 				spieler = null;
 			} catch (IOException e) {
 				e.printStackTrace();
+				//Programm beenden
 				System.exit(0);
 			}
         }

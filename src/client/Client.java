@@ -4,6 +4,7 @@ import lib.Karte;
 import lib.Model.modus;
 
 import graphik.Graphik;
+import graphik.MenuGUI;
 
 public class Client implements View {
 
@@ -34,7 +35,7 @@ public class Client implements View {
 	private boolean nocheins;
 	
 	
-	public Client(String IP, String name) throws Exception{
+	public Client(String IP, String name, MenuGUI menu) throws Exception{
 		graphik = new Graphik();
 		
 		model = new ModelMVC();
@@ -54,6 +55,9 @@ public class Client implements View {
 		};
 		
 		thread.start();
+		
+		//Menü wieder sichtbar machen
+		menu.setVisible(true);
 	}
 	
 	/**
