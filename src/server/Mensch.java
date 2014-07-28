@@ -91,11 +91,14 @@ public class Mensch implements Spieler, Runnable {
 	}
 	
 	public String gibAntwort() {
-		return antwort;
+		String a = antwort;
+		//Eingelesene Antwort löschen
+		antwort = null;
+		return a;
 	}
 	
 	public Model gibModel() {
-		return model;
+		return model; 
 	}
 
 	public void erste3(Model model) throws Exception {
@@ -176,12 +179,8 @@ public class Mensch implements Spieler, Runnable {
 	}
 
 	public synchronized String gibName() throws Exception {
-		try {
-			netzwerk.send("!NAME");
-			Thread.sleep(100);
-		} catch (Exception e) {
-			throw e;
-		}
+		netzwerk.send("!NAME");
+		Thread.sleep(100);
 		return name;
 	}
 
@@ -191,8 +190,14 @@ public class Mensch implements Spieler, Runnable {
 		netzwerk.send(String.valueOf(ID));
 	}
 
-	public synchronized Karte gibKarte() {
-		return karte;
+	public synchronized Karte gibKarte() throws InterruptedException {
+		//Auf Eingabe warten
+		Thread.sleep(100);
+		
+		Karte k = karte;
+		//löscht die eingelesene Karte, um nicht zweimal die gleiche zurückzugeben
+		karte = null;
+		return k;
 	}
 
 	public void hochzeit() throws Exception {

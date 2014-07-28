@@ -82,8 +82,9 @@ public interface Spieler{
 	/**
 	 * Gibt eine empfangene Karte
 	 * @return
+	 * @throws InterruptedException  
 	 */
-	public Karte gibKarte();
+	public Karte gibKarte() throws InterruptedException; 
 
 	/**
 	 * Frägt, ob eine Hochzeit angenommen wird
