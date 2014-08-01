@@ -7,13 +7,13 @@ import javax.swing.JPanel;
 
 public class Spielerhand extends JPanel {
 	
-	private ArrayList<JLabel> karten;
+	private ArrayList<KartenLabel> karten;
 	
 	public Spielerhand() {
 		
 		JLabel lblName = new JLabel("name");
 		add(lblName);
-		karten = new ArrayList<JLabel>();
+		karten = new ArrayList<KartenLabel>();
 		reset();
 	}
 	
@@ -21,7 +21,9 @@ public class Spielerhand extends JPanel {
 	 * Entfernt eine Karte von der Hand
 	 */
 	public void entferneKarte() {
+		//animieren
 		
+		karten.remove(0);
 	}
 	
 	/**
@@ -31,9 +33,11 @@ public class Spielerhand extends JPanel {
 		//Zuerst alle Karten entfernen
 		karten.clear();
 		for(int i = 0; i < 6; i++) {
-			JLabel karte = new JLabel();
-			this.add(karte);
+			KartenLabel karte = new KartenLabel(100, 50);
+			//Setzt als Bild die Kartenrückseite
+			karte.setBild(null);
 			
+			this.add(karte);
 		}
 	}
 
