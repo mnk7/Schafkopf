@@ -123,6 +123,7 @@ public class Client implements View {
 					//ID des Spielers empfangen
 					ID = Integer.parseInt(netzwerk.einlesen());
 					netzwerk.setID(ID);
+					graphik.setID(ID);
 					break;
 				case "!HOCHZEIT" :
 					String answer = graphik.hochzeit();

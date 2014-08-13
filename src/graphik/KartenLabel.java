@@ -25,6 +25,8 @@ public class KartenLabel extends JLabel {
 	
 	
 	public KartenLabel(int width, int height) {
+		super();
+		
 		bild = "rueckseite.jpg";
 		try {
 			//Liest das Bild ein

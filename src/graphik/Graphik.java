@@ -26,8 +26,13 @@ public class Graphik extends JFrame implements View {
 	//Das Model
 	private ModelMVC model;
 	
+	private int ID;
+	
 	public Graphik() {
 		super();
+		//Vorerst keine ID setzen
+		ID = -1;
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Schoafkopf-Äpp");
 		this.setSize(825, 620);
@@ -46,6 +51,10 @@ public class Graphik extends JFrame implements View {
 	 */
 	public void update(ModelMVC model) {
 		this.model = model;		
+	}
+	
+	public void setID(int ID) {
+		this.ID = ID;
 	}
 	
 	/**

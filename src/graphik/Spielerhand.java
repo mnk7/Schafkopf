@@ -25,16 +25,6 @@ public class Spielerhand extends JPanel {
 	}
 	
 	/**
-	 * Entfernt eine Karte von der Hand
-	 */
-	public void entferneKarte() {
-		//animieren
-		
-		karten.remove(0);
-		repaint();
-	}
-	
-	/**
 	 * Setzt die angezeigten Karten
 	 * @param model (Karten des Spielers)
 	 */
@@ -42,6 +32,10 @@ public class Spielerhand extends JPanel {
 		ArrayList<Karte> m = model;
 		for(int i = 0; i < karten.size(); i++) {
 			karten.get(i).setBild(m.get(i));
+		}
+		for(int i = karten.size(); i < 6; i++) {
+			//Alle restlichen Karten disabeln
+			karten.get(i).setEnabled(false);
 		}
 	}
 	
@@ -52,12 +46,20 @@ public class Spielerhand extends JPanel {
 		//Zuerst alle Karten entfernen
 		karten.clear();
 		for(int i = 0; i < 6; i++) {
-			KartenLabel karte = new KartenLabel(this.getWidth() / 6, this.getHeight());
+			karten.add(new KartenLabel(this.getWidth() / 6, this.getHeight()));
 			//Setzt als Bild die Kartenrückseite
-			karte.setBild(null);
+			karten.get(i).setBild(null);
 			
-			this.add(karte);
+			this.add(karten.get(i));
 		}
 	}
 
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		
+		//Passt die Größe der Karten an
+		for(int i = 0; i < karten.size(); i++) {
+			karten.get(i).setSize(this.getWidth() / 6, this.getHeight());
+		}
+	}
 }

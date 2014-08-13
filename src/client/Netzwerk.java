@@ -15,6 +15,7 @@ public class Netzwerk extends lib.Netzwerk{
 	public static final int PORT = 15555;
 	
 	public Netzwerk(int spielerID, String ip) {
+		super();
 		
 		//ID des Spielers
 		this.spielerID = spielerID;

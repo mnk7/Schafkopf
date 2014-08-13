@@ -13,7 +13,9 @@ public class Netzwerk extends lib.Netzwerk {
 	private Socket client;
 	
 	public Netzwerk(Socket client) throws Exception {
-		try {
+		super();
+		
+		try {			
 			//Erstellen eines Clients -> Output
 			this.client = client;
 			

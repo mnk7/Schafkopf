@@ -134,7 +134,7 @@ public class Model {
 	 * Mischt das Kartendeck fünf mal
 	 */
 	public void mischen() {
-		mischen(5);
+		mischen(10);
 	}
 	
 	/**

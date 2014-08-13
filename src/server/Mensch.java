@@ -185,6 +185,7 @@ public class Mensch implements Spieler, Runnable {
 	}
 
 	public synchronized void setzeID(int ID) throws Exception {
+		netzwerk.setID(ID);
 		//Steuerbefehl
 		netzwerk.send("!ID");		
 		netzwerk.send(String.valueOf(ID));
