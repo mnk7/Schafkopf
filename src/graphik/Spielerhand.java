@@ -46,9 +46,7 @@ public class Spielerhand extends JPanel {
 		//Zuerst alle Karten entfernen
 		karten.clear();
 		for(int i = 0; i < 6; i++) {
-			karten.add(new KartenLabel(this.getWidth() / 6, this.getHeight()));
-			//Setzt als Bild die Kartenrückseite
-			karten.get(i).setBild(null);
+			karten.add(new KartenLabel(null, this.getWidth() / 6, this.getHeight()));
 			
 			this.add(karten.get(i));
 		}

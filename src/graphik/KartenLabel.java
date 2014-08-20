@@ -24,13 +24,14 @@ public class KartenLabel extends JLabel {
 	private int height;
 	
 	
-	public KartenLabel(int width, int height) {
+	public KartenLabel(Karte bild, int width, int height) {
 		super();
 		
-		bild = "rueckseite.jpg";
+		//Setzt das Bild der Karte
+		setBild(bild);
 		try {
 			//Liest das Bild ein
-			icon = ImageIO.read(new File(bild));
+			icon = ImageIO.read(new File(this.bild));
 		} catch (IOException e) {
 			System.out.println("Bild wurde nicht gefunden");
 			e.printStackTrace();
@@ -52,7 +53,8 @@ public class KartenLabel extends JLabel {
 		} else {
 			//Zeigt das zur Karte gehörende Bild
 			bild = karte.gibFarbe().toString().toLowerCase() + 
-					karte.gibWert().toString().toLowerCase();
+					karte.gibWert().toString().toLowerCase() + 
+					".jpg";
 		}
 	}
 	

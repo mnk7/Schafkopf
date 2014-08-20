@@ -23,7 +23,7 @@ public class Tisch extends JLabel {
 		karten = new KartenLabel[4];
 		//Setzt die Größe der Karten
 		for(int i = 0; i < 4; i++) {
-			karten[i] = new KartenLabel(this.getWidth() / 4, this.getHeight() / 3);
+			karten[i] = new KartenLabel(null, this.getWidth() / 4, this.getHeight() / 3);
 			this.add(karten[i]);
 		}
 		//Weist den Karten ihren Platz zu
