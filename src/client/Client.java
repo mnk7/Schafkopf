@@ -19,7 +19,7 @@ public class Client implements View {
 	
 	//erstellt eine GUI
 	private Graphik graphik;
-	
+	 
 	//Erstellt ein Model
 	private ModelMVC model;
 	

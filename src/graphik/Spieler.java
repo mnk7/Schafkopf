@@ -17,6 +17,9 @@ public class Spieler extends JPanel {
 	//Layout
 	private FlowLayout layout;
 	
+	//speichert die gespielte Karte
+	private Karte gespielt;
+	
 	public Spieler() {
 		super();
 		//Karten werden je nach größe angeordnet
@@ -51,13 +54,35 @@ public class Spieler extends JPanel {
 				karten.get(i).setzeKarte(spielerkarten.get(i));
 			
 		}
-	}
-	
+	}	
 	
 	private void karteSpielen(ActionEvent evt) {
 		//Das Signal kommt auf jeden Fall von einem KartenButton
 		KartenButton k = (KartenButton) evt.getSource();
 		
+		//Speichert die gewählte Karte und lässt keine neue Auswahl zu
+		gespielt = k.gibKarte();
+		aktiviert(false);
+	}
+	
+	public Karte spiel() {
+		gespielt = null;
+		aktiviert(true);
+		while(gespielt == null) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return gespielt;
+	}
+	
+	private void aktiviert(boolean an) {
+		for(int i = 0; i < karten.size(); i++) {
+			karten.get(i).setEnabled(an);
+		}
 	}
 	
 	public void paintComponent(Graphics g) {

@@ -14,7 +14,7 @@ import lib.Karte;
 import lib.Model;  
 import lib.Model.modus;
 import client.ModelMVC;
-import client.View;
+import client.View; 
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
@@ -28,6 +28,25 @@ public class Graphik extends JFrame implements View {
 	
 	private int ID;
 	
+	//GUI
+	//Karten des Spielers
+	private Spieler spielerKarten;
+	//Nachrichten des Clients
+	private Meldungen spielerMeldungen;
+	
+	//Karten der Gegenspieler
+	private Gegenspieler[] gegenspielerKarten;
+	
+	//Tisch
+	private Tisch tisch;
+	
+	//Hintergrund
+	private JLabel hintergrund;
+	
+	//Auswahldialoge
+	
+	
+	
 	public Graphik() {
 		super();
 		//Vorerst keine ID setzen
@@ -36,7 +55,7 @@ public class Graphik extends JFrame implements View {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Schoafkopf-Äpp");
 		this.setSize(825, 620);
-		this.initGUI();
+		this.initGUI(); 
 	}	
 	
 	/**
