@@ -25,10 +25,10 @@ public class MenuGUI extends JFrame{
 	 */
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
+			public void run() { 
 				MenuGUI inst = new MenuGUI();
 			}
-		});
+		}); 
 	}
 	
 	private Client client;
@@ -36,7 +36,7 @@ public class MenuGUI extends JFrame{
 	//GUI
 	private JButton connect;
 	private JLabel IPlabel;
-	private JLabel NAMElabel;
+	private JLabel NAMElabel; 
 	private JLabel hintergrund;
 	private JTextField IPtf;
 	private JTextField NAMEtf;
@@ -66,6 +66,7 @@ public class MenuGUI extends JFrame{
 			//unsichtbar machen
 			this.setVisible(false);
 		} catch(Exception e) {
+			e.printStackTrace();
 			javax.swing.JOptionPane.showMessageDialog(null, "Fehler beim Verbindungsaufbau");
 			//Fehlende Einträge markieren
 			if(IPtf.getText().equals("")) IPlabel.setForeground(Color.RED);

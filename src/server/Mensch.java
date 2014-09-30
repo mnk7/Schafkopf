@@ -39,6 +39,9 @@ public class Mensch implements Spieler, Runnable {
 			//Errichtet neue Verbindung
 			netzwerk = new Netzwerk(client);
 			
+			//sendet die Namen der Mitspieler
+			mitspielerNamen();
+			
 			//Lauscher aufsperren
 			t = new Thread(this);
 			
@@ -59,26 +62,23 @@ public class Mensch implements Spieler, Runnable {
 			try {
 				String input = netzwerk.einlesen();
 				
-				switch(input) {
-				case "!NAME" :
+				if(input.equals("!NAME")) {
 					name = netzwerk.einlesen();
 					break;
-				case "!ERSTE3" :
+				} if(input.equals("!ERSTE3")) {
 					antwort = netzwerk.einlesen();
 					break;
-				case "!SPIEL" :
+				} if(input.equals("!SPIEL")) {
 					model = netzwerk.empfangen();
 					break;
-				case "!SPIELSTDU" :
+				} if(input.equals("!SPIELSTDU")) {
 					antwort = netzwerk.einlesen();
 					break;
-				case "!HOCHZEIT" :
+				} if(input.equals("!HOCHZEIT")) {
 					antwort = netzwerk.einlesen();
-				case "!KARTE" :	
+				} if(input.equals("!KARTE")) {	
 					karte = netzwerk.getKarte();
 					break;
-				default :
-					antwort = input;
 				}
 				
 				Thread.sleep(100);
@@ -108,9 +108,26 @@ public class Mensch implements Spieler, Runnable {
 			netzwerk.send("!ERSTE3");
 			
 			netzwerk.senden(model);
+			
 			//horcht nach der Antwort
 		} catch(Exception e) {
 			throw e;
+		}
+	}
+	
+	/**
+	 * Sendet die Namen der Mitspieler
+	 */
+	private void mitspielerNamen() {
+		try {
+			netzwerk.send("!MITSPIELER");
+			String[] namen = model.gibNamen();
+			for(int i = 0; i < namen.length; i++) {
+				netzwerk.send(namen[i]);
+			}
+		} catch (Exception e) {
+			//Keine Fehlermeldung, da unbedeutend
+			e.printStackTrace();
 		}
 	}
 

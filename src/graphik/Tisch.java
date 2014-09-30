@@ -27,10 +27,10 @@ public class Tisch extends JLabel {
 			this.add(karten[i]);
 		}
 		//Weist den Karten ihren Platz zu
-		layout.addLayoutComponent(karten[0], SOUTH);
-		layout.addLayoutComponent(karten[1], WEST);
-		layout.addLayoutComponent(karten[2], NORTH);
-		layout.addLayoutComponent(karten[3], EAST);
+		layout.addLayoutComponent(karten[0], layout.SOUTH);
+		layout.addLayoutComponent(karten[1], layout.WEST);
+		layout.addLayoutComponent(karten[2], layout.NORTH);
+		layout.addLayoutComponent(karten[3], layout.EAST);
 		
 	}
 	

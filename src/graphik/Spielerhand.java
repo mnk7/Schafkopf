@@ -31,7 +31,10 @@ public class Spielerhand extends JPanel {
 	public void setzeKarten(ArrayList<Karte> model) {
 		ArrayList<Karte> m = model;
 		for(int i = 0; i < karten.size(); i++) {
-			karten.get(i).setBild(m.get(i));
+			if(i < m.size())
+				karten.get(i).setBild(m.get(i));
+			else
+				karten.get(i).setBild(null);
 		}
 		for(int i = karten.size(); i < 6; i++) {
 			//Alle restlichen Karten disabeln

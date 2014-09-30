@@ -68,27 +68,35 @@ public class Client implements View {
 			try {
 				String steuerung = netzwerk.einlesen();
 
-				switch (steuerung) {
-				case "!NAME":
+				if(steuerung.equals("!NAME")) {
 					//Senden des Namens
 					netzwerk.send("!NAME");
 					netzwerk.send(name);
 					break;
-				case "!ERSTE3":
+				} if(steuerung.equals("!MITSPIELER")) {
+					//Namen der Mitspieler empfangen
+					String[] namen = new String[4];
+					for(int i = 0; i < 4; i++) {
+						namen[i] = netzwerk.einlesen();
+					}
+					//Speichert die Namen der Mitspieler
+					graphik.setzeNamen(namen);
+					break;
+				} if(steuerung.equals("!ERSTE3")) {
 					//Model empfangen
 					model.setzeModel(netzwerk.empfangen());
 					//Klopfen des Spielers abwarten
 					netzwerk.send("!ERSTE3");
 					netzwerk.send(String.valueOf(graphik.klopfstDu()));
 					break;
-				case "!SPIEL":
+				} if(steuerung.equals("!SPIEL")) {
 					//Model empfangen
 					model.setzeModel(netzwerk.empfangen());
 					//Signal an Graphik
 					netzwerk.send("!SPIEL");
 					graphik.spiel();
 					break;
-				case "!SPIELSTDU":
+				} if(steuerung.equals("!SPIELSTDU")) {
 					//empfängt das neue Model
 					model.setzeModel(netzwerk.empfangen());
 					//Sendet den Spielmodus
@@ -102,16 +110,16 @@ public class Client implements View {
 						netzwerk.send(k.gibWert().toString());
 					}
 					break;
-				case "!MODUS":
+				} if(steuerung.equals("!MODUS")) {
 					//Empfangen des Modus des Spiels
 					mod = modus.valueOf(netzwerk.einlesen());
 					break;
-				case "!SPIELT":
+				} if(steuerung.equals("!SPIELT")) {
 					int spielt = Integer.parseInt(netzwerk.einlesen());
 					int mitspieler = Integer.parseInt(netzwerk.einlesen());
 					graphik.spielt(spielt, mitspieler);
 					break;
-				case "!SIEGER":
+				} if(steuerung.equals("!SIEGER")) {
 					//empfängt die Sieger
 					int s1 = Integer.parseInt(netzwerk.einlesen());
 					int s2 = Integer.parseInt(netzwerk.einlesen());
@@ -119,13 +127,13 @@ public class Client implements View {
 					//und gibt sie an die Graphik weiter
 					graphik.sieger(s1, s2);
 					break;
-				case "!ID":
+				} if(steuerung.equals("!ID")) {
 					//ID des Spielers empfangen
 					ID = Integer.parseInt(netzwerk.einlesen());
 					netzwerk.setID(ID);
 					graphik.setID(ID);
 					break;
-				case "!HOCHZEIT" :
+				} if(steuerung.equals("!HOCHZEIT")) {
 					String answer = graphik.hochzeit();
 					
 					if(answer.equals("JA")) {
@@ -136,7 +144,7 @@ public class Client implements View {
 						netzwerk.send(k.gibWert().toString());
 					}
 					break;
-				case "!KONTRA" :
+				} if(steuerung.equals("!KONTRA")) {
 					boolean[] kontra = new boolean[4];
 					for(int i = 0; i < 4; i++) {
 						if(netzwerk.einlesen().equals("true"))
@@ -146,7 +154,7 @@ public class Client implements View {
 					}
 					graphik.kontra(kontra);
 					break;
-				case "!GEKLOPFT" :
+				} if(steuerung.equals("!GEKLOPFT")) {
 					boolean[] geklopft = new boolean[4];
 					for(int i = 0; i < 4; i++) {
 						if(netzwerk.einlesen().equals("true"))
@@ -162,6 +170,7 @@ public class Client implements View {
 				Thread.sleep(100);
 			} catch (Exception e) {
 				//Wenn ein Fehler auftritt aus der Schleife ausbrechen
+				e.printStackTrace();
 				break;
 			}
 		}
@@ -185,6 +194,7 @@ public class Client implements View {
 			netzwerk = new Netzwerk(ID, IP);
 			return true;
 		} catch(Exception e) {
+			e.printStackTrace();
 		}
 		
 		//falls keine Verbindung hergestellt werden konnte

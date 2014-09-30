@@ -18,13 +18,16 @@ public class Gegenspieler extends JPanel {
 	
 	private FlowLayout layout;
 	
-	public Gegenspieler(String name) {
+	/**
+	 * Erstellt einen Gegenspieler
+	 */
+	public Gegenspieler() {
 		super();
 		
 		//Anordnung der beiden Komponenten
 		layout = new FlowLayout();
 		this.setLayout(layout);
-		
+		 
 		kartenzahl = 6;
 		
 		karten = new Spielerhand();
@@ -33,8 +36,6 @@ public class Gegenspieler extends JPanel {
 		
 		//Erstellt eine neue Nachrichtenanzeige mit 4 Ausgaben
 		meldungen = new Meldungen(4);
-		//Zeigt den Namen des Spielers an
-		meldungen.festeAnzeige(name);
 		
 		this.add(meldungen);
 		this.add(karten);
@@ -48,8 +49,20 @@ public class Gegenspieler extends JPanel {
 		karten.setzeKarten(new ArrayList<Karte>(kartenzahl));
 	}
 	
+	/**
+	 * Zeigt eine Nachricht für den Gegenspieler an
+	 * @param text
+	 */
 	public void nachricht(String text) {
 		meldungen.nachricht(text);
+	}
+	
+	/**
+	 * Setzt den Namen des Spielers
+	 * @param text
+	 */
+	public void name(String text) {
+		meldungen.festeAnzeige(text);
 	}
 
 }
