@@ -13,13 +13,9 @@ public class Spielerhand extends JPanel {
 	
 	private ArrayList<KartenLabel> karten;
 	
-	private FlowLayout layout;
-	
 	public Spielerhand() {
-		super();
+		super(new FlowLayout());
 		
-		layout = new FlowLayout();
-		this.setLayout(layout);
 		karten = new ArrayList<KartenLabel>();
 		reset();
 	}
@@ -52,6 +48,7 @@ public class Spielerhand extends JPanel {
 			karten.add(new KartenLabel(null, this.getWidth() / 6, this.getHeight()));
 			
 			this.add(karten.get(i));
+			karten.get(i).setVisible(true);
 		}
 	}
 

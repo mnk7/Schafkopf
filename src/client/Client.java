@@ -35,9 +35,7 @@ public class Client implements View {
 	private boolean nocheins;
 	
 	
-	public Client(String IP, String name, MenuGUI menu) throws Exception{
-		graphik = new Graphik();
-		
+	public Client(String IP, String name, MenuGUI menu) throws Exception{		
 		model = new ModelMVC();
 		
 		this.IP = IP;
@@ -55,6 +53,8 @@ public class Client implements View {
 		};
 		
 		thread.start();
+		
+		graphik = new Graphik();
 		
 		//Menü wieder sichtbar machen
 		menu.setVisible(true);

@@ -9,6 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import regeln.Controll;
 import lib.Karte;
@@ -16,7 +18,9 @@ import lib.Model;
 import lib.Model.modus;
 import client.ModelMVC;
 import client.View; 
+
 import java.awt.BorderLayout;
+
 import javax.swing.JPanel;
 
 public class Graphik extends JFrame implements View {	
@@ -28,10 +32,9 @@ public class Graphik extends JFrame implements View {
 	private ModelMVC model;
 	
 	private int ID;
+	private String[] namen;
 	
 	//GUI
-	//Layout
-	private BorderLayout layout;
 	//Karten des Spielers
 	private Spieler spielerKarten;
 	//Nachrichten des Clients
@@ -44,7 +47,7 @@ public class Graphik extends JFrame implements View {
 	private Tisch tisch;
 	
 	//Hintergrund
-	private JLabel hintergrund;
+	private JPanel hintergrund;
 	
 	//Auswahldialoge
 	
@@ -58,10 +61,12 @@ public class Graphik extends JFrame implements View {
 		model = new ModelMVC();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		setTitle("Schoafkopf-Äpp");
 		this.setSize(825, 620);
 		//Äußeres Layout nicht vorhanden
 		this.setLayout(null);
+		this.setLocationRelativeTo(null);
 		this.initGUI(); 
 		this.setVisible(true);
 	}	
@@ -70,20 +75,17 @@ public class Graphik extends JFrame implements View {
 	 * Erstellt eine neue GUI
 	 */
 	private void initGUI() {
-		layout = new BorderLayout();
 		
-		hintergrund = new JLabel();
+		hintergrund = new JPanel(new BorderLayout());
 		getContentPane().add(hintergrund);
 		//Das letzte fünftel des Fensters ist für Spielermeldungen
 		hintergrund.setBounds(0, 0, this.getWidth() - this.getWidth() / 5, this.getHeight());
-		hintergrund.setLayout(layout);
 		hintergrund.setVisible(true);
 		
 		//-------------------------------------------------------------hintergrund
 		//Karten auf dem Tisch
 		tisch = new Tisch();
-		hintergrund.add(tisch);
-		layout.addLayoutComponent(tisch, layout.CENTER);
+		hintergrund.add(tisch, BorderLayout.CENTER);
 		tisch.setVisible(true);
 		
 		gegenspielerKarten = new Gegenspieler[3];
@@ -91,18 +93,16 @@ public class Graphik extends JFrame implements View {
 		for(int i = 0; i < gegenspielerKarten.length; i++) {
 			//Name muss noch gesetzt werden
 			gegenspielerKarten[i] = new Gegenspieler();
-			hintergrund.add(gegenspielerKarten[i]);
 			gegenspielerKarten[i].setVisible(true);
 		}
 		
-		layout.addLayoutComponent(gegenspielerKarten[0], layout.WEST);
-		layout.addLayoutComponent(gegenspielerKarten[1], layout.NORTH);
-		layout.addLayoutComponent(gegenspielerKarten[2], layout.EAST);
+		hintergrund.add(gegenspielerKarten[0], BorderLayout.LINE_START);
+		hintergrund.add(gegenspielerKarten[1], BorderLayout.PAGE_START);
+		hintergrund.add(gegenspielerKarten[2], BorderLayout.LINE_END);
 		
 		//Anzeige der Karten der Spieler
 		spielerKarten = new Spieler();
-		hintergrund.add(spielerKarten);
-		layout.addLayoutComponent(spielerKarten, layout.SOUTH);
+		hintergrund.add(spielerKarten, BorderLayout.PAGE_END);
 		spielerKarten.setVisible(true);
 		//-------------------------------------------------------------hintergrund
 		
@@ -112,6 +112,8 @@ public class Graphik extends JFrame implements View {
 		//Die Meldungen laufen im letzten Fünftel des Fensters
 		spielerMeldungen.setBounds(this.getWidth() * (4 / 5), 0, this.getWidth() / 5, this.getHeight());
 		spielerMeldungen.setVisible(true);
+		//erste Ausgabe
+		spielerMeldungen.nachricht("Mit Server verbunden");
 	}
 	
 	/**
@@ -127,16 +129,24 @@ public class Graphik extends JFrame implements View {
 	 */
 	public void setID(int ID) {
 		this.ID = ID;
+		//setzt die Namen, da nun die ID des lokalen Spielers bekannt ist
+		mitspieler();
 	}
 	
 	/**
-	 * Setzt die Namen der Spieler
+	 * Setzt die Namen der Spieler, ->nachdem<- eine ID vergeben wurde
 	 * @param namen
 	 */
 	public void setzeNamen(String[] namen) {
-		String[] spieler = namen;
-		
-		spielerMeldungen.festeAnzeige(spieler[ID]);
+		//speichert die Namen der Mitspieler, die angezeigt werden, sobald die ID verfügbar ist
+		this.namen = namen;
+	}
+	
+	/**
+	 * Setzt die Namen der Mitspieler
+	 */
+	private void mitspieler() {
+		spielerMeldungen.festeAnzeige(namen[ID]);
 		
 		int start = ID;
 		
@@ -147,7 +157,7 @@ public class Graphik extends JFrame implements View {
 			start %= 4;
 			
 			//Gegenspieler den richtigen Namen zuweisen
-			gegenspielerKarten[i].name(spieler[start]);
+			gegenspielerKarten[i].name(namen[start]);
 		}
 	}
 	

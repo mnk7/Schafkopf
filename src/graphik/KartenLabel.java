@@ -27,11 +27,17 @@ public class KartenLabel extends JLabel {
 	public KartenLabel(Karte bild, int width, int height) {
 		super();
 		
+		this.setLayout(null);
+		
 		//Setzt das Bild der Karte
-		this.bild = setBild(bild);
+		setBild(bild);
 		try {
 			//Liest das Bild ein
+			KartenLabel.class.getResource(this.bild);
 			icon = ImageIO.read(new File(this.bild));
+			
+			this.setText("Karte");
+			
 		} catch (IOException e) {
 			System.out.println("Bild wurde nicht gefunden");
 			e.printStackTrace();
@@ -47,12 +53,12 @@ public class KartenLabel extends JLabel {
 	 * Wird null übergeben, wird das Bild rueckseite.jpg angezeigt
 	 * @param karte
 	 */
-	public String setBild(Karte karte) {
+	public void setBild(Karte karte) {
 		if(karte == null) {
-			return "karten/rueckseite.jpg";
+			bild =  "karten/rueckseite.jpg";
 		} else {
 			//Zeigt das zur Karte gehörende Bild
-			return "karten/" + 
+			bild =  "karten/" + 
 					karte.gibFarbe().toString().toLowerCase() + 
 					karte.gibWert().toString().toLowerCase() + 
 					".jpg";

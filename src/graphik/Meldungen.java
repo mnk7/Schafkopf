@@ -10,14 +10,9 @@ public class Meldungen extends JPanel{
 	
 	//Anzeigen
 	private JLabel[] meldung;
-	//Layoutmanager
-	private GridLayout layout;
 	
 	public Meldungen(int histLaenge) {
-		super();
-		
-		layout = new GridLayout(1, histLaenge);
-		this.setLayout(layout);
+		super(new GridLayout(1, histLaenge));
 		
 		meldung = new JLabel[histLaenge];
 		for(int i = 0; i < meldung.length; i++) {

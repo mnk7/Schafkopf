@@ -82,6 +82,10 @@ public class Server implements Runnable{
 				listener.start();
 			} catch (IOException e) {
 				e.printStackTrace();
+				//Alle Spieler zurücksetzen
+        		for(int i = 0; i < spieler.size(); i++) {
+        			entferneSpieler(spieler.get(i));
+        		};
 			}
         	
         } 
@@ -96,8 +100,10 @@ public class Server implements Runnable{
 	        		Socket client = server.accept();
 	        		
 	        		spieler.add(new Mensch(client, this));
+	        		//Im Server-Applet die Anzeige aktualisieren
 	        		graphik.textSetzen(spieler);
 	        		
+	        		//Wenn die maximale Anzahl an Spielern erreicht ist und nicht gerade gespielt wird
 	        		if(spieler.size() == spielerzahl && nocheins) {
 	        			nocheins = false;
 	        			neuesSpiel();
@@ -108,6 +114,10 @@ public class Server implements Runnable{
         		}
         	} catch(Exception e) {
         		e.printStackTrace();
+        		//Alle Spieler zurücksetzen
+        		for(int i = 0; i < spieler.size(); i++) {
+        			entferneSpieler(spieler.get(i));
+        		}
         		graphik.textSetzen(spieler);
         	}
         }
@@ -120,6 +130,9 @@ public class Server implements Runnable{
         	
         	//Spiel wurde gestartet
         	while(!nocheins) {
+        		
+        		//Nochmal Spieler aktualisieren
+        		graphik.textSetzen(spieler);
         		
         		//Am Anfang jeder Runde ein neues Model erzeugen
         		model = new Model();
@@ -137,6 +150,7 @@ public class Server implements Runnable{
 					} catch (Exception e) {
 						e.printStackTrace();
 						//Bei Fehler abbrechen
+						entferneSpieler(spieler.get(i));
 						break;
 					}
         		}
@@ -360,10 +374,12 @@ public class Server implements Runnable{
         
         /**
          * Entfernt einen Spieler und sorgt dafür, dass das Spiel unterbrochen wird
-         * @param s
+         * @param i
          */
         public synchronized void entferneSpieler(Spieler s) {
         	spieler.remove(s);
+        	//aktualisiert die Anzeige
+        	graphik.textSetzen(spieler);
         	nocheins = true;
         }
         

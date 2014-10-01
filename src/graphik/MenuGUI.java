@@ -31,7 +31,7 @@ public class MenuGUI extends JFrame{
 		}); 
 	}
 	
-	private Client client;
+	private Client client; 
 	
 	//GUI
 	private JButton connect;
@@ -71,6 +71,7 @@ public class MenuGUI extends JFrame{
 			//Fehlende Einträge markieren
 			if(IPtf.getText().equals("")) IPlabel.setForeground(Color.RED);
 			if(NAMEtf.getText().equals("")) NAMElabel.setForeground(Color.RED);
+			
 			repaint();
 		}
 	}

@@ -14,7 +14,7 @@ public class Netzwerk extends lib.Netzwerk{
 	
 	public static final int PORT = 15555;
 	
-	public Netzwerk(int spielerID, String ip) {
+	public Netzwerk(int spielerID, String ip) throws IOException{
 		super();
 		
 		//ID des Spielers
@@ -24,15 +24,10 @@ public class Netzwerk extends lib.Netzwerk{
 		this.ip = ip;
 		this.port = PORT;
 		
-		try {
-			//Verbindung mit dem Server
-			Socket client = new Socket(ip, port);
+		//Verbindung mit dem Server
+		Socket client = new Socket(ip, port);
 			
-			out = new PrintWriter(client.getOutputStream());
-			in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		out = new PrintWriter(client.getOutputStream());
+		in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 	}
 }

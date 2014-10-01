@@ -14,17 +14,11 @@ public class Spieler extends JPanel {
 	//Buttons mit Bildern der Karten
 	private ArrayList<KartenButton> karten;
 	
-	//Layout
-	private FlowLayout layout;
-	
 	//speichert die gespielte Karte
 	private Karte gespielt;
 	
 	public Spieler() {
-		super();
-		//Karten werden je nach größe angeordnet
-		layout = new FlowLayout();
-		this.setLayout(layout);
+		super(new FlowLayout());
 		
 		karten = new ArrayList<KartenButton>();		
 	}

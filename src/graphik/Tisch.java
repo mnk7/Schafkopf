@@ -3,34 +3,28 @@ package graphik;
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 
-import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import lib.Karte;
 
-public class Tisch extends JLabel {
+public class Tisch extends JPanel {
 	
 	//Speichert die Karten, die auf dem Tisch liegen
 	private KartenLabel[] karten;
 	
-	private BorderLayout layout;
-	
 	public Tisch() {
-		super();
-		
-		layout = new BorderLayout();
-		this.setLayout(layout);
+		super(new BorderLayout());
 		
 		karten = new KartenLabel[4];
 		//Setzt die Größe der Karten
 		for(int i = 0; i < 4; i++) {
 			karten[i] = new KartenLabel(null, this.getWidth() / 4, this.getHeight() / 3);
-			this.add(karten[i]);
 		}
 		//Weist den Karten ihren Platz zu
-		layout.addLayoutComponent(karten[0], layout.SOUTH);
-		layout.addLayoutComponent(karten[1], layout.WEST);
-		layout.addLayoutComponent(karten[2], layout.NORTH);
-		layout.addLayoutComponent(karten[3], layout.EAST);
+		this.add(karten[0], BorderLayout.PAGE_END);
+		this.add(karten[1], BorderLayout.LINE_START);
+		this.add(karten[2], BorderLayout.PAGE_START);
+		this.add(karten[3], BorderLayout.LINE_END);
 		
 	}
 	

@@ -1,9 +1,12 @@
 package server;
 
+import graphik.MenuGUI;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,8 +32,17 @@ public class Graphik extends JFrame {
 	private JLabel [] PlayerLabel;
 	private Server server;
 	
+	private String logo = "./logo.gif";
+	
 	public Graphik(){
 		super();
+		
+		Graphik.class.getResource(logo);
+		//Icon der Anwendung setzen
+		ImageIcon icon = new ImageIcon(logo);
+		this.setIconImage(icon.getImage());
+				
+		
 		PlayerLabel = new JLabel [4];
 		
 		try {
@@ -79,8 +91,11 @@ public class Graphik extends JFrame {
 					server = new Server(g);
 					clear();
 					PlayerLabel[0].setText("Server gestartet");
-				} else
-					JOptionPane.showMessageDialog(null, "Server läuft schon");
+					start.setText("Aktualisieren");
+				} else {
+					//erneuert die Anzeige der Spieler
+					textSetzen(server.gibSpieler());
+				}
 			}
 		});
 		start.setVisible(true);
@@ -96,6 +111,7 @@ public class Graphik extends JFrame {
 					server = null;
 					clear();
 					PlayerLabel[0].setText("Server beendet");
+					start.setText("Server starten");
 				}
 			}
 		});

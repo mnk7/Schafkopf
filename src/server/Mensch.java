@@ -39,9 +39,6 @@ public class Mensch implements Spieler, Runnable {
 			//Errichtet neue Verbindung
 			netzwerk = new Netzwerk(client);
 			
-			//sendet die Namen der Mitspieler
-			mitspielerNamen();
-			
 			//Lauscher aufsperren
 			t = new Thread(this);
 			
@@ -206,6 +203,9 @@ public class Mensch implements Spieler, Runnable {
 		//Steuerbefehl
 		netzwerk.send("!ID");		
 		netzwerk.send(String.valueOf(ID));
+		
+		//Sendet die Namen der Mitspieler
+		mitspielerNamen();
 	}
 
 	public synchronized Karte gibKarte() throws InterruptedException {
