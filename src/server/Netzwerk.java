@@ -22,6 +22,8 @@ public class Netzwerk extends lib.Netzwerk {
 			out = new PrintWriter(client.getOutputStream());
 			in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 		} catch(Exception e) {
+			//Verbindung beenden
+			client.close();
 			throw e;
 		}
 	}

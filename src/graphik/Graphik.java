@@ -63,7 +63,7 @@ public class Graphik extends JFrame implements View {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		setTitle("Schoafkopf-Äpp");
-		this.setSize(825, 620);
+		this.setSize(1200, 620);
 		//Äußeres Layout nicht vorhanden
 		this.setLayout(null);
 		this.setLocationRelativeTo(null);
@@ -94,6 +94,7 @@ public class Graphik extends JFrame implements View {
 			//Name muss noch gesetzt werden
 			gegenspielerKarten[i] = new Gegenspieler();
 			gegenspielerKarten[i].setVisible(true);
+			gegenspielerKarten[i].setSize(this.getWidth() / 3, this.getHeight() / 3);
 		}
 		
 		hintergrund.add(gegenspielerKarten[0], BorderLayout.LINE_START);
@@ -254,6 +255,10 @@ public class Graphik extends JFrame implements View {
 		hintergrund.setSize(this.getWidth() - this.getWidth() / 5, this.getHeight());
 		//Meldungen an Fenster anpassen
 		spielerMeldungen.setBounds(this.getWidth() * (4 / 5), 0, this.getWidth() / 5, this.getHeight());
+		
+		for(int i = 0; i < 3; i++) {
+			gegenspielerKarten[i].setSize(this.getWidth() / 3, this.getHeight() / 3);
+		}
 	}
 }
 

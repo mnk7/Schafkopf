@@ -12,14 +12,17 @@ public class Meldungen extends JPanel{
 	private JLabel[] meldung;
 	
 	public Meldungen(int histLaenge) {
-		super(new GridLayout(1, histLaenge));
+		super(new GridLayout(histLaenge, 1));
 		
 		meldung = new JLabel[histLaenge];
 		for(int i = 0; i < meldung.length; i++) {
 			meldung[i] = new JLabel();
 			this.add(meldung[i]);
 			//Absolute Minimalgröße setzen
-			meldung[i].setMinimumSize(new Dimension(100, 20));
+			meldung[i].setMinimumSize(new Dimension(100, 10));
+			
+			//DEBUG
+			meldung[i].setText("Meldung");
 		}
 	}
 	

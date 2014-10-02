@@ -1,12 +1,12 @@
 package server;
 
+import java.awt.HeadlessException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
 import regeln.Hochzeit;
-
 import regeln.Controll;
 import regeln.Regelwahl;
 import lib.Karte;
@@ -378,6 +378,10 @@ public class Server implements Runnable{
          */
         public synchronized void entferneSpieler(Spieler s) {
         	spieler.remove(s);
+        	try {
+				javax.swing.JOptionPane.showMessageDialog(graphik, "Spieler " + s.gibName() +" wurde entfernt");
+			} catch (Exception e) {
+			}
         	//aktualisiert die Anzeige
         	graphik.textSetzen(spieler);
         	nocheins = true;

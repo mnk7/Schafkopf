@@ -1,5 +1,6 @@
 package graphik;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -8,7 +9,9 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.border.Border;
 
 import lib.Karte;
 
@@ -28,6 +31,9 @@ public class KartenLabel extends JLabel {
 		super();
 		
 		this.setLayout(null);
+		
+		//Anzeige der Begrenzungen des Panels
+		this.setBorder(BorderFactory.createLineBorder(Color.black));
 		
 		//Setzt das Bild der Karte
 		setBild(bild);

@@ -1,6 +1,8 @@
 package graphik;
 
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
@@ -22,20 +24,18 @@ public class Gegenspieler extends JPanel {
 	 * Erstellt einen Gegenspieler
 	 */
 	public Gegenspieler() {
-		super();
-		
-		//Anordnung der beiden Komponenten
-		layout = new FlowLayout();
-		this.setLayout(layout);
+		super(new GridLayout(2, 1));
 		 
 		kartenzahl = 6;
 		
 		karten = new Spielerhand();
+		karten.setSize(this.getWidth(), this.getHeight() / 2);
 		//Übergibt 6 leere Karten, damit die Rückseite angezeigt wird
 		karten.setzeKarten(new ArrayList<Karte>(kartenzahl));
 		
 		//Erstellt eine neue Nachrichtenanzeige mit 4 Ausgaben
 		meldungen = new Meldungen(4);
+		meldungen.setSize(this.getWidth(), this.getHeight() / 2);
 		
 		this.add(meldungen);
 		this.add(karten);
@@ -63,6 +63,14 @@ public class Gegenspieler extends JPanel {
 	 */
 	public void name(String text) {
 		meldungen.festeAnzeige(text);
+	}
+	
+	public void paintComponents(Graphics g) {
+		super.paintComponents(g);
+		
+		karten.setSize(this.getWidth(), this.getHeight() / 2);
+		
+		meldungen.setSize(this.getWidth(), this.getHeight() / 2);
 	}
 
 }
