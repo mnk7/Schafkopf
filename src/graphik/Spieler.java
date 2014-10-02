@@ -47,6 +47,12 @@ public class Spieler extends JPanel {
 			} else
 				karten.get(i).setzeKarte(spielerkarten.get(i));
 			
+			karten.get(i).setVisible(true);
+		}
+		
+		//entfernt alle überflüssigen Karten
+		for(int i = spielerkarten.size(); i < 6; i++) {
+			karten.remove(i);
 		}
 	}	
 	

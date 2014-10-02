@@ -21,6 +21,7 @@ public class KartenButton extends JButton {
 		
 		label = new KartenLabel(this.karte, this.getWidth(), this.getHeight());
 		this.add(label);
+		label.setVisible(true);
 	}
 	
 	/**

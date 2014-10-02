@@ -20,9 +20,6 @@ public class Meldungen extends JPanel{
 			this.add(meldung[i]);
 			//Absolute Minimalgröße setzen
 			meldung[i].setMinimumSize(new Dimension(100, 10));
-			
-			//DEBUG
-			meldung[i].setText("Meldung");
 		}
 	}
 	
@@ -44,7 +41,7 @@ public class Meldungen extends JPanel{
 			meldung[i] = meldung[i - 1];
 		}
 		//Zeigt die neue Meldung an
-		meldung[1].setText(text);
+		meldung[1].setText("  --->" + text);
 	}
 
 }

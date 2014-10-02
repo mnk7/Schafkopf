@@ -63,7 +63,9 @@ public class Graphik extends JFrame implements View {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		setTitle("Schoafkopf-Äpp");
-		this.setSize(1200, 620);
+		this.setSize(1300, 700);
+		//arrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrg
+		this.setResizable(false);
 		//Äußeres Layout nicht vorhanden
 		this.setLayout(null);
 		this.setLocationRelativeTo(null);
@@ -75,46 +77,65 @@ public class Graphik extends JFrame implements View {
 	 * Erstellt eine neue GUI
 	 */
 	private void initGUI() {
+		try {
 		
-		hintergrund = new JPanel(new BorderLayout());
-		getContentPane().add(hintergrund);
-		//Das letzte fünftel des Fensters ist für Spielermeldungen
-		hintergrund.setBounds(0, 0, this.getWidth() - this.getWidth() / 5, this.getHeight());
-		hintergrund.setVisible(true);
+			hintergrund = new JPanel();
+			getContentPane().add(hintergrund);
+			//Das letzte fünftel des Fensters ist für Spielermeldungen
+			hintergrund.setBounds(0, 0, this.getWidth() - this.getWidth() / 5, this.getHeight());
+			hintergrund.setVisible(true);
+			hintergrund.setLayout(null);
+			
+			//-------------------------------------------------------------hintergrund
+			
+			//Breite der Felder
+			int breite = hintergrund.getWidth() / 3;
+			//Höhe der Felder
+			int hoehe = hintergrund.getHeight() / 3;
+			
+			//Karten auf dem Tisch
+			tisch = new Tisch();
+			hintergrund.add(tisch);
+			//Der Hintergrund wird + -förmig aufgeteilt
+			tisch.setBounds(breite, hoehe, breite, hoehe);
+			tisch.setVisible(true);
+			
+			gegenspielerKarten = new Gegenspieler[3];
+			
+			for(int i = 0; i < gegenspielerKarten.length; i++) {
+				//Name muss noch gesetzt werden
+				gegenspielerKarten[i] = new Gegenspieler();
+				gegenspielerKarten[i].setVisible(true);
+			}
+			
+			hintergrund.add(gegenspielerKarten[0]);
+			gegenspielerKarten[0].setBounds(0, hoehe, breite, hoehe);
+			
+			hintergrund.add(gegenspielerKarten[1]);
+			gegenspielerKarten[1].setBounds(breite, 0, breite, hoehe);
+			
+			hintergrund.add(gegenspielerKarten[2]);
+			gegenspielerKarten[2].setBounds(2 * breite, hoehe, breite, hoehe);
+			
+			//Anzeige der Karten der Spieler
+			spielerKarten = new Spieler();
+			hintergrund.add(spielerKarten);
+			spielerKarten.setBounds(breite, hoehe * 2, breite, hoehe);
+			spielerKarten.setVisible(true);
+			//-------------------------------------------------------------hintergrund
+			
+			//Meldungen des Spielers (10 Meldungen werden gebuffert)
+			spielerMeldungen = new Meldungen(10);
+			getContentPane().add(spielerMeldungen);
+			//Die Meldungen laufen im letzten Fünftel des Fensters
+			spielerMeldungen.setBounds(this.getWidth() * (4 / 5), 0, this.getWidth() / 5, this.getHeight());
+			spielerMeldungen.setVisible(true);
+			//erste Ausgabe
+			spielerMeldungen.nachricht("Mit Server verbunden");
 		
-		//-------------------------------------------------------------hintergrund
-		//Karten auf dem Tisch
-		tisch = new Tisch();
-		hintergrund.add(tisch, BorderLayout.CENTER);
-		tisch.setVisible(true);
-		
-		gegenspielerKarten = new Gegenspieler[3];
-		
-		for(int i = 0; i < gegenspielerKarten.length; i++) {
-			//Name muss noch gesetzt werden
-			gegenspielerKarten[i] = new Gegenspieler();
-			gegenspielerKarten[i].setVisible(true);
-			gegenspielerKarten[i].setSize(this.getWidth() / 3, this.getHeight() / 3);
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
-		
-		hintergrund.add(gegenspielerKarten[0], BorderLayout.LINE_START);
-		hintergrund.add(gegenspielerKarten[1], BorderLayout.PAGE_START);
-		hintergrund.add(gegenspielerKarten[2], BorderLayout.LINE_END);
-		
-		//Anzeige der Karten der Spieler
-		spielerKarten = new Spieler();
-		hintergrund.add(spielerKarten, BorderLayout.PAGE_END);
-		spielerKarten.setVisible(true);
-		//-------------------------------------------------------------hintergrund
-		
-		//Meldungen des Spielers (10 Meldungen werden gebuffert)
-		spielerMeldungen = new Meldungen(10);
-		getContentPane().add(spielerMeldungen);
-		//Die Meldungen laufen im letzten Fünftel des Fensters
-		spielerMeldungen.setBounds(this.getWidth() * (4 / 5), 0, this.getWidth() / 5, this.getHeight());
-		spielerMeldungen.setVisible(true);
-		//erste Ausgabe
-		spielerMeldungen.nachricht("Mit Server verbunden");
 	}
 	
 	/**
@@ -256,9 +277,24 @@ public class Graphik extends JFrame implements View {
 		//Meldungen an Fenster anpassen
 		spielerMeldungen.setBounds(this.getWidth() * (4 / 5), 0, this.getWidth() / 5, this.getHeight());
 		
-		for(int i = 0; i < 3; i++) {
-			gegenspielerKarten[i].setSize(this.getWidth() / 3, this.getHeight() / 3);
-		}
+		tisch.setBounds(hintergrund.getWidth() / 3, hintergrund.getHeight() / 3,
+				hintergrund.getWidth() / 3, hintergrund.getHeight() / 3);
+		
+		//Breite der Felder
+		int breite = hintergrund.getWidth() / 3;
+		//Höhe der Felder
+		int hoehe = hintergrund.getHeight() / 3;
+		
+		hintergrund.add(gegenspielerKarten[0]);
+		gegenspielerKarten[0].setBounds(0, hoehe, breite, hoehe);
+		
+		hintergrund.add(gegenspielerKarten[1]);
+		gegenspielerKarten[1].setBounds(breite, 0, breite, hoehe);
+		
+		hintergrund.add(gegenspielerKarten[2]);
+		gegenspielerKarten[2].setBounds(2 * breite, hoehe, breite, hoehe);
+		
+		spielerKarten.setBounds(breite, hoehe * 2, breite, hoehe);
 	}
 }
 
