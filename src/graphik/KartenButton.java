@@ -1,7 +1,5 @@
 package graphik;
 
-import java.awt.Graphics;
-
 import javax.swing.JButton;
 
 import lib.Karte;
@@ -21,6 +19,7 @@ public class KartenButton extends JButton {
 		
 		label = new KartenLabel(this.karte, this.getWidth(), this.getHeight());
 		this.add(label);
+		this.setSize(label.getWidth(), label.getHeight());
 		label.setVisible(true);
 	}
 	
@@ -40,11 +39,4 @@ public class KartenButton extends JButton {
 	public Karte gibKarte() {
 		return karte;
 	}
-	
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		//Größe des Labels an passen
-		label.setSize(this.getWidth(), this.getHeight());
-	}
-
 }

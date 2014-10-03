@@ -18,35 +18,38 @@ public class Gegenspieler extends JPanel {
 	//Nachrichten und Meldungen
 	private Meldungen meldungen;
 	
-	private FlowLayout layout;
-	
 	/**
 	 * Erstellt einen Gegenspieler
 	 */
 	public Gegenspieler() {
-		super(new GridLayout(2, 1));
+		super();
+		
+		this.setLayout(null);
 		 
 		kartenzahl = 6;
 		
 		karten = new Spielerhand();
-		karten.setSize(this.getWidth(), this.getHeight() / 2);
-		//Übergibt 6 leere Karten, damit die Rückseite angezeigt wird
-		karten.setzeKarten(new ArrayList<Karte>(kartenzahl));
+		karten.setzeKarten(kartenzahl);
+		this.add(karten);
 		
 		//Erstellt eine neue Nachrichtenanzeige mit 4 Ausgaben
 		meldungen = new Meldungen(4);
-		meldungen.setSize(this.getWidth(), this.getHeight() / 2);
-		
 		this.add(meldungen);
-		this.add(karten);
+		
+		//legt eine feste Größe für das Label fest
+		this.setSize(karten.getWidth(),
+					 karten.getHeight() + meldungen.getHeight() + 10);
+		
+		meldungen.setLocation(100, 0);
+		karten.setLocation(0, meldungen.getHeight() + 10);
 	}
 	
 	/**
 	 * Entfernt eine Karte aus der Hand des Gegenspielers
 	 */
-	public void entferneKarte() {
-		kartenzahl--;
-		karten.setzeKarten(new ArrayList<Karte>(kartenzahl));
+	public void entferneKarte(int kartenzahl) {
+		this.kartenzahl = kartenzahl;
+		karten.setzeKarten(this.kartenzahl);
 	}
 	
 	/**
@@ -62,15 +65,8 @@ public class Gegenspieler extends JPanel {
 	 * @param text
 	 */
 	public void name(String text) {
+		//Erst zurücksetzen
+		meldungen.reset();
 		meldungen.festeAnzeige(text);
 	}
-	
-	public void paintComponents(Graphics g) {
-		super.paintComponents(g);
-		
-		karten.setSize(this.getWidth(), this.getHeight() / 2);
-		
-		meldungen.setSize(this.getWidth(), this.getHeight() / 2);
-	}
-
 }

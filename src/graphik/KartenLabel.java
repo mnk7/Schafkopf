@@ -24,8 +24,8 @@ public class KartenLabel extends JLabel {
 	private BufferedImage icon;
 	
 	//Speichert Höhe und Weite des Panels
-	private int width = 1;
-	private int height = 1;
+	private int width = 60;
+	private int height = 100;
 	
 	/**
 	 * Zeigt eine Karte an, die Karte wird immer kleinstmöglich angezeigt
@@ -37,16 +37,21 @@ public class KartenLabel extends JLabel {
 		super();
 		
 		this.setLayout(null);
+		this.setSize(this.width, this.height);
 		
-		//Anzeige der Begrenzungen des Panels
+		setBild(bild);
+		
+		KartenLabel.class.getResource(this.bild);
+		
 		//[DEBUG]
 		//this.setBorder(BorderFactory.createLineBorder(Color.black));
 		
 		//Setzt das Bild der Karte
 		setBild(bild);
-		try {
+		
+		//Für skalierbare Karten
+		/**try {
 			//Liest das Bild ein
-			KartenLabel.class.getResource(this.bild);
 			icon = ImageIO.read(new File(this.bild));
 			
 		} catch (IOException e) {
@@ -55,7 +60,7 @@ public class KartenLabel extends JLabel {
 		}
 		
 		//Division durch null vermeiden
-		/**float quotient = width / (height + 1);
+		float quotient = width / (height + 1);
 		if(quotient < 0.6) {
 			this.width = width;
 			this.height = this.width * 6/10;
@@ -83,20 +88,23 @@ public class KartenLabel extends JLabel {
 					karte.gibWert().toString().toLowerCase() + 
 					".jpg";
 		}
+		
+		this.setIcon(new ImageIcon(bild));
 	}
 	
+	//Für skalierbare Karten
 	/**
 	 * Passt die Größe des Bildes auf eine veränderte Fenstergröße an
 	 * @param width
 	 * @param height
 	 */	
-	public void paintComponent(Graphics g) {
+	/**public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
 		//immer die kleinstmögliche Anzeige wird gewählt
 		Dimension windowSize = this.getSize();
 		//Divison durch null vermeiden
-		/**float quotient = width / (height + 1);
+		float quotient = width / (height + 1);
 		if(quotient < 0.6) {
 			this.width = (int) windowSize.getWidth();
 			this.height = this.width * 6/10;
@@ -112,9 +120,9 @@ public class KartenLabel extends JLabel {
 		
 		//this.setIcon(new ImageIcon(bild));
 		g.drawImage(img, 0, this.getInsets().top, this);
-		**/
+		
 		this.setSize(60, 100);
 		
 		this.setIcon(new ImageIcon(bild));
-	}
+	}**/
 }

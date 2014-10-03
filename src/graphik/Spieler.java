@@ -1,7 +1,5 @@
 package graphik;
 
-import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -18,9 +16,27 @@ public class Spieler extends JPanel {
 	private Karte gespielt;
 	
 	public Spieler() {
-		super(new FlowLayout());
+		super();
+		
+		this.setLayout(null);
+		this.setSize(420, 100);
 		
 		karten = new ArrayList<KartenButton>();		
+		for(int i = 0; i < 6; i++) {
+			karten.add(new KartenButton(null));
+			this.add(karten.get(i));
+			karten.get(i).setLocation(70*i, 0);
+			karten.get(i).setVisible(true);
+			
+			karten.get(i).addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent evt) {
+					karteSpielen(evt);
+				}
+			});
+		}
+		
+		//Karten abschalten
+		aktiviert(false);
 	}
 	
 	/**
@@ -31,28 +47,14 @@ public class Spieler extends JPanel {
 		ArrayList<Karte> spielerkarten = model;
 		
 		for(int i = 0; i < spielerkarten.size(); i++) {
-			if(spielerkarten.get(i) == null) {
-				//Fügt einen neuen Knopf hinzu
-				karten.add(new KartenButton(spielerkarten.get(i)));
-				this.add(karten.get(i));
-				//Passt die Größe der Karten an
-				karten.get(i).setSize(this.getWidth() / 6, this.getHeight());
-				karten.get(i).addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent evt) {
-						karteSpielen(evt);
-					}
-				});
-				//Die Karten können nicht gewählt werden, wenn man nicht an der Reihe ist
-				karten.get(i).setEnabled(false);
-			} else
-				karten.get(i).setzeKarte(spielerkarten.get(i));
-			
-			karten.get(i).setVisible(true);
+			//neues Bild zuteilen
+			karten.get(i).setzeKarte(spielerkarten.get(i));
 		}
 		
-		//entfernt alle überflüssigen Karten
-		for(int i = spielerkarten.size(); i < 6; i++) {
-			karten.remove(i);
+		//schon gespielte Karten werden abgeschaltet
+		for(int i = 5; i >= spielerkarten.size(); i--) {
+			karten.get(i).setVisible(false);
+			karten.get(i).setEnabled(false);
 		}
 	}	
 	
@@ -83,14 +85,5 @@ public class Spieler extends JPanel {
 		for(int i = 0; i < karten.size(); i++) {
 			karten.get(i).setEnabled(an);
 		}
-	}
-	
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		
-		for(int i = 0; i < karten.size(); i++) {
-			karten.get(i).setSize(this.getWidth() / 6, this.getHeight());
-		}
-	}
-	
+	}	
 }

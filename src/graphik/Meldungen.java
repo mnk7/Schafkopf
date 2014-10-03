@@ -11,15 +11,19 @@ public class Meldungen extends JPanel{
 	//Anzeigen
 	private JLabel[] meldung;
 	
+	private int festeAnzeigen = 0;
+	
 	public Meldungen(int histLaenge) {
-		super(new GridLayout(histLaenge, 1));
+		super();
+		
+		this.setLayout(null);
+		this.setSize(200, histLaenge*20);
 		
 		meldung = new JLabel[histLaenge];
 		for(int i = 0; i < meldung.length; i++) {
 			meldung[i] = new JLabel();
 			this.add(meldung[i]);
-			//Absolute Minimalgröße setzen
-			meldung[i].setMinimumSize(new Dimension(100, 10));
+			meldung[i].setBounds(0, i*20, 200, 20);
 		}
 	}
 	
@@ -28,7 +32,7 @@ public class Meldungen extends JPanel{
 	 * @param text
 	 */
 	public void festeAnzeige(String text) {
-		meldung[0].setText(text);
+		meldung[festeAnzeigen].setText(text);
 	}
 	
 	/**
@@ -36,12 +40,22 @@ public class Meldungen extends JPanel{
 	 * @param text
 	 */
 	public void nachricht(String text) {
-		for(int i = meldung.length - 1; i > 1; i--) {
+		for(int i = meldung.length - 1; i > festeAnzeigen; i--) {
 			//Rückt alle Anzeigen eins nach unten
-			meldung[i] = meldung[i - 1];
+			meldung[i].setText(meldung[i - 1].getText());
 		}
 		//Zeigt die neue Meldung an
 		meldung[1].setText("  --->" + text);
+	}
+	
+	/**
+	 * Setzt alle Meldungen zurück
+	 */
+	public void reset() {
+		festeAnzeigen = 0;
+		for(int i = 0; i < meldung.length; i++) {
+			meldung[i].setText("");
+		}
 	}
 
 }

@@ -22,7 +22,7 @@ public class Tisch extends JPanel {
 		for(int i = 0; i < 4; i++) {
 			karten[i] = new KartenLabel(null, this.getWidth() / 4, this.getHeight() / 3);
 			this.add(karten[i]);
-			karten[i].setVisible(true);
+			karten[i].setVisible(false);
 		}
 		
 		kartenPosition();
@@ -49,18 +49,12 @@ public class Tisch extends JPanel {
 	 */
 	public void setzeKarten(Karte[] karten) {
 		for(int i = 0; i < 4; i++) {
-			this.karten[i].setBild(karten[i]);
+			if(karten[i] == null)
+				this.karten[i].setVisible(false);
+			else {
+				this.karten[i].setBild(karten[i]);
+				this.karten[i].setVisible(true);
+			}
 		}
-	}
-	
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		
-		//Setzt bei Veränderung am Tisch die Größe der Karten neu
-		for(int i = 0; i < 4; i++) {
-			karten[i].setSize(this.getWidth() / 4, this.getHeight() / 3);
-		}
-		
-		kartenPosition();
 	}
 }

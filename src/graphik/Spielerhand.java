@@ -1,40 +1,39 @@
 package graphik;
 
-import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.util.ArrayList;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import lib.Karte;
 
 public class Spielerhand extends JPanel {
 	
 	private ArrayList<KartenLabel> karten;
 	
 	public Spielerhand() {
-		super(new FlowLayout());
+		super();
+		
+		this.setLayout(null);
+		
+		this.setSize(420, 100);
 		
 		karten = new ArrayList<KartenLabel>();
-		reset();
+		for(int i = 0; i < 6; i++) {
+			karten.add(new KartenLabel(null, 60, 100));
+			this.add(karten.get(i));
+			karten.get(i).setLocation(70*i, 0);
+			karten.get(i).setVisible(true);
+			//Kartenhintergrund anzeigen
+			karten.get(i).setBild(null);
+		}
 	}
 	
 	/**
-	 * Setzt die angezeigten Karten
-	 * @param model (Karten des Spielers)
+	 * Setzt die angezeigten Karten -> entfernt eine Karte
+	 * @param Anzahl der angezeigten Karten
 	 */
-	public void setzeKarten(ArrayList<Karte> model) {
-		ArrayList<Karte> m = model;
-		for(int i = 0; i < karten.size(); i++) {
-			if(i < m.size())
-				karten.get(i).setBild(m.get(i));
-			else
-				karten.get(i).setBild(null);
-		}
-		for(int i = karten.size(); i < 6; i++) {
-			//Alle restlichen Karten disabeln
-			karten.get(i).setEnabled(false);
+	public void setzeKarten(int angezeigt) {
+		for(int i = 6; i > angezeigt; i--) {
+			//setzt gespielte Karten unsichtbar
+			karten.get(i).setVisible(false);
 		}
 	}
 	
@@ -42,22 +41,8 @@ public class Spielerhand extends JPanel {
 	 * Setzt alles auf Anfang
 	 */
 	public void reset() {
-		//Zuerst alle Karten entfernen
-		karten.clear();
 		for(int i = 0; i < 6; i++) {
-			karten.add(new KartenLabel(null, this.getWidth() / 6, this.getHeight()));
-			
-			this.add(karten.get(i));
 			karten.get(i).setVisible(true);
-		}
-	}
-
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		
-		//Passt die Größe der Karten an
-		for(int i = 0; i < karten.size(); i++) {
-			karten.get(i).setSize(this.getWidth() / 6, this.getHeight());
 		}
 	}
 }
