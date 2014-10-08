@@ -8,11 +8,13 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import regeln.Controll;
+import regeln.Regelwahl;
 import lib.Karte;
 import lib.Model;  
 import lib.Model.modus;
@@ -47,14 +49,7 @@ public class Graphik extends JFrame implements View {
 	private Tisch tisch;
 	
 	//Hintergrund
-	private JPanel hintergrund;
-	
-	//Auswahldialoge
-	//Kontra
-	//Klopfen
-	//Spielmodus
-	//Hochzeit
-	
+	private JPanel hintergrund;	
 	
 	public Graphik() {
 		super();
@@ -237,7 +232,26 @@ public class Graphik extends JFrame implements View {
 	 * Spielzug des Spielers durchführen
 	 */
 	public void spiel() {
+		Karte gespielt = spielerKarten.spiel();
+		Model m = model.gibModel();
+		boolean ok = false;
 		
+		do {
+			try {
+				m.setTisch(ID, gespielt);
+				if(controll.erlaubt(m)) {
+					model.setzeModel(m);
+					ok = true;
+				} else
+					m.undo(ID);
+			} catch (Exception e) {
+				e.printStackTrace();
+				//nächster Versuch
+				m.undo(ID);
+				continue;
+			}
+			
+		} while(!ok);
 	}
 	
 	/**
@@ -245,7 +259,7 @@ public class Graphik extends JFrame implements View {
 	 * @param mod
 	 */
 	public void setzeModus(modus mod) {
-		
+		controll = new Regelwahl().wahl(mod, model.gibModel(), ID);
 	}
 	
 	/**
@@ -254,7 +268,43 @@ public class Graphik extends JFrame implements View {
 	 * @return
 	 */
 	public modus spielstDu() {
-		return null;
+		while(true) {
+			SpielmodusDialog dialog = new SpielmodusDialog();
+			modus m = dialog.modusWahl();
+			
+			//Prüft Clien-seitig, ob ein Sauspiel oder ein Si gespielt werden können.
+			//Eine Hochzeit wird Server-seitig geprüft
+			//evtl. Verschiebung der Prüfung auf den Server
+			if(m.toString().substring(0, 7).equals("SAUSPIEL")) {
+				Karte.farbe f = dialog.farbe(m);
+				if(new Regelwahl().sauspielMoeglich(f, model.gibModel(), ID)) {
+					dialog.dispose();
+					return m;
+				}
+			} else {
+				if(m.equals(modus.SI)) {
+					if(new Regelwahl().siMoeglich(model.gibModel(), ID)) {
+						dialog.dispose();
+						return m;
+					}
+					else {
+						JOptionPane.showMessageDialog(this, "Des konnst ned spuiln!");
+						continue;
+					}
+				}
+				dialog.dispose();
+				return m;
+			}
+			
+			JOptionPane.showMessageDialog(this, "Des konnst ned spuiln!");
+			try {
+				//Bremse
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			continue;
+		}
 	}
 	
 	/**
@@ -262,7 +312,10 @@ public class Graphik extends JFrame implements View {
 	 * @return
 	 */
 	public boolean klopfstDu() {
-		return false;
+		if(javax.swing.JOptionPane.showConfirmDialog(this, "Woist klopfa?") == 0)
+			return false;
+		else
+			return true;	
 	}
 	
 	/**
@@ -297,6 +350,8 @@ public class Graphik extends JFrame implements View {
 	 * @return
 	 */
 	public String hochzeit() {
+		if(JOptionPane.showConfirmDialog(this, "Woist klopfa?") == JOptionPane.OK_OPTION)
+			return "JA";
 		return null;
 	}
 
@@ -307,7 +362,8 @@ public class Graphik extends JFrame implements View {
 	 * @return
 	 */
 	public Karte hochzeitKarte() {
-		return null;
+		JOptionPane.showMessageDialog(this, "Welche gibst na her?");
+		return spielerKarten.spiel();
 	}
 
 	/**

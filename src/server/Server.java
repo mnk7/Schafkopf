@@ -146,11 +146,13 @@ public class Server implements Runnable{
         		//gibt jedem Spieler seine ID
         		for(int i = 0; i < 4; i++) {
         			try {
+        				spieler.get(i).setzeModel(model);
 						spieler.get(i).setzeID(i);
 					} catch (Exception e) {
 						e.printStackTrace();
 						//Bei Fehler abbrechen
 						entferneSpieler(spieler.get(i));
+						graphik.textSetzen(spieler);
 						break;
 					}
         		}

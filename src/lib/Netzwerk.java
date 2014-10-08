@@ -185,13 +185,15 @@ public abstract class Netzwerk {
 	public String einlesen() throws Exception {
 		String input = "error";
 		try {
-			//Solange nichts gesendet wird
 			do {
 				input = in.readLine();
-			} while(input.equals("") || input.equals(null));
+			} while(input.equals(null) || input.equals(""));
 		} catch(Exception e) {
 			throw e;
 		}
+		
+		//[DEBUG]
+		System.out.println(input);
 		
 		return input;
 	}

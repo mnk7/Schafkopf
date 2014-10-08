@@ -91,4 +91,10 @@ public class Bot implements Spieler {
 		
 	}
 
+	@Override
+	public void setzeModel(Model model) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

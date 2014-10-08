@@ -53,5 +53,18 @@ public class Karte {
 	public int gibPunkte() {
 		return punkte[w.ordinal()];
 	}
+	
+	/**
+	 * Vergleicht zwei Karten
+	 * @param k
+	 * @return gleich?
+	 */
+	public boolean vergleiche(Karte k) {
+		if(k.gibFarbe().equals(f)
+			&& k.gibWert().equals(w))
+			return true;
+			
+		return false;
+	}
 
 }

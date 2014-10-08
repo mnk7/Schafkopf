@@ -112,6 +112,8 @@ public interface Spieler{
 	 * @param kontra
 	 * @throws Exception
 	 */
-	public void kontra(boolean[] kontra) throws Exception;  
+	public void kontra(boolean[] kontra) throws Exception;
+
+	public void setzeModel(Model model);  
 
 }

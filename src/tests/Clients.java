@@ -14,7 +14,7 @@ public class Clients {
 			t[i] = new Thread() {
 				public void run() {
 					try {
-						Client c = new Client("127.0.0.1", "Michael", new MenuGUI());
+						MenuGUI m = new MenuGUI();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

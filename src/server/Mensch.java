@@ -57,6 +57,8 @@ public class Mensch implements Spieler, Runnable {
 		
 		while(true) {
 			try {
+				Thread.sleep(100);
+				
 				String input = netzwerk.einlesen();
 				
 				if(input.equals("!NAME")) {
@@ -77,8 +79,6 @@ public class Mensch implements Spieler, Runnable {
 					karte = netzwerk.getKarte();
 					break;
 				}
-				
-				Thread.sleep(100);
 			} catch (Exception e) {
 				//Benachrichtige Server, dass ein Spieler entfernt wurde
 				server.entferneSpieler(this);
@@ -97,6 +97,10 @@ public class Mensch implements Spieler, Runnable {
 	public Model gibModel() {
 		return model; 
 	}
+	
+	public void setzeModel(Model m) {
+		this.model = m;
+	}
 
 	public void erste3(Model model) throws Exception {
 		//sendet das Model und erwartet antwort
@@ -106,7 +110,7 @@ public class Mensch implements Spieler, Runnable {
 			
 			netzwerk.senden(model);
 			
-			//horcht nach der Antwort
+			//horcht nach der Antwort			
 		} catch(Exception e) {
 			throw e;
 		}
@@ -118,6 +122,8 @@ public class Mensch implements Spieler, Runnable {
 	private void mitspielerNamen() {
 		try {
 			netzwerk.send("!MITSPIELER");
+			Thread.sleep(100);
+			
 			String[] namen = model.gibNamen();
 			for(int i = 0; i < namen.length; i++) {
 				netzwerk.send(namen[i]);

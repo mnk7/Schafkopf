@@ -66,6 +66,9 @@ public class Client implements View {
 	private void listen() {
 		while(true) {
 			try {
+				//kleine Pause
+				Thread.sleep(100);
+				
 				String steuerung = netzwerk.einlesen();
 
 				if(steuerung.equals("!NAME")) {
@@ -130,6 +133,7 @@ public class Client implements View {
 				} if(steuerung.equals("!ID")) {
 					//ID des Spielers empfangen
 					ID = Integer.parseInt(netzwerk.einlesen());
+					
 					netzwerk.setID(ID);
 					graphik.setID(ID);
 					break;
@@ -165,9 +169,6 @@ public class Client implements View {
 					graphik.geklopft(geklopft);
 					break;
 				}
-				
-				//kleine Pause
-				Thread.sleep(100);
 			} catch (Exception e) {
 				//Wenn ein Fehler auftritt aus der Schleife ausbrechen
 				e.printStackTrace();
