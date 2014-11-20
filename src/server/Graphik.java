@@ -123,16 +123,16 @@ public class Graphik extends JFrame {
 	public synchronized void textSetzen(ArrayList<Spieler> s) { 
 		ArrayList <Spieler> spieler = s;		
 		
-		try {
-			for(int i = 0; i < 4; i++){
-				String aufschrift;
+		for(int i = 0; i < 4; i++){
+			String aufschrift;
+			try {
 				aufschrift = spieler.get(i).gibName();
 				aufschrift += " - ";
 				aufschrift += spieler.get(i).gibIP();
-				PlayerLabel[i].setText(aufschrift);
+			} catch(Exception e) {
+				aufschrift = "";
 			}
-		} catch(Exception e) {
-			// e.printStackTrace();
+			PlayerLabel[i].setText(aufschrift);
 		}
 	}
 	

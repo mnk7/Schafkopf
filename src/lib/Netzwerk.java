@@ -165,7 +165,8 @@ public abstract class Netzwerk {
 	 * @param modus
 	 */
 	public void send(String output) throws Exception{
-		out.print(output + "\n");
+		System.out.println("[SEND]" + output);
+		out.print(output);
 		out.flush();
 	}
 	
@@ -192,8 +193,7 @@ public abstract class Netzwerk {
 			throw e;
 		}
 		
-		//[DEBUG]
-		System.out.println(input);
+		System.out.println("[READ]" + input);
 		
 		return input;
 	}

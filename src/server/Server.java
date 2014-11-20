@@ -85,7 +85,7 @@ public class Server implements Runnable{
 				//Alle Spieler zurücksetzen
         		for(int i = 0; i < spieler.size(); i++) {
         			entferneSpieler(spieler.get(i));
-        		};
+        		}
 			}
         	
         } 
@@ -153,9 +153,13 @@ public class Server implements Runnable{
 						//Bei Fehler abbrechen
 						entferneSpieler(spieler.get(i));
 						graphik.textSetzen(spieler);
+						nocheins = true;
 						break;
 					}
         		}
+        		
+        		if(nocheins)
+        			break;
 
 	        	model.mischen();
 	        	model.ersteKartenGeben();

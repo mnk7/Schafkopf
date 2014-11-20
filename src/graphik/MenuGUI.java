@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -130,6 +132,23 @@ public class MenuGUI extends JFrame{
 		NAMEtf = new JTextField();
 		hintergrund.add(NAMEtf);
 		NAMEtf.setBounds(200, 50, 120, 30);
+		NAMEtf.addKeyListener(new KeyListener() {
+			public void keyPressed(KeyEvent arg0) {
+				if(arg0.getKeyCode() == KeyEvent.VK_ENTER) 
+					enter();
+			}
+			public void keyReleased(KeyEvent arg0) {
+				if(arg0.getKeyCode() == KeyEvent.VK_ENTER)
+					enter();
+				
+			}
+			public void keyTyped(KeyEvent arg0) {
+				if(arg0.getKeyCode() == KeyEvent.VK_ENTER)
+					enter();
+			}	
+			
+		});
+
 		NAMEtf.setVisible(true);
 		
 		//Knopf
@@ -139,9 +158,7 @@ public class MenuGUI extends JFrame{
 		connect.setText("Verbinde mit Server");
 		connect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				IPlabel.setForeground(Color.BLACK);
-				NAMElabel.setForeground(Color.BLACK);
-				verbinden();
+				enter();
 			}
 		});
 		connect.setVisible(true);
@@ -149,4 +166,9 @@ public class MenuGUI extends JFrame{
 		repaint();
 	}
 
+	private void enter() {
+		IPlabel.setForeground(Color.BLACK);
+		NAMElabel.setForeground(Color.BLACK);
+		verbinden();
+	}
 }
