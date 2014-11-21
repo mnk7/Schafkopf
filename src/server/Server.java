@@ -107,10 +107,7 @@ public class Server implements Runnable{
 	        		if(spieler.size() == spielerzahl && nocheins) {
 	        			nocheins = false;
 	        			neuesSpiel();
-	        		}
-	        		
-	        		//Drossel
-	        		Thread.sleep(100);
+	        		} 
         		}
         	} catch(Exception e) {
         		e.printStackTrace();
@@ -122,7 +119,7 @@ public class Server implements Runnable{
         	}
         }
         
-        /**
+        /** 
          * Erstellt ein neues Spiel
          * @throws Exception 
          */
@@ -190,7 +187,7 @@ public class Server implements Runnable{
 	        				nocheins = true;
 	        				continue;
 	        			}
-	        			Thread.sleep(100);
+	        			//Thread.sleep(100);
 	        		}
 	        		
 	        		//speichert, was gespielt wird
@@ -243,21 +240,17 @@ public class Server implements Runnable{
 	        	
 	        	//Sendet den Modus an alle Spieler und empfängt, ob kontra gegeben wurde
 	        	for(int i = 0; i < 4; i++) {
-	        		String k;
 					try {
-						k = spieler.get(i).modus(mod);
+						spieler.get(i).modus(mod);
 						//Wenn eine Hochzeit gespielt wird, werden beide spielenden gesendet
 						int mit = 4;
-						if(mod.equals(modus.HOCHZEIT))
+						if(mod.equals(modus.HOCHZEIT)) {
 							mit = mitspieler;
+						}
 						spieler.get(i).spieler(spielt, mit);
 					} catch (Exception e) {
 						e.printStackTrace(); 
-						k = null;
 					}
-	        		
-	        		if(k == null || k == "") kontra[i] = false;
-	        		else kontra[i] = true;
 	        	}	
 	        	
 	        	for(int i = 0; i < 4; i++) {
@@ -313,6 +306,10 @@ public class Server implements Runnable{
          * Beendet die Runde
          */
         private void rundeBeenden() {
+        	for(int i = 0; i < 4; i++) {
+        		kontra[i] = spieler.get(i).gibKontra();
+        	}
+        	
         	int pSpielt;
         	if(mod.equals(modus.SI)) {
         		//Der Spieler hat alle Punkte

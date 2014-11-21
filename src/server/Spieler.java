@@ -48,10 +48,9 @@ public interface Spieler{
 	/**
 	 * Übergibt den Spielern den Modus und fragt nach Kontra
 	 * @param m
-	 * @return Kontra
 	 * @throws Exception 
 	 */
-	public String modus(modus m) throws Exception;
+	public void modus(modus m) throws Exception;
 	
 	/**
 	 * Sendet die Sieger einer Runde
@@ -67,10 +66,14 @@ public interface Spieler{
 	
 	/**
 	 * Gibt den Namen des Spielers zurück
-	 * @return
 	 * @throws Exception 
 	 */
 	public String gibName() throws Exception;
+	
+	/**
+	 * Fragt nach dem Namen
+	 */
+	public void name() throws Exception;
 	
 	/**
 	 * Setzt vor jedem Spiel die ID der Spieler
@@ -106,6 +109,12 @@ public interface Spieler{
 	 * @throws Exception 
 	 */
 	public void geklopft(boolean[] geklopft) throws Exception;
+	
+	/**
+	 * Gibt zurück, ob Kontra gegeben wurde
+	 * @return kontra?
+	 */
+	public boolean gibKontra();
 
 	/**
 	 * Sendet, welche Spieler Kontra geben

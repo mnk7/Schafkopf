@@ -20,10 +20,9 @@ public class Bot implements Spieler {
 	}
 
 	@Override
-	public String modus(lib.Model.modus m) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public void modus(lib.Model.modus m) {
+
+	} 
 
 	@Override
 	public void sieger(int s1, int s2) {
@@ -39,8 +38,7 @@ public class Bot implements Spieler {
 
 	@Override
 	public String gibName() {
-		// TODO Auto-generated method stub
-		return "Bot";
+		return null;
 	}
 
 	@Override
@@ -93,6 +91,18 @@ public class Bot implements Spieler {
 
 	@Override
 	public void setzeModel(Model model) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean gibKontra() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void name() {
 		// TODO Auto-generated method stub
 		
 	}

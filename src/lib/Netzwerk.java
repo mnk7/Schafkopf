@@ -27,7 +27,7 @@ public abstract class Netzwerk {
 	 * @throws IOException 
 	 * @throws NumberFormatException 
 	 */
-	public void senden(Model model) throws Exception {
+	protected void senden(Model model) throws Exception {
 		//Speichert das Model
 		this.model = model;
 		
@@ -82,7 +82,7 @@ public abstract class Netzwerk {
 	 * @return aktualisiertes Model
 	 * @throws Exception 
 	 */
-	public Model empfangen() throws Exception {
+	protected Model empfangen() throws Exception {
 		
 		Model model;
 		
@@ -164,7 +164,7 @@ public abstract class Netzwerk {
 	 * Sendet Antworten z.B. ob geklopft wird, oder was gespielt wird
 	 * @param modus
 	 */
-	public void send(String output) throws Exception{
+	protected void send(String output) throws Exception{
 		System.out.println("[SEND]" + output);
 		out.print(output);
 		out.flush();
@@ -183,8 +183,8 @@ public abstract class Netzwerk {
 	 * @return input
 	 * @throws Exception 
 	 */
-	public String einlesen() throws Exception {
-		String input = "error";
+	protected String einlesen() throws Exception {
+		String input = "";
 		try {
 			do {
 				input = in.readLine();
@@ -196,5 +196,83 @@ public abstract class Netzwerk {
 		System.out.println("[READ]" + input);
 		
 		return input;
+	}
+	
+	/**
+	 * Schreibt einen Datensatz mit Steuerbefehl in den Stream
+	 * @param steuer
+	 * @param data
+	 * @throws Exception
+	 */
+	public void print(String steuer, String data) throws Exception {
+		String[] d = new String[1];
+		d[0] = data;
+		print(steuer, d);
+	}
+	
+	/**
+	 * Schreibt eine Reihe von Datensätzen mit Steuerbefehl
+	 * @param steuer
+	 * @param data
+	 * @throws Exception
+	 */
+	public void print(String steuer, String[] data) throws Exception {
+		send(steuer);
+		if(einlesen().equals("!COPY")) {
+			for(int i = 0; i < data.length; i++) {
+				send(data[i]);
+			}
+			send("!END");
+		}
+	}
+	
+	/**
+	 * Sendet ein Model mit Steuerbefehl
+	 * @param steuer
+	 * @param data
+	 * @throws Exception
+	 */
+	public void printModel(String steuer, Model data) throws Exception {
+		send("!MODEL");
+		send(steuer);
+		if(einlesen().equals("!COPY")) {
+			senden(data);
+		}
+	}
+	
+	/**
+	 * Liest eine Reihe von Datensätzen
+	 * @return Steuerbefehl und Datensätze
+	 * @throws Exception
+	 */
+	public Object[] read() throws Exception {
+		ArrayList<String> data = new ArrayList<String>();
+		data.add(einlesen());
+		//Bestätigung senden
+		send("!COPY");
+		if(data.get(0).equals("!MODEL")) {
+			return readModel();
+		}
+		String input = einlesen();
+		while(!input.equals("!END")) {
+			data.add(input);
+			input = einlesen();
+		}
+		
+		return data.toArray();
+	}
+	
+	/**
+	 * Liest ein Model
+	 * @return Steuerbefehl und Model
+	 * @throws Exception
+	 */
+	protected Object[] readModel() throws Exception {
+		Object[] data = new Object[2];
+		data[0] = einlesen();
+		//Bestätigen
+		send("!COPY");
+		data[1] = empfangen();
+		return data;
 	}
 }

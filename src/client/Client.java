@@ -1,12 +1,12 @@
 package client;
 
 import lib.Karte;
+import lib.Model;
 import lib.Model.modus;
-
 import graphik.Graphik;
 import graphik.MenuGUI;
 
-public class Client implements View {
+public class Client implements View{
 
 	//Enthält die Verbindung zum Server
 	private Netzwerk netzwerk;
@@ -31,8 +31,7 @@ public class Client implements View {
 	//ID des Spielers
 	private int ID;
 	
-	//gibt an, ob weitergespielt wird
-	private boolean nocheins;
+	private boolean update;
 	
 	
 	public Client(String IP, String name, MenuGUI menu) throws Exception{		
@@ -42,7 +41,7 @@ public class Client implements View {
 		this.name = name;
 		ID = -1;
 		
-		nocheins = true;
+		update = false;
 		
 		if(!connect()) throw new Exception("Verbindung gescheitert");
 		
@@ -65,103 +64,112 @@ public class Client implements View {
 	 */
 	private void listen() {
 		while(true) {
-			try {
-				//kleine Pause
-				Thread.sleep(100);
-				
-				String steuerung = netzwerk.einlesen();
+			try {				
+				Object[] data = netzwerk.read();
 
-				if(steuerung.equals("!NAME")) {
+				if(data[0].equals("!NAME")) {
 					//Senden des Namens
-					netzwerk.send("!NAME");
-					netzwerk.send(name);
+					netzwerk.print("!NAME", name);
 					break;
 				} 
-				if(steuerung.equals("!MITSPIELER")) {
+				if(data[0].equals("!MITSPIELER")) {
 					//Namen der Mitspieler empfangen
 					String[] namen = new String[4];
 					for(int i = 0; i < 4; i++) {
-						namen[i] = netzwerk.einlesen();
+						namen[i] = (String) data[i+1];
 					}
 					//Speichert die Namen der Mitspieler
 					graphik.setzeNamen(namen);
 					break;
 				} 
-				if(steuerung.equals("!ERSTE3")) {
+				if(data[0].equals("!ERSTE3")) {
 					//Model empfangen
-					model.setzeModel(netzwerk.empfangen());
+					model.setzeModel((Model) data[1]);
 					//Klopfen des Spielers abwarten
-					netzwerk.send("!ERSTE3");
-					netzwerk.send(String.valueOf(graphik.klopfstDu()));
+					netzwerk.print("!ERSTE3", String.valueOf(graphik.klopfstDu()));
 					break;
 				}
-				if(steuerung.equals("!SPIEL")) {
+				if(data[0].equals("!SPIEL")) {
 					//Model empfangen
-					model.setzeModel(netzwerk.empfangen());
+					model.setzeModel((Model) data[1]);
 					//Signal an Graphik
-					netzwerk.send("!SPIEL");
 					graphik.spiel();
+					
+					while(!update) {
+						Thread.sleep(500);
+					}
+					netzwerk.printModel("!SPIEL", model.gibModel());
+					
 					break;
 				} 
-				if(steuerung.equals("!SPIELSTDU")) {
+				if(data[0].equals("!SPIELSTDU")) {
 					//empfängt das neue Model
-					model.setzeModel(netzwerk.empfangen());
+					model.setzeModel((Model) data[1]);
 					//Sendet den Spielmodus
-					netzwerk.send("!SPIELSTDU");
 					String antwort = graphik.spielstDu().toString();
-					netzwerk.send(antwort);
+					netzwerk.print("!SPIELSTDU", antwort);
+					
+					//Wenn eine Hochzeit gespielt werden soll, wird die angebotene Karte gesendet
 					if(antwort.equals("HOCHZEIT")) {
-						netzwerk.send("!KARTE");
 						Karte k = graphik.hochzeitKarte();
-						netzwerk.send(k.gibFarbe().toString());
-						netzwerk.send(k.gibWert().toString());
+						String[] output = new String[] {
+							k.gibFarbe().toString(), 
+							k.gibWert().toString()
+						};
+						netzwerk.print("!KARTE", output);
 					}
+					
 					break;
 				}
-				if(steuerung.equals("!MODUS")) {
+				if(data[0].equals("!MODUS")) {
 					//Empfangen des Modus des Spiels
-					mod = modus.valueOf(netzwerk.einlesen());
+					mod = modus.valueOf((String) data[1]);
+					netzwerk.print("!KONTRA", String.valueOf(graphik.kontra()));
 					break;
 				} 
-				if(steuerung.equals("!SPIELT")) {
-					int spielt = Integer.parseInt(netzwerk.einlesen());
-					int mitspieler = Integer.parseInt(netzwerk.einlesen());
+				if(data[0].equals("!SPIELT")) {
+					int spielt = (int) data[1];
+					int mitspieler = (int) data[2];
 					graphik.spielt(spielt, mitspieler);
 					break;
 				} 
-				if(steuerung.equals("!SIEGER")) {
+				if(data[0].equals("!SIEGER")) {
 					//empfängt die Sieger
-					int s1 = Integer.parseInt(netzwerk.einlesen());
-					int s2 = Integer.parseInt(netzwerk.einlesen());
+					int s1 = (int) data[1];
+					int s2 = (int) data[2];
 
 					//und gibt sie an die Graphik weiter
 					graphik.sieger(s1, s2);
 					break;
 				} 
-				if(steuerung.equals("!ID")) {
+				if(data[0].equals("!ID")) {
 					//ID des Spielers empfangen
-					ID = Integer.parseInt(netzwerk.einlesen());
+					ID = (int) data[1];
 					
 					netzwerk.setID(ID);
 					graphik.setID(ID);
 					break;
 				} 
-				if(steuerung.equals("!HOCHZEIT")) {
+				if(data[0].equals("!HOCHZEIT")) {
 					String answer = graphik.hochzeit();
 					
 					if(answer.equals("JA")) {
-						netzwerk.send(answer);
-						netzwerk.send("!KARTE");
+						netzwerk.print("!HOCHZEIT", answer);
 						Karte k = graphik.hochzeitKarte();
-						netzwerk.send(k.gibFarbe().toString());
-						netzwerk.send(k.gibWert().toString());
+						String[] output = new String[] {
+							k.gibFarbe().toString(), 
+							k.gibWert().toString()
+						};
+						netzwerk.print("!KARTE", output);
+					} else {
+						netzwerk.print("!HOCHZEIT", answer);
 					}
 					break;
 				} 
-				if(steuerung.equals("!KONTRA")) {
+				if(data[0].equals("!KONTRA")) {
 					boolean[] kontra = new boolean[4];
 					for(int i = 0; i < 4; i++) {
-						if(netzwerk.einlesen().equals("true"))
+						if(data[1].equals("true"))
 							kontra[i] = true;
 						else 
 							kontra[i] = false;
@@ -169,10 +177,10 @@ public class Client implements View {
 					graphik.kontra(kontra);
 					break;
 				} 
-				if(steuerung.equals("!GEKLOPFT")) {
+				if(data[0].equals("!GEKLOPFT")) {
 					boolean[] geklopft = new boolean[4];
 					for(int i = 0; i < 4; i++) {
-						if(netzwerk.einlesen().equals("true"))
+						if(data[1].equals("true"))
 							geklopft[i] = true;
 						else
 							geklopft[i] = false;
@@ -185,15 +193,6 @@ public class Client implements View {
 				e.printStackTrace();
 				break;
 			}
-		}
-	}
-	
-	public void update(ModelMVC model) throws Exception {
-		this.model = model;
-		try {
-			netzwerk.senden(model.gibModel());
-		} catch (Exception e) {
-			throw e;
 		}
 	}
 	
@@ -211,6 +210,14 @@ public class Client implements View {
 		
 		//falls keine Verbindung hergestellt werden konnte
 		return false;
+	}
+
+	/**
+	 * Aktualisiert das Model
+	 */
+	public void update(ModelMVC model) throws Exception {
+		this.model = model;
+		update = true;
 	}
 
 }

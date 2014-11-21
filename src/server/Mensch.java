@@ -29,6 +29,8 @@ public class Mensch implements Spieler, Runnable {
 	private Model model;
 	private Karte karte;
 	
+	private boolean kontra;
+	
 	public Mensch(Socket client, Server server) throws Exception {
 		
 		antwort = "";
@@ -57,26 +59,40 @@ public class Mensch implements Spieler, Runnable {
 		
 		while(true) {
 			try {
-				Thread.sleep(100);
+				//Thread.sleep(100);
 				
-				String input = netzwerk.einlesen();
+				Object[] data = netzwerk.read();
 				
-				if(input.equals("!NAME")) {
-					name = netzwerk.einlesen();
+				if(data[0].equals("!NAME")) {
+					name = (String) data[1];
 					break;
-				} if(input.equals("!ERSTE3")) {
-					antwort = netzwerk.einlesen();
+				} if(data[0].equals("!ERSTE3")) {
+					antwort = (String) data[1];
 					break;
-				} if(input.equals("!SPIEL")) {
-					model = netzwerk.empfangen();
+				} if(data[0].equals("!SPIEL")) {
+					model = (Model) data[1];
 					break;
-				} if(input.equals("!SPIELSTDU")) {
-					antwort = netzwerk.einlesen();
+				} if(data[0].equals("!SPIELSTDU")) {
+					antwort = (String) data[1];
 					break;
-				} if(input.equals("!HOCHZEIT")) {
-					antwort = netzwerk.einlesen();
-				} if(input.equals("!KARTE")) {	
-					karte = netzwerk.getKarte();
+				} if(data[0].equals("!KONTRA")) {
+					if(data[1].equals("true")) {
+						kontra = true;
+					} else {
+						kontra = false;
+					}	
+					break;
+				} if(data[0].equals("!HOCHZEIT")) {
+					//Antwort JA + Karte oder NEIN
+					antwort = (String) data[1];
+					if(antwort.equals("JA")) {
+						model = (Model) data[2];
+					}
+					break;
+				} if(data[0].equals("!KARTE")) {	
+					karte = new Karte(
+							Karte.farbe.valueOf((String) data[1]),
+							Karte.wert.valueOf((String) data[2]));
 					break;
 				}
 			} catch (Exception e) {
@@ -94,6 +110,10 @@ public class Mensch implements Spieler, Runnable {
 		return a;
 	}
 	
+	public boolean gibKontra() {
+		return kontra;
+	}
+	
 	public Model gibModel() {
 		return model; 
 	}
@@ -105,11 +125,7 @@ public class Mensch implements Spieler, Runnable {
 	public void erste3(Model model) throws Exception {
 		//sendet das Model und erwartet antwort
 		try {
-			//Sendet erst Steuerbefehl
-			netzwerk.send("!ERSTE3");
-			
-			netzwerk.senden(model);
-			
+			netzwerk.printModel("!ERSTE3", model);			
 			//horcht nach der Antwort			
 		} catch(Exception e) {
 			throw e;
@@ -121,13 +137,8 @@ public class Mensch implements Spieler, Runnable {
 	 */
 	private void mitspielerNamen() {
 		try {
-			netzwerk.send("!MITSPIELER");
-			Thread.sleep(100);
-			
 			String[] namen = model.gibNamen();
-			for(int i = 0; i < namen.length; i++) {
-				netzwerk.send(namen[i]);
-			}
+			netzwerk.print("!MITSPIELER", namen);
 		} catch (Exception e) {
 			//Keine Fehlermeldung, da unbedeutend
 			e.printStackTrace();
@@ -135,14 +146,8 @@ public class Mensch implements Spieler, Runnable {
 	}
 
 	public void spielen(Model model) throws Exception {
-		Model m = model;
-		
 		try {
-			//Steuerbefehl
-			netzwerk.send("!SPIEL");
-			
-			//Senden des Models und 
-			netzwerk.senden(m);
+			netzwerk.printModel("!SPIEL", model);
 		} catch(Exception e) {
 			throw e;
 		}
@@ -150,11 +155,7 @@ public class Mensch implements Spieler, Runnable {
 
 	public void spielstDu(Model model) throws Exception {
 		try {
-			//Steuerbefehl
-			netzwerk.send("!SPIELSTDU");
-			
-			netzwerk.senden(model);
-
+			netzwerk.printModel("!SPIELSTDU", model);
 		} catch(Exception e) {
 			throw e;
 		}
@@ -162,62 +163,51 @@ public class Mensch implements Spieler, Runnable {
 	
 	public void spieler(int spielt, int mitspieler) throws Exception {
 		try {
-			netzwerk.send("!SPIELT");
-			netzwerk.send(String.valueOf(spielt));
-			netzwerk.send(String.valueOf(mitspieler));
+			String[] data = new String[] {
+					String.valueOf(spielt),
+					String.valueOf(mitspieler)
+			};
+			netzwerk.print("!SPIEL", data);
 		} catch (Exception e) {
 			throw e;
 		}
 	}
 
-	public String modus(lib.Model.modus m) throws Exception{
-		//Steuerbefehl
-		netzwerk.send("!MODUS");
-		
-		//Sendet den Modus
-		netzwerk.send(m.toString());
-		
+	public void modus(lib.Model.modus m) throws Exception {
+		netzwerk.print("!MODUS", m.toString());
 		//gibt zurück, ob Kontra gegeben wurde
-		try {
-			return netzwerk.einlesen();
-		} catch(Exception e) {
-			return null;
-		}
 	}
 
 	public void sieger(int s1, int s2) throws Exception {
-		//Steuerbefehl
-		netzwerk.send("!SIEGER");
-		
-		netzwerk.send(String.valueOf(s1));
-		netzwerk.send(String.valueOf(s2));
+		String[] data = new String[] {
+			String.valueOf(s1),
+			String.valueOf(s2)
+		};
+		netzwerk.print("!SIEGER", data);
 	}
  
 	public String gibIP() {
 		String ip = netzwerk.gibIP();
 		return ip;
 	}
-
-	public synchronized String gibName() throws Exception {
-		netzwerk.send("!NAME");
-		Thread.sleep(100);
+	
+	public String gibName() {
 		return name;
+	}
+
+	public void name() throws Exception {
+		netzwerk.print("!NAME", "");
 	}
 
 	public synchronized void setzeID(int ID) throws Exception {
 		netzwerk.setID(ID);
-		//Steuerbefehl
-		netzwerk.send("!ID");		
-		netzwerk.send(String.valueOf(ID));
+		netzwerk.print("!ID", String.valueOf(ID));
 		
 		//Sendet die Namen der Mitspieler
 		mitspielerNamen();
 	}
 
-	public synchronized Karte gibKarte() throws InterruptedException {
-		//Auf Eingabe warten
-		Thread.sleep(100);
-		
+	public synchronized Karte gibKarte() throws InterruptedException {	
 		Karte k = karte;
 		//löscht die eingelesene Karte, um nicht zweimal die gleiche zurückzugeben
 		karte = null;
@@ -225,25 +215,31 @@ public class Mensch implements Spieler, Runnable {
 	}
 
 	public void hochzeit() throws Exception {
-		netzwerk.send("!HOCHZEIT");
+		netzwerk.print("!HOCHZEIT", "");
 	}
 
 	public void geklopft(boolean[] geklopft) throws Exception {
-		netzwerk.send("!GEKLOPFT");
+		String[] data = new String[4];
 		for(int i = 0; i < 4; i++) {
-			if(geklopft[i])
-				netzwerk.send("true");
-			netzwerk.send("false");
+			if(geklopft[i]) {
+				data[i] = "true";
+			} else {
+				data[i] = "false";
+			}
 		}
+		netzwerk.print("!GEKLOPFT", data);
 	}
 
 	public void kontra(boolean[] kontra) throws Exception {
-		netzwerk.send("!KONTRA");
+		String[] data = new String[4];
 		for(int i = 0; i < 4; i++) {
-			if(kontra[i])
-				netzwerk.send("true");
-			netzwerk.send("false");
+			if(kontra[i]) {
+				data[i] = "true";
+			} else {
+				data[i] = "false";
+			}
 		}
+		netzwerk.print("!KONTRA", data);
 	}
 
 }
