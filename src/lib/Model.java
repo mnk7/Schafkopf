@@ -159,7 +159,7 @@ public class Model {
 	 * Gibt alle Karten auf dem Tisch aus
 	 * @return Karten-Feld
 	 */
-	public Karte[] gibTisch(){
+	public Karte[] gibTisch() {
 		return tisch;
 	}
 	

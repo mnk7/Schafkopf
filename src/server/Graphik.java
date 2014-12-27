@@ -1,7 +1,5 @@
 package server;
 
-import graphik.MenuGUI;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -10,7 +8,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -30,19 +27,32 @@ public class Graphik extends JFrame {
 	private JButton start;
 	private JButton end;
 	private JLabel [] PlayerLabel;
+	
+	private Thread serverThread;
 	private Server server;
+	private boolean server_gestartet;
+	
+	//Referenz auf sich selbst
+	private final Graphik g = this;
 	
 	private String logo = "./logo.gif";
 	
 	public Graphik(){
 		super();
 		
+		server_gestartet = false;
+		
+		serverThread = new Thread() {
+			public void run() {
+				server = new Server(g);
+			}
+		};
+		
 		Graphik.class.getResource(logo);
 		//Icon der Anwendung setzen
 		ImageIcon icon = new ImageIcon(logo);
 		this.setIconImage(icon.getImage());
 				
-		
 		PlayerLabel = new JLabel [4];
 		
 		try {
@@ -78,17 +88,16 @@ public class Graphik extends JFrame {
 			PlayerLabel [i].setVisible(true);
 		}
 		
-		//Referenz auf sich selbst
-		final Graphik g = this;
-		
 		start = new JButton();
 		getContentPane().add(start);
 		start.setBounds(10, 10, getWidth()/2 - 15, 30);
 		start.setText("Server starten");
 		start.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				if(server == null) {
-					server = new Server(g);
+				if(!server_gestartet) {
+					serverThread.start();
+					server_gestartet = true;
+					
 					clear();
 					PlayerLabel[0].setText("Server gestartet");
 					start.setText("Aktualisieren");
@@ -107,8 +116,10 @@ public class Graphik extends JFrame {
 		end.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				if(server != null) {
-					server.beenden();
+					serverThread.stop();
 					server = null;
+					server_gestartet = false;
+					
 					clear();
 					PlayerLabel[0].setText("Server beendet");
 					start.setText("Server starten");
@@ -136,7 +147,7 @@ public class Graphik extends JFrame {
 		}
 	}
 	
-	public void clear() {
+	public synchronized void clear() {
 		for(int i = 0; i < 4; i++) {
 			PlayerLabel[i].setText("");
 		}

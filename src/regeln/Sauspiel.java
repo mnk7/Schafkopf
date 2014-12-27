@@ -6,7 +6,7 @@ import lib.Karte;
 import lib.Model;
 
 
-public class Sauspiel implements Controll {
+public class Sauspiel implements Control {
 	Karte.farbe rufsau;
 	Karte.farbe farbe = Karte.farbe.HERZ;
 	public Sauspiel(Karte.farbe saufarbe){

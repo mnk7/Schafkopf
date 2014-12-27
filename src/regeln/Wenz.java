@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import lib.Karte;
 import lib.Model;
 //rttlbrmpf
-public class Wenz implements Controll {
+public class Wenz implements Control {
 	@Override
 	public int sieger(Model m) {
 		boolean unter = false;

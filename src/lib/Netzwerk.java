@@ -12,7 +12,7 @@ public abstract class Netzwerk {
 	//Addresse des Clients
 	protected String ip;
 	//Port am Client
-	protected int port;
+	protected int port = 35555;
 	
 	//Lesen und Schreiben
 	protected PrintWriter out;
@@ -27,7 +27,7 @@ public abstract class Netzwerk {
 	 * @throws IOException 
 	 * @throws NumberFormatException 
 	 */
-	protected void senden(Model model) throws Exception {
+	protected void ModelSenden(Model model) throws Exception {
 		//Speichert das Model
 		this.model = model;
 		
@@ -82,7 +82,7 @@ public abstract class Netzwerk {
 	 * @return aktualisiertes Model
 	 * @throws Exception 
 	 */
-	protected Model empfangen() throws Exception {
+	protected Model ModelEmpfangen() throws Exception {
 		
 		Model model;
 		
@@ -164,10 +164,9 @@ public abstract class Netzwerk {
 	 * Sendet Antworten z.B. ob geklopft wird, oder was gespielt wird
 	 * @param modus
 	 */
-	protected void send(String output) throws Exception{
+	protected synchronized void send(String output) throws Exception{
 		System.out.println("[SEND]" + output);
-		out.print(output);
-		out.flush();
+		out.println(output);
 	}
 	
 	/**
@@ -183,15 +182,8 @@ public abstract class Netzwerk {
 	 * @return input
 	 * @throws Exception 
 	 */
-	protected String einlesen() throws Exception {
-		String input = "";
-		try {
-			do {
-				input = in.readLine();
-			} while(input.equals(null) || input.equals(""));
-		} catch(Exception e) {
-			throw e;
-		}
+	protected synchronized String einlesen() throws Exception {
+		String input = in.readLine();
 		
 		System.out.println("[READ]" + input);
 		
@@ -204,7 +196,7 @@ public abstract class Netzwerk {
 	 * @param data
 	 * @throws Exception
 	 */
-	public void print(String steuer, String data) throws Exception {
+	public synchronized void print(String steuer, String data) throws Exception {
 		String[] d = new String[1];
 		d[0] = data;
 		print(steuer, d);
@@ -216,14 +208,12 @@ public abstract class Netzwerk {
 	 * @param data
 	 * @throws Exception
 	 */
-	public void print(String steuer, String[] data) throws Exception {
+	public synchronized void print(String steuer, String[] data) throws Exception {
 		send(steuer);
-		if(einlesen().equals("!COPY")) {
-			for(int i = 0; i < data.length; i++) {
-				send(data[i]);
-			}
-			send("!END");
+		for(int i = 0; i < data.length; i++) {
+			send(data[i]);
 		}
+		send("!END");
 	}
 	
 	/**
@@ -232,12 +222,10 @@ public abstract class Netzwerk {
 	 * @param data
 	 * @throws Exception
 	 */
-	public void printModel(String steuer, Model data) throws Exception {
+	public synchronized void printModel(String steuer, Model data) throws Exception {
 		send("!MODEL");
 		send(steuer);
-		if(einlesen().equals("!COPY")) {
-			senden(data);
-		}
+		ModelSenden(data);
 	}
 	
 	/**
@@ -245,12 +233,11 @@ public abstract class Netzwerk {
 	 * @return Steuerbefehl und Datensätze
 	 * @throws Exception
 	 */
-	public Object[] read() throws Exception {
+	public synchronized Object[] read() throws Exception {
 		ArrayList<String> data = new ArrayList<String>();
 		data.add(einlesen());
-		//Bestätigung senden
-		send("!COPY");
 		if(data.get(0).equals("!MODEL")) {
+			//Wenn ein Model gesendet wird
 			return readModel();
 		}
 		String input = einlesen();
@@ -267,12 +254,10 @@ public abstract class Netzwerk {
 	 * @return Steuerbefehl und Model
 	 * @throws Exception
 	 */
-	protected Object[] readModel() throws Exception {
+	protected synchronized Object[] readModel() throws Exception {
 		Object[] data = new Object[2];
 		data[0] = einlesen();
-		//Bestätigen
-		send("!COPY");
-		data[1] = empfangen();
+		data[1] = ModelEmpfangen();
 		return data;
 	}
 }

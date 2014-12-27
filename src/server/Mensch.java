@@ -12,15 +12,13 @@ import lib.Model;
 import lib.Model.modus;
 import server.Netzwerk;
 
-public class Mensch implements Spieler, Runnable {
+public class Mensch extends Thread implements Spieler {
 	
 	private Netzwerk netzwerk;
 	
-	Thread t;
-	
 	//Hält eine Referenz auf den Server, um diesen zu benachrichtigen, wenn
 	//die Verbindung abgebrochen wurde
-	Server server;
+	private Server server;
 	
 	private String name;
 	
@@ -37,30 +35,17 @@ public class Mensch implements Spieler, Runnable {
 		
 		this.server = server;
 		
-		try {
-			//Errichtet neue Verbindung
-			netzwerk = new Netzwerk(client);
-			
-			//Lauscher aufsperren
-			t = new Thread(this);
-			
-			t.start();
-			
-		} catch(Exception e) {
-			//Gibt den Fehler weiter
-			throw e;
-		}
+		//Errichtet neue Verbindung
+		netzwerk = new Netzwerk(client);
 	}
 	
 	/**
-	 * Horcht auf Befehle vom Server
+	 * Horcht auf Befehle vom Client
 	 */
 	public void run() {
 		
 		while(true) {
 			try {
-				//Thread.sleep(100);
-				
 				Object[] data = netzwerk.read();
 				
 				if(data[0].equals("!NAME")) {
@@ -103,26 +88,35 @@ public class Mensch implements Spieler, Runnable {
 		}
 	}
 	
-	public String gibAntwort() {
+	public synchronized String gibAntwort() {
+		//Solange keine Antwort da ist...
+		while(antwort == null) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		String a = antwort;
 		//Eingelesene Antwort löschen
 		antwort = null;
 		return a;
 	}
 	
-	public boolean gibKontra() {
+	public synchronized boolean gibKontra() {
 		return kontra;
 	}
 	
-	public Model gibModel() {
+	public synchronized Model gibModel() {
 		return model; 
 	}
 	
-	public void setzeModel(Model m) {
+	public synchronized void setzeModel(Model m) {
 		this.model = m;
 	}
 
-	public void erste3(Model model) throws Exception {
+	public synchronized void erste3(Model model) throws Exception {
 		//sendet das Model und erwartet antwort
 		try {
 			netzwerk.printModel("!ERSTE3", model);			
@@ -135,7 +129,7 @@ public class Mensch implements Spieler, Runnable {
 	/**
 	 * Sendet die Namen der Mitspieler
 	 */
-	private void mitspielerNamen() {
+	private synchronized void mitspielerNamen() {
 		try {
 			String[] namen = model.gibNamen();
 			netzwerk.print("!MITSPIELER", namen);
@@ -145,40 +139,28 @@ public class Mensch implements Spieler, Runnable {
 		}
 	}
 
-	public void spielen(Model model) throws Exception {
-		try {
+	public synchronized void spielen(Model model) throws Exception {
 			netzwerk.printModel("!SPIEL", model);
-		} catch(Exception e) {
-			throw e;
-		}
 	}
 
-	public void spielstDu(Model model) throws Exception {
-		try {
+	public synchronized void spielstDu(Model model) throws Exception {
 			netzwerk.printModel("!SPIELSTDU", model);
-		} catch(Exception e) {
-			throw e;
-		}
 	} 
 	
-	public void spieler(int spielt, int mitspieler) throws Exception {
-		try {
-			String[] data = new String[] {
-					String.valueOf(spielt),
-					String.valueOf(mitspieler)
-			};
-			netzwerk.print("!SPIEL", data);
-		} catch (Exception e) {
-			throw e;
-		}
+	public synchronized void spieler(int spielt, int mitspieler) throws Exception {
+		String[] data = new String[] {
+				String.valueOf(spielt),
+				String.valueOf(mitspieler)
+		};
+		netzwerk.print("!SPIEL", data);
 	}
 
-	public void modus(lib.Model.modus m) throws Exception {
+	public synchronized void modus(lib.Model.modus m) throws Exception {
 		netzwerk.print("!MODUS", m.toString());
 		//gibt zurück, ob Kontra gegeben wurde
 	}
 
-	public void sieger(int s1, int s2) throws Exception {
+	public synchronized void sieger(int s1, int s2) throws Exception {
 		String[] data = new String[] {
 			String.valueOf(s1),
 			String.valueOf(s2)
@@ -195,7 +177,7 @@ public class Mensch implements Spieler, Runnable {
 		return name;
 	}
 
-	public void name() throws Exception {
+	public synchronized void name() throws Exception {
 		netzwerk.print("!NAME", "");
 	}
 
@@ -214,11 +196,11 @@ public class Mensch implements Spieler, Runnable {
 		return k;
 	}
 
-	public void hochzeit() throws Exception {
+	public synchronized void hochzeit() throws Exception {
 		netzwerk.print("!HOCHZEIT", "");
 	}
 
-	public void geklopft(boolean[] geklopft) throws Exception {
+	public synchronized void geklopft(boolean[] geklopft) throws Exception {
 		String[] data = new String[4];
 		for(int i = 0; i < 4; i++) {
 			if(geklopft[i]) {
@@ -230,7 +212,7 @@ public class Mensch implements Spieler, Runnable {
 		netzwerk.print("!GEKLOPFT", data);
 	}
 
-	public void kontra(boolean[] kontra) throws Exception {
+	public synchronized void kontra(boolean[] kontra) throws Exception {
 		String[] data = new String[4];
 		for(int i = 0; i < 4; i++) {
 			if(kontra[i]) {

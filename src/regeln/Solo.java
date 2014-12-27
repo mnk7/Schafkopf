@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import lib.Karte;
 import lib.Model;
 
-public class Solo implements Controll {
+public class Solo implements Control {
 	Karte.farbe farbe = null;
 
 	public Solo(Karte.farbe farb) {

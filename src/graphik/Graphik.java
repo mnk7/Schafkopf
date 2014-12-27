@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import regeln.Controll;
+import regeln.Control;
 import regeln.Regelwahl;
 import lib.Karte;
 import lib.Model;  
@@ -28,7 +28,7 @@ import javax.swing.JPanel;
 public class Graphik extends JFrame implements View {	
 	
 	//Enthält die Controll -> kontrolliert einen Spielzug
-	private Controll controll;
+	private Control control;
 	
 	//Das Model
 	private ModelMVC model;
@@ -51,12 +51,12 @@ public class Graphik extends JFrame implements View {
 	//Hintergrund
 	private JPanel hintergrund;	
 	
-	public Graphik() {
+	public Graphik(ModelMVC model) {
 		super();
 		//Vorerst keine ID setzen
 		ID = -1;
 		
-		model = new ModelMVC();
+		this.model = model;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -239,7 +239,7 @@ public class Graphik extends JFrame implements View {
 		do {
 			try {
 				m.setTisch(ID, gespielt);
-				if(controll.erlaubt(m)) {
+				if(control.erlaubt(m)) {
 					model.setzeModel(m);
 					ok = true;
 				} else
@@ -259,7 +259,7 @@ public class Graphik extends JFrame implements View {
 	 * @param mod
 	 */
 	public void setzeModus(modus mod) {
-		controll = new Regelwahl().wahl(mod, model.gibModel(), ID);
+		control = new Regelwahl().wahl(mod, model.gibModel(), ID);
 	}
 	
 	/**
@@ -361,7 +361,7 @@ public class Graphik extends JFrame implements View {
 	 * @return
 	 */
 	public String hochzeit() {
-		if(JOptionPane.showConfirmDialog(this, "Woist klopfa?") == JOptionPane.OK_OPTION)
+		if(JOptionPane.showConfirmDialog(this, "Woist heiran'?") == JOptionPane.OK_OPTION)
 			return "JA";
 		return null;
 	}

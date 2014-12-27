@@ -14,8 +14,8 @@ public class Regelwahl {
 		
 	}
 	
-	public Controll wahl(modus mod, Model m, int position) {
-		Controll x = null;
+	public Control wahl(modus mod, Model m, int position) {
+		Control x = null;
 		switch (mod) {
 		case GEIERdu: 
 		case GEIER: 

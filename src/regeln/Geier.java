@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import lib.Karte;
 import lib.Model;
 
-public class Geier implements Controll {
+public class Geier implements Control {
 	@Override
 	public int sieger(Model m) {
 		boolean ober = false;

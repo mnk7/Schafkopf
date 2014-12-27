@@ -12,8 +12,6 @@ import java.net.SocketAddress;
 
 public class Netzwerk extends lib.Netzwerk{
 	
-	public static final int PORT = 15555;
-	
 	public Netzwerk(int spielerID, String ip) throws IOException{
 		super();
 		
@@ -22,7 +20,6 @@ public class Netzwerk extends lib.Netzwerk{
 		
 		//Verbindungsinformationen
 		this.ip = ip;
-		this.port = PORT;
 		
 		//Verbindung mit dem Server
 		Socket client = new Socket(ip, port);

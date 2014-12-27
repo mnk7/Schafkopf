@@ -7,15 +7,15 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import regeln.Hochzeit;
-import regeln.Controll;
+import regeln.Control;
 import regeln.Regelwahl;
 import lib.Karte;
 import lib.Model;
 import lib.Model.modus;
 
-public class Server implements Runnable{
+public class Server {
 	
-		private static final int PORT = 15555;
+		private static final int PORT = 35555;
 	
 		//Server, der die Verbindungen verwaltet
 		private ServerSocket server;
@@ -38,7 +38,7 @@ public class Server implements Runnable{
         //speichert den Spielmodus
         private modus mod;
         
-        private Controll regeln;
+        private Control regeln;
         private Regelwahl regelwahl;
         
         private int spielt;
@@ -77,9 +77,10 @@ public class Server implements Runnable{
         	try {
         		//Server für jeden Port
 				server = new ServerSocket(PORT);
-				listener = new Thread(this);
-				
-				listener.start();
+        		
+        		//Startet das Spiel
+        		start();
+        		
 			} catch (IOException e) {
 				e.printStackTrace();
 				//Alle Spieler zurücksetzen
@@ -93,15 +94,20 @@ public class Server implements Runnable{
         /**
          * Nimmt die Verbindungen auf
          */
-        public void run() {
+        private void start() {
         	try {
         		while(true) {
         			//Akzeptiert die Verbindung
 	        		Socket client = server.accept();
 	        		
-	        		spieler.add(new Mensch(client, this));
-	        		//Im Server-Applet die Anzeige aktualisieren
-	        		graphik.textSetzen(spieler);
+	        		Mensch neuerSpieler = new Mensch(client, this);
+	        		neuerSpieler.start();
+	        		spieler.add(neuerSpieler);
+	        		
+	        		//Fragt nach dem Namen des Spielers
+	        		neuerSpieler.name();
+	        		
+	        		ViewTextSetzen();
 	        		
 	        		//Wenn die maximale Anzahl an Spielern erreicht ist und nicht gerade gespielt wird
 	        		if(spieler.size() == spielerzahl && nocheins) {
@@ -115,7 +121,6 @@ public class Server implements Runnable{
         		for(int i = 0; i < spieler.size(); i++) {
         			entferneSpieler(spieler.get(i));
         		}
-        		graphik.textSetzen(spieler);
         	}
         }
         
@@ -123,13 +128,10 @@ public class Server implements Runnable{
          * Erstellt ein neues Spiel
          * @throws Exception 
          */
-        private void neuesSpiel() throws Exception {
+        private synchronized void neuesSpiel() throws Exception {
         	
         	//Spiel wurde gestartet
         	while(!nocheins) {
-        		
-        		//Nochmal Spieler aktualisieren
-        		graphik.textSetzen(spieler);
         		
         		//Am Anfang jeder Runde ein neues Model erzeugen
         		model = new Model();
@@ -138,7 +140,6 @@ public class Server implements Runnable{
 	        	for(int i = 0; i < 4; i++) {
 	        		model.setzeName(i, spieler.get(i).gibName());
 	        	}
-        		graphik.textSetzen(spieler);
         		
         		//gibt jedem Spieler seine ID
         		for(int i = 0; i < 4; i++) {
@@ -149,7 +150,6 @@ public class Server implements Runnable{
 						e.printStackTrace();
 						//Bei Fehler abbrechen
 						entferneSpieler(spieler.get(i));
-						graphik.textSetzen(spieler);
 						nocheins = true;
 						break;
 					}
@@ -164,8 +164,9 @@ public class Server implements Runnable{
 	        	for(int i = 0; i < 4; i++) {
 	        		//Speichert, ob ein Spieler geklopft hat etc.
 	        		spieler.get(i).erste3(model);
-	        		if(spieler.get(i).gibAntwort().equals("JA"))
+	        		if(spieler.get(i).gibAntwort().equals("JA")) {
 	        			geklopft[i] = true;
+	        		}
 	        	}
 	        	
 	        	//Spieler benachrichtigen, wer geklopft hat
@@ -234,9 +235,10 @@ public class Server implements Runnable{
 		        			}
 		        		}
 	        		}
-	        	} else 
+	        	} else {
 	        		//bestimmt einen eventuellen Mitspieler
 		        	mitspieler = regeln.mitspieler(model);   
+	        	}
 	        	
 	        	//Sendet den Modus an alle Spieler und empfängt, ob kontra gegeben wurde
 	        	for(int i = 0; i < 4; i++) {
@@ -257,7 +259,7 @@ public class Server implements Runnable{
 	        		spieler.get(i).kontra(kontra); 
 	        	}
 	        	
-	        	//Wenn ein Si gespielt wird die Runde gar nicht ers spielen
+	        	//Wenn ein Si gespielt wird die Runde gar nicht erst spielen
 	        	if(mod.equals(modus.SI)) {
 	        		rundeBeenden();
 	        		continue;
@@ -305,7 +307,7 @@ public class Server implements Runnable{
         /**
          * Beendet die Runde
          */
-        private void rundeBeenden() {
+        private synchronized void rundeBeenden() {
         	for(int i = 0; i < 4; i++) {
         		kontra[i] = spieler.get(i).gibKontra();
         	}
@@ -385,8 +387,8 @@ public class Server implements Runnable{
 				javax.swing.JOptionPane.showMessageDialog(graphik, "Spieler " + s.gibName() +" wurde entfernt");
 			} catch (Exception e) {
 			}
-        	//aktualisiert die Anzeige
-        	graphik.textSetzen(spieler);
+        	//Graphik updaten
+        	ViewTextSetzen();
         	nocheins = true;
         }
         
@@ -394,7 +396,7 @@ public class Server implements Runnable{
          * Setzt die Spielerzahl
          * @param spielerzahl
          */
-        public void setSpielerzahl(int spielerzahl) {
+        public void setzeSpielerzahl(int spielerzahl) {
         	this.spielerzahl = spielerzahl;
         }
         
@@ -407,9 +409,16 @@ public class Server implements Runnable{
         }
         
         /**
+         * Aktualisiert die Anzeige der Spieler
+         */
+        private synchronized void ViewTextSetzen() {
+        	graphik.textSetzen(spieler);
+        }
+        
+        /**
          * Beendet den Server
          */
-        public void beenden() {
+        public synchronized void beenden() {
         	try {
         		listener.stop();
 				server.close();
@@ -420,5 +429,4 @@ public class Server implements Runnable{
 				System.exit(0);
 			}
         }
-
 }

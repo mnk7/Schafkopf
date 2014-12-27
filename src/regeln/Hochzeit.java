@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import lib.Karte;
 import lib.Model;
 
-public class Hochzeit implements Controll {
+public class Hochzeit implements Control {
 	Karte.farbe farbe = Karte.farbe.HERZ;
 
 	public Hochzeit() {

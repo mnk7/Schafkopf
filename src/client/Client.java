@@ -12,7 +12,7 @@ public class Client implements View{
 	private Netzwerk netzwerk;
 	
 	//Hört auf Befehle des Servers
-	private Thread thread;
+	private Thread listener;
 	
 	//IP des Servers
 	private String IP;
@@ -36,6 +36,7 @@ public class Client implements View{
 	
 	public Client(String IP, String name, MenuGUI menu) throws Exception{		
 		model = new ModelMVC();
+		model.addBeobachter(this);
 		
 		this.IP = IP;
 		this.name = name;
@@ -45,15 +46,16 @@ public class Client implements View{
 		
 		if(!connect()) throw new Exception("Verbindung gescheitert");
 		
-		thread = new Thread() {
+		listener = new Thread() {
 			public void run() {
 				listen();
 			}
 		};
 		
-		thread.start();
+		listener.start();
 		
-		graphik = new Graphik();
+		graphik = new Graphik(model);
+		model.addBeobachter(graphik);
 		
 		//Menü wieder sichtbar machen
 		menu.setVisible(true);
@@ -62,7 +64,7 @@ public class Client implements View{
 	/**
 	 * Empfängt Daten vom Server 
 	 */
-	private void listen() {
+	private synchronized void listen() {
 		while(true) {
 			try {				
 				Object[] data = netzwerk.read();
@@ -94,11 +96,12 @@ public class Client implements View{
 					model.setzeModel((Model) data[1]);
 					//Signal an Graphik
 					graphik.spiel();
-					
+//Untersuchen!!
 					while(!update) {
 						Thread.sleep(500);
 					}
 					netzwerk.printModel("!SPIEL", model.gibModel());
+					update = false;
 					
 					break;
 				} 
@@ -215,7 +218,7 @@ public class Client implements View{
 	/**
 	 * Aktualisiert das Model
 	 */
-	public void update(ModelMVC model) throws Exception {
+	public synchronized void update(ModelMVC model) throws Exception {
 		this.model = model;
 		update = true;
 	}

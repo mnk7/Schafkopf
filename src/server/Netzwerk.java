@@ -35,16 +35,5 @@ public class Netzwerk extends lib.Netzwerk {
 	public String gibIP() {
 		return client.getInetAddress().getHostAddress();
 	}
-
-	public Karte getKarte() throws Exception {
-		Karte karte;
-		try {
-			karte = new Karte(Karte.farbe.valueOf(einlesen()),
-							Karte.wert.valueOf(einlesen())); 
-		} catch(Exception e) {
-			throw e;
-		}
-		return karte;
-	}
 }
 
