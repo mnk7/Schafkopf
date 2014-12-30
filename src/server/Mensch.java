@@ -92,7 +92,7 @@ public class Mensch extends Thread implements Spieler {
 		//Solange keine Antwort da ist...
 		while(antwort == null) {
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -174,6 +174,14 @@ public class Mensch extends Thread implements Spieler {
 	}
 	
 	public String gibName() {
+		//Gefährlich, aber der Name ist für den weiteren Ablauf wichtig
+		while(name == null) {
+			try {
+				name();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		return name;
 	}
 

@@ -27,7 +27,7 @@ public class SpielmodusDialog extends JFrame {
 		this.setVisible(true);
 		this.setLayout(null);
 		
-		spiele = new JButton[6];
+		spiele = new JButton[7];
 		
 		for(int i = 0; i < spiele.length; i++) {
 			spiele[i] = new JButton();
@@ -47,6 +47,8 @@ public class SpielmodusDialog extends JFrame {
 		spiele[3].setText("Wenz");
 		spiele[4].setText("Solo");
 		spiele[5].setText("Si");
+		
+		spiele[6].setText("Nichts");
 		
 		tout = new JCheckBox();
 		getContentPane().add(tout);
@@ -71,7 +73,7 @@ public class SpielmodusDialog extends JFrame {
 		farben[2].setText("Herz");
 		farben[3].setText("Schellen");
 		
-		this.setSize(300, 270);
+		this.setSize(300, 300);
 	}
 
 	/**
@@ -139,6 +141,8 @@ public class SpielmodusDialog extends JFrame {
 			}
 		case "SI":
 			return modus.SI;
+		case "Nichts":
+			return null;
 		}
 		
 		return null;

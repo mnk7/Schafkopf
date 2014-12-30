@@ -201,7 +201,7 @@ public class Client implements View{
 	
 	private synchronized void id(Object[] data) {
 		//ID des Spielers empfangen
-		ID = (int) data[1];
+		ID = Integer.parseInt((String) data[1]);
 		
 		netzwerk.setID(ID);
 		graphik.setID(ID);
@@ -238,9 +238,9 @@ public class Client implements View{
 		boolean[] geklopft = new boolean[4];
 		for(int i = 1; i < 5; i++) {
 			if(data[i].equals("true"))
-				geklopft[i] = true;
+				geklopft[i - 1] = true;
 			else
-				geklopft[i] = false;
+				geklopft[i - 1] = false;
 		}
 		graphik.geklopft(geklopft);
 	}

@@ -14,6 +14,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import regeln.Control;
+import regeln.Hochzeit;
 import regeln.Regelwahl;
 import lib.Karte;
 import lib.Model;  
@@ -24,6 +25,8 @@ import client.View;
 import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
+
+import regeln.Sauspiel;
 
 public class Graphik extends JFrame implements View {	
 	
@@ -158,10 +161,7 @@ public class Graphik extends JFrame implements View {
 		tisch.setzeKarten(m.gibTisch());
 		
 		for(int i = 0; i < 3; i++) {
-			//ermittelt die ID des Spielers
-			int spielerID = ID + 1 + i;
-			spielerID %= 4;
-			gegenspielerKarten[i].entferneKarte(m.gibSpielerKarten(spielerID).size());
+			gegenspielerKarten[i].entferneKarte(m.gibSpielerKarten(ID).size() - 1);
 		}
 	}
 	
@@ -171,8 +171,6 @@ public class Graphik extends JFrame implements View {
 	 */
 	public void setID(int ID) {
 		this.ID = ID;
-		//setzt die Namen, da nun die ID des lokalen Spielers bekannt ist
-		mitspieler();
 	}
 	
 	/**
@@ -182,6 +180,8 @@ public class Graphik extends JFrame implements View {
 	public void setzeNamen(String[] namen) {
 		//speichert die Namen der Mitspieler, die angezeigt werden, sobald die ID verfügbar ist
 		this.namen = namen;
+		//Wenn die Namen bekannt sind, werden sie angezeigt
+		mitspieler();
 	}
 	
 	/**
@@ -274,36 +274,27 @@ public class Graphik extends JFrame implements View {
 			
 			//Prüft Clien-seitig, ob ein Sauspiel oder ein Si gespielt werden können.
 			//Eine Hochzeit wird Server-seitig geprüft
-			//evtl. Verschiebung der Prüfung auf den Server
 			if(m.toString().substring(0, 7).equals("SAUSPIEL")) {
 				Karte.farbe f = dialog.farbe(m);
 				if(new Regelwahl().sauspielMoeglich(f, model.gibModel(), ID)) {
+					
 					dialog.dispose();
 					return m;
+				} else {
+					JOptionPane.showMessageDialog(this, "Das geht nicht!");
+					continue;
 				}
-			} else {
-				if(m.equals(modus.SI)) {
-					if(new Regelwahl().siMoeglich(model.gibModel(), ID)) {
-						dialog.dispose();
-						return m;
-					}
-					else {
-						JOptionPane.showMessageDialog(this, "Des konnst ned spuiln!");
-						continue;
-					}
+			} if(m.equals(modus.SI)) {
+				if(new Regelwahl().siMoeglich(model.gibModel(), ID)) {
+					dialog.dispose();
+					return m;
+				} else {
+					JOptionPane.showMessageDialog(this, "Das geht nicht!");
+					continue;
 				}
-				dialog.dispose();
-				return m;
-			}
-			
-			JOptionPane.showMessageDialog(this, "Des konnst ned spuiln!");
-			try {
-				//Bremse
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			continue;
+			} 			
+			dialog.dispose();
+			return m;
 		}
 	}
 	
@@ -312,7 +303,7 @@ public class Graphik extends JFrame implements View {
 	 * @return
 	 */
 	public boolean klopfstDu() {
-		if(javax.swing.JOptionPane.showConfirmDialog(this, "Woist klopfa?") == 0)
+		if(javax.swing.JOptionPane.showConfirmDialog(this, "Wilst du klopfen?") == 0)
 			return false;
 		else
 			return true;	
@@ -344,9 +335,9 @@ public class Graphik extends JFrame implements View {
 				if(i == s1)
 					nachricht(i, "Zefix!");
 				else if(i == s2)
-					nachricht(i, "Wos soll na des!");
+					nachricht(i, "Oh nöö!");
 				else {		 
-					nachricht(i, "So konns geh!");
+					nachricht(i, "Na toll.");
 				}
 			}
 		} else { //Ansonsten
@@ -361,7 +352,7 @@ public class Graphik extends JFrame implements View {
 	 * @return
 	 */
 	public String hochzeit() {
-		if(JOptionPane.showConfirmDialog(this, "Woist heiran'?") == JOptionPane.OK_OPTION)
+		if(JOptionPane.showConfirmDialog(this, "Willst du heiraten?") == JOptionPane.OK_OPTION)
 			return "JA";
 		return null;
 	}
@@ -373,7 +364,7 @@ public class Graphik extends JFrame implements View {
 	 * @return
 	 */
 	public Karte hochzeitKarte() {
-		JOptionPane.showMessageDialog(this, "Welche gibst na her?");
+		JOptionPane.showMessageDialog(this, "Welche gibst du her?");
 		return spielerKarten.spiel();
 	}
 
@@ -383,9 +374,9 @@ public class Graphik extends JFrame implements View {
 	 * @param mitspieler 
 	 */
 	public void spielt(int spielt, int mitspieler) { 
-		 nachricht(spielt, "I spül!");
+		 nachricht(spielt, "Ich spiel!");
 		 if(mitspieler != 4) 
-			 nachricht(mitspieler, "Und i ho g'heirat");
+			 nachricht(mitspieler, "Und ich hab geheiratet");
 	}
 
 	/**

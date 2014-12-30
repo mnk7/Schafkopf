@@ -130,6 +130,7 @@ public class Server {
         
         /** 
          * Erstellt ein neues Spiel
+         * Unbedingt in einzelne Methoden ausgliedern!
          * @throws Exception 
          */
         private synchronized void neuesSpiel() throws Exception {
@@ -140,67 +141,21 @@ public class Server {
         		//Am Anfang jeder Runde ein neues Model erzeugen
         		model = new Model();
         		
-        		//Anzeigen der Spieler
-	        	for(int i = 0; i < 4; i++) {
-	        		model.setzeName(i, spieler.get(i).gibName());
-	        	}
+        		spielerVorbereiten();
         		
-        		//gibt jedem Spieler seine ID
-        		for(int i = 0; i < 4; i++) {
-        			try {
-        				spieler.get(i).setzeModel(model);
-						spieler.get(i).setzeID(i);
-					} catch (Exception e) {
-						e.printStackTrace();
-						//Bei Fehler abbrechen
-						entferneSpieler(spieler.get(i));
-						nocheins = true;
-						break;
-					}
-        		}
-        		
-        		if(nocheins)
+        		//Wenn ein Fehler aufgetreten ist
+        		if(nocheins) {
         			break;
+        		}
 
 	        	model.mischen();
 	        	model.ersteKartenGeben();
 	        	
-	        	for(int i = 0; i < 4; i++) {
-	        		//Speichert, ob ein Spieler geklopft hat etc.
-	        		spieler.get(i).erste3(model);
-	        		if(spieler.get(i).gibAntwort().equals("JA")) {
-	        			geklopft[i] = true;
-	        		}
-	        	}
-	        	
-	        	//Spieler benachrichtigen, wer geklopft hat
-	        	for(int i = 0; i < 4; i++) {
-	        		spieler.get(i).geklopft(geklopft);
-	        	}
+	        	klopfen();
 	        	
 	        	model.zweiteKartenGeben();
 	        	
-	        	for(int i = 0; i < 4; i++) {
-	        		//speichert, was der Spieler spielen will
-	        		spieler.get(i).spielstDu(model);
-	        		
-	        		modus m = null;
-	        		while(m == null) {
-	        			try {
-	        				m = Model.modus.valueOf(spieler.get(i).gibAntwort());
-	        			} catch(Exception e) {
-	        				nocheins = true;
-	        				continue;
-	        			}
-	        			//Thread.sleep(100);
-	        		}
-	        		
-	        		//speichert, was gespielt wird
-	        		mod = model.werSpielt(m, mod);
-	        		
-	        		//Wenn das Spiel des aktuellen Spielers über ein anderes geht
-	        		if(mod.equals(m)) spielt = i;
-	        	}
+	        	werspielt();
 	        	
 	        	//will niemand spielen geht es zur nächsten Runde
 	        	if(mod.equals(null)) {
@@ -214,54 +169,13 @@ public class Server {
 	        		break;
 	        	}
 	        	
-	        	//Wenn eine Hochzeit gespielt wird
-	        	if(mod.equals(modus.HOCHZEIT)) {
-	        		Hochzeit h = (Hochzeit) regeln;
-	        		
-	        		Karte angebot = spieler.get(spielt).gibKarte();
-	        		
-	        		if(h.hochzeitMoeglich(model, spielt, angebot)) {
-		        		for(int i = 0; i < 4; i++) {
-		        			
-		        			if(i != spielt) {
-		        				spieler.get(i).hochzeit();
-		        				
-		        				if(spieler.get(i).gibAntwort().equals("JA")) {
-		        					//Wenn die Hochzeit angenommen wird
-		        					Karte k = spieler.get(i).gibKarte();
-		        					
-		        					//Wenn die Karte ein Trumpf ist
-			        				if(!h.istTrumpf(k.gibWert(), k.gibFarbe())) {
-			        					model.hochzeit(spielt, i, angebot, k);
-			        					mitspieler = i;
-			        				}
-		        				}
-		        			}
-		        		}
-	        		}
-	        	} else {
+	        	//Wenn keine Hochzeit gespielt wird, Mitspieler feststellen
+	        	if(!mod.equals(modus.HOCHZEIT)) {
 	        		//bestimmt einen eventuellen Mitspieler
 		        	mitspieler = regeln.mitspieler(model);   
 	        	}
 	        	
-	        	//Sendet den Modus an alle Spieler und empfängt, ob kontra gegeben wurde
-	        	for(int i = 0; i < 4; i++) {
-					try {
-						spieler.get(i).modus(mod);
-						//Wenn eine Hochzeit gespielt wird, werden beide spielenden gesendet
-						int mit = 4;
-						if(mod.equals(modus.HOCHZEIT)) {
-							mit = mitspieler;
-						}
-						spieler.get(i).spieler(spielt, mit);
-					} catch (Exception e) {
-						e.printStackTrace(); 
-					}
-	        	}	
-	        	
-	        	for(int i = 0; i < 4; i++) {
-	        		spieler.get(i).kontra(kontra); 
-	        	}
+	        	kontra();
 	        	
 	        	//Wenn ein Si gespielt wird die Runde gar nicht erst spielen
 	        	if(mod.equals(modus.SI)) {
@@ -295,6 +209,157 @@ public class Server {
 	        	
 	        	//neu Runde
 	        	naechster();
+        	}
+        }
+        
+        /**
+         * Sendet die Spielernamen an alle und weist jedem Spieler seine ID zu
+         * @throws Exception
+         */
+        private void spielerVorbereiten() throws Exception {
+        	//Anzeigen der Spieler
+        	for(int i = 0; i < 4; i++) {
+        		model.setzeName(i, spieler.get(i).gibName());
+        	}
+    		
+    		//gibt jedem Spieler seine ID
+    		for(int i = 0; i < 4; i++) {
+    			try {
+    				spieler.get(i).setzeModel(model);
+					spieler.get(i).setzeID(i);
+				} catch (Exception e) {
+					e.printStackTrace();
+					//Bei Fehler abbrechen
+					entferneSpieler(spieler.get(i));
+					nocheins = true;
+					throw e;
+				}
+    		}
+        }
+        
+        /**
+         * Ermittelt, welche Spieler klopfen
+         * @throws Exception
+         */
+        private void klopfen() throws Exception {
+        	for(int i = 0; i < 4; i++) {
+        		//Speichert, ob ein Spieler geklopft hat etc.
+        		spieler.get(i).erste3(model);
+        		if(spieler.get(i).gibAntwort().equals("JA")) {
+        			geklopft[i] = true;
+        		}
+        	}
+        	
+        	//Spieler benachrichtigen, wer geklopft hat
+        	for(int i = 0; i < 4; i++) {
+        		spieler.get(i).geklopft(geklopft);
+        	}
+        }
+        
+        /**
+         * Ermittelt, welcher Spieler spielt
+         * @throws Exception
+         */
+        private void werspielt() throws Exception {
+        	//Speichert, wer was spielen will
+        	ArrayList<modus> spielfolge = new ArrayList<modus>();
+        	
+        	for(int i = 0; i < 4; i++) {
+        		//speichert, was der Spieler spielen will
+        		spieler.get(i).spielstDu(model);
+        		try {
+        			spielfolge.add(modus.valueOf(spieler.get(i).gibAntwort()));
+        		} catch(Exception e) {
+        			//Wird ein Fehler zurückgegeben, so wird dieser Spieler nicht berücksichtigt
+        			spielfolge.remove(i);
+        		}
+        	}
+        	
+        	hoechstesSpiel(spielfolge);
+        }
+        
+        /**
+         * Stellt fest, was gespielt wird
+         * @param spielfolge
+         * @throws Exception 
+         */
+        private void hoechstesSpiel(ArrayList<modus> spielfolge) throws Exception {
+        	//ermittelt das höchstwertige Spiel
+        	mod = spielfolge.get(0);
+        	for(int i = 1; i < 4; i++) {
+        		mod = model.werSpielt(mod, spielfolge.get(i));
+        		
+        		if(mod.equals(spielfolge.get(i))) {
+        			spielt = i;
+        		}
+        	}
+        	
+        	//Wenn eine Hochzeit nicht erlaubt ist, wird unter den restlichen Spielen ein höchstes ermittelt
+        	if(mod.equals(modus.HOCHZEIT) && !hochzeit()) {
+        		spielfolge.remove(spielt);
+        		spielt = -1;
+        		hoechstesSpiel(spielfolge);
+        	}
+        }
+        
+        /**
+         * Führt eine Hochzeit zwischen zwei Spielern durch
+         * @throws Exception 
+         */
+        private boolean hochzeit() throws Exception {
+        	Hochzeit h = (Hochzeit) regeln;
+    		
+    		Karte angebot = spieler.get(spielt).gibKarte();
+    		
+    		if(h.hochzeitMoeglich(model, spielt, angebot)) {
+        		for(int i = 0; i < 4; i++) {
+        			
+        			if(i != spielt) {
+        				spieler.get(i).hochzeit();
+        				
+        				if(spieler.get(i).gibAntwort().equals("JA")) {
+        					//Wenn die Hochzeit angenommen wird
+        					Karte k = spieler.get(i).gibKarte();
+        					
+        					//Wenn die Karte ein Trumpf ist
+	        				if(!h.istTrumpf(k.gibWert(), k.gibFarbe())) {
+	        					model.hochzeit(spielt, i, angebot, k);
+	        					mitspieler = i;
+	        					return true;
+	        				} else {
+	        					return false;
+	        				}
+        				} else {
+        					return false;
+        				}
+        			} else {
+        				return false;
+        			}
+        		}
+    		} else {
+    			return false;
+    		}
+			return false;
+        }
+        
+        private void kontra() throws Exception {
+        	//Sendet den Modus an alle Spieler und empfängt, ob kontra gegeben wurde
+        	for(int i = 0; i < 4; i++) {
+				try {
+					spieler.get(i).modus(mod);
+					//Wenn eine Hochzeit gespielt wird, werden beide spielenden gesendet
+					int mit = 4;
+					if(mod.equals(modus.HOCHZEIT)) {
+						mit = mitspieler;
+					}
+					spieler.get(i).spieler(spielt, mit);
+				} catch (Exception e) {
+					e.printStackTrace(); 
+				}
+        	}	
+        	
+        	for(int i = 0; i < 4; i++) {
+        		spieler.get(i).kontra(kontra); 
         	}
         }
         
@@ -415,7 +480,7 @@ public class Server {
         /**
          * Aktualisiert die Anzeige der Spieler
          */
-        private synchronized void ViewTextSetzen() {
+        public synchronized void ViewTextSetzen() {
         	graphik.textSetzen(spieler);
         }
         

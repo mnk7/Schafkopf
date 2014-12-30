@@ -62,19 +62,6 @@ public class Regelwahl {
 		}
 		return x;
 	}
-
-	public boolean sauspielMoeglich(Karte.farbe farb, Model m, int position){
-		ArrayList<Karte> y;
-		y = m.gibSpielerKarten(position);
-		for(int i = 0; i < y.size(); i++){
-			if(y.get(i).gibFarbe().equals(farb) 
-					&& y.get(i).gibWert().equals(Karte.wert.SAU) 
-					&& !istTrumpf(y.get(i).gibWert(),y.get(i).gibFarbe())){
-				return true;
-			}
-		}
-		return false;
-	}
 	
 	public boolean istTrumpf(Karte.wert angespielt, Karte.farbe angespielt2) {
 		if (angespielt.equals(Karte.wert.OBER) 
@@ -117,4 +104,16 @@ public class Regelwahl {
 		return false;
 	}
 	
+	public boolean sauspielMoeglich(Karte.farbe farb, Model m, int position){
+		ArrayList<Karte> y;
+		y = m.gibSpielerKarten(position);
+		for(int i = 0; i < y.size(); i++){
+			if(y.get(i).gibFarbe().equals(farb) 
+					&& y.get(i).gibWert().equals(Karte.wert.SAU) 
+					&& !istTrumpf(y.get(i).gibWert(),y.get(i).gibFarbe())){
+				return true;
+			}
+		}
+		return false;
+	}
 }

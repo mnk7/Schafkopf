@@ -226,18 +226,19 @@ public class Hochzeit implements Control {
 
 	@Override
 	public int mitspieler(Model m) {
-		// TODO Auto-generated method stub
 		return -1;
 	}
 
 	public boolean hochzeitMoeglich(Model m, int position, Karte angebot){
 		ArrayList<Karte> hand;
 		hand = m.gibSpielerKarten(position);
-	for(int i = 0; i < hand.size(); i++){
-		if((!hand.get(i).gibWert().equals(angebot.gibWert()) && !hand.get(i).gibFarbe().equals(angebot.gibFarbe())) && istTrumpf(hand.get(i).gibWert(),hand.get(i).gibFarbe())){
-			return false;
-		} 
-	}
-	return true;
+		for(int i = 0; i < hand.size(); i++){
+			if((!hand.get(i).gibWert().equals(angebot.gibWert()) 
+					&& !hand.get(i).gibFarbe().equals(angebot.gibFarbe())) 
+					&& istTrumpf(hand.get(i).gibWert(),hand.get(i).gibFarbe())){
+				return false;
+			} 
+		}
+		return true;
 	}
 }

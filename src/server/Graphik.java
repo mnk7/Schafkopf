@@ -103,7 +103,7 @@ public class Graphik extends JFrame {
 					start.setText("Aktualisieren");
 				} else {
 					//erneuert die Anzeige der Spieler
-					textSetzen(server.gibSpieler());
+					server.ViewTextSetzen();
 				}
 			}
 		});

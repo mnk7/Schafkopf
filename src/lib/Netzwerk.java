@@ -109,7 +109,7 @@ public abstract class Netzwerk {
 				String wert = einlesen();
 				
 				//Wurde keine Karte gesendet, keine hinzufügen
-				if(!farbe.equals("§")) {
+				if(!farbe.equals("")) {
 					karte = new Karte(Karte.farbe.valueOf(farbe), Karte.wert.valueOf(wert));
 					spielerhand.get(spielerID).add(karte);
 				}
@@ -126,7 +126,7 @@ public abstract class Netzwerk {
 				String wert = einlesen();
 				
 				//Wurde keine Karte gesendet, keine hinzufügen
-				if(farbe.equals("§")) throw new Exception();
+				if(farbe.equals("")) throw new Exception();
 				
 				karte = new Karte(Karte.farbe.valueOf(farbe), Karte.wert.valueOf(wert));
 				
@@ -144,7 +144,8 @@ public abstract class Netzwerk {
 				String farbe = einlesen();
 				String wert = einlesen();
 				
-				if(farbe.equals("§")) letzterStich[i] = null;
+				//siehe einlesen
+				if(farbe.equals("")) letzterStich[i] = null;
 				else {
 					karte = new Karte(Karte.farbe.valueOf(farbe), Karte.wert.valueOf(wert));
 	
@@ -169,7 +170,7 @@ public abstract class Netzwerk {
 			//keine Leerzeichen
 			output = "§";
 		}
-		System.out.println("[SEND]" + output);
+		System.out.println("\t\t[SEND]" + output);
 		out.println(output);
 	}
 	
@@ -188,6 +189,7 @@ public abstract class Netzwerk {
 	 */
 	protected synchronized String einlesen() throws Exception {
 		String input = in.readLine();
+		//§ kommt nicht in der Ausgabe vor!!
 		if(input.equals("§")) {
 			input = "";
 		}
