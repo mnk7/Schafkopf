@@ -164,7 +164,11 @@ public abstract class Netzwerk {
 	 * Sendet Antworten z.B. ob geklopft wird, oder was gespielt wird
 	 * @param modus
 	 */
-	protected synchronized void send(String output) throws Exception{
+	protected synchronized void send(String output) throws Exception {
+		if(output.equals("") || output == null) {
+			//keine Leerzeichen
+			output = "§";
+		}
 		System.out.println("[SEND]" + output);
 		out.println(output);
 	}
@@ -184,6 +188,9 @@ public abstract class Netzwerk {
 	 */
 	protected synchronized String einlesen() throws Exception {
 		String input = in.readLine();
+		if(input.equals("§")) {
+			input = "";
+		}
 		
 		System.out.println("[READ]" + input);
 		
@@ -234,8 +241,9 @@ public abstract class Netzwerk {
 	 * @throws Exception
 	 */
 	public synchronized Object[] read() throws Exception {
-		ArrayList<String> data = new ArrayList<String>();
+		ArrayList<String> data = new ArrayList<String>();		
 		data.add(einlesen());
+		
 		if(data.get(0).equals("!MODEL")) {
 			//Wenn ein Model gesendet wird
 			return readModel();

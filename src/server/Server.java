@@ -112,6 +112,10 @@ public class Server {
 	        		//Wenn die maximale Anzahl an Spielern erreicht ist und nicht gerade gespielt wird
 	        		if(spieler.size() == spielerzahl && nocheins) {
 	        			nocheins = false;
+	        			//Mit Bots auffüllen
+	        			for(int i = spielerzahl; i < 4; i++) {
+	        				spieler.add(new Bot());
+	        			}
 	        			neuesSpiel();
 	        		} 
         		}

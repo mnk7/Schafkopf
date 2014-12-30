@@ -19,7 +19,7 @@ public class Netzwerk extends lib.Netzwerk {
 			//Erstellen eines Clients -> Output
 			this.client = client;
 			
-			out = new PrintWriter(client.getOutputStream());
+			out = new PrintWriter(client.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 		} catch(Exception e) {
 			//Verbindung beenden

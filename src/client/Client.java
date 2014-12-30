@@ -44,7 +44,7 @@ public class Client implements View{
 		
 		update = false;
 		
-		if(!connect()) throw new Exception("Verbindung gescheitert");
+		netzwerk = new Netzwerk(ID, IP);
 		
 		listener = new Thread() {
 			public void run() {
@@ -70,126 +70,52 @@ public class Client implements View{
 				Object[] data = netzwerk.read();
 
 				if(data[0].equals("!NAME")) {
-					//Senden des Namens
-					netzwerk.print("!NAME", name);
-					break;
+					name(data);
+					continue;
 				} 
 				if(data[0].equals("!MITSPIELER")) {
-					//Namen der Mitspieler empfangen
-					String[] namen = new String[4];
-					for(int i = 0; i < 4; i++) {
-						namen[i] = (String) data[i+1];
-					}
-					//Speichert die Namen der Mitspieler
-					graphik.setzeNamen(namen);
-					break;
+					mitspieler(data);
+					continue;
 				} 
 				if(data[0].equals("!ERSTE3")) {
-					//Model empfangen
-					model.setzeModel((Model) data[1]);
-					//Klopfen des Spielers abwarten
-					netzwerk.print("!ERSTE3", String.valueOf(graphik.klopfstDu()));
-					break;
+					erste3(data);
+					continue;
 				}
 				if(data[0].equals("!SPIEL")) {
-					//Model empfangen
-					model.setzeModel((Model) data[1]);
-					//Signal an Graphik
-					graphik.spiel();
-//Untersuchen!!
-					while(!update) {
-						Thread.sleep(500);
-					}
-					netzwerk.printModel("!SPIEL", model.gibModel());
-					update = false;
-					
-					break;
+					spiel(data);
+					continue;
 				} 
 				if(data[0].equals("!SPIELSTDU")) {
-					//empfängt das neue Model
-					model.setzeModel((Model) data[1]);
-					//Sendet den Spielmodus
-					String antwort = graphik.spielstDu().toString();
-					netzwerk.print("!SPIELSTDU", antwort);
-					
-					//Wenn eine Hochzeit gespielt werden soll, wird die angebotene Karte gesendet
-					if(antwort.equals("HOCHZEIT")) {
-						Karte k = graphik.hochzeitKarte();
-						String[] output = new String[] {
-							k.gibFarbe().toString(), 
-							k.gibWert().toString()
-						};
-						netzwerk.print("!KARTE", output);
-					}
-					
-					break;
+					spielstdu(data);
+					continue;
 				}
 				if(data[0].equals("!MODUS")) {
-					//Empfangen des Modus des Spiels
-					mod = modus.valueOf((String) data[1]);
-					netzwerk.print("!KONTRA", String.valueOf(graphik.kontra()));
-					break;
+					modus(data);
+					continue;
 				} 
 				if(data[0].equals("!SPIELT")) {
-					int spielt = (int) data[1];
-					int mitspieler = (int) data[2];
-					graphik.spielt(spielt, mitspieler);
-					break;
+					spielt(data);
+					continue;
 				} 
 				if(data[0].equals("!SIEGER")) {
-					//empfängt die Sieger
-					int s1 = (int) data[1];
-					int s2 = (int) data[2];
-
-					//und gibt sie an die Graphik weiter
-					graphik.sieger(s1, s2);
-					break;
+					sieger(data);
+					continue;
 				} 
 				if(data[0].equals("!ID")) {
-					//ID des Spielers empfangen
-					ID = (int) data[1];
-					
-					netzwerk.setID(ID);
-					graphik.setID(ID);
-					break;
+					id(data);
+					continue;
 				} 
 				if(data[0].equals("!HOCHZEIT")) {
-					String answer = graphik.hochzeit();
-					
-					if(answer.equals("JA")) {
-						netzwerk.print("!HOCHZEIT", answer);
-						Karte k = graphik.hochzeitKarte();
-						String[] output = new String[] {
-							k.gibFarbe().toString(), 
-							k.gibWert().toString()
-						};
-						netzwerk.print("!KARTE", output);
-					} else {
-						netzwerk.print("!HOCHZEIT", answer);
-					}
-					break;
+					hochzeit(data);
+					continue;
 				} 
 				if(data[0].equals("!KONTRA")) {
-					boolean[] kontra = new boolean[4];
-					for(int i = 0; i < 4; i++) {
-						if(data[1].equals("true"))
-							kontra[i] = true;
-						else 
-							kontra[i] = false;
-					}
-					graphik.kontra(kontra);
-					break;
+					kontra(data);
+					continue;
 				} 
 				if(data[0].equals("!GEKLOPFT")) {
-					boolean[] geklopft = new boolean[4];
-					for(int i = 0; i < 4; i++) {
-						if(data[1].equals("true"))
-							geklopft[i] = true;
-						else
-							geklopft[i] = false;
-					}
-					graphik.geklopft(geklopft);
-					break;
+					geklopft(data);
+					continue;
 				}
 			} catch (Exception e) {
 				//Wenn ein Fehler auftritt aus der Schleife ausbrechen
@@ -199,20 +125,124 @@ public class Client implements View{
 		}
 	}
 	
-	/**
-	 * Erstellt die Verbindung zum Server
-	 */
-	public boolean connect() { 
-		try {
-			//Verbindet sich mit dem Server mit falscher Spielernummer
-			netzwerk = new Netzwerk(ID, IP);
-			return true;
-		} catch(Exception e) {
-			e.printStackTrace();
+	private synchronized void name(Object[] data) throws Exception {
+		//Senden des Namens
+		netzwerk.print("!NAME", name);
+	}
+	
+	private synchronized void mitspieler(Object[] data) {
+		//Namen der Mitspieler empfangen
+		String[] namen = new String[4];
+		for(int i = 0; i < 4; i++) {
+			namen[i] = (String) data[i+1];
 		}
+		//Speichert die Namen der Mitspieler
+		graphik.setzeNamen(namen);
+	}
+	
+	private synchronized void erste3(Object[] data) throws Exception {
+		//Model empfangen
+		model.setzeModel((Model) data[1]);
+		//Klopfen des Spielers abwarten
+		netzwerk.print("!ERSTE3", String.valueOf(graphik.klopfstDu()));
+	}
+	
+	private synchronized void spiel(Object[] data) throws Exception {
+		//Model empfangen
+		model.setzeModel((Model) data[1]);
+		//Signal an Graphik
+		graphik.spiel();
 		
-		//falls keine Verbindung hergestellt werden konnte
-		return false;
+		while(!update) {
+			Thread.sleep(500);
+		}
+		netzwerk.printModel("!SPIEL", model.gibModel());
+		update = false;
+	}
+	
+	private synchronized void spielstdu(Object[] data) throws Exception {
+		//empfängt das neue Model
+		model.setzeModel((Model) data[1]);
+		//Sendet den Spielmodus
+		String antwort = graphik.spielstDu().toString();
+		netzwerk.print("!SPIELSTDU", antwort);
+		
+		//Wenn eine Hochzeit gespielt werden soll, wird die angebotene Karte gesendet
+		if(antwort.equals("HOCHZEIT")) {
+			Karte k = graphik.hochzeitKarte();
+			String[] output = new String[] {
+				k.gibFarbe().toString(), 
+				k.gibWert().toString()
+			};
+			netzwerk.print("!KARTE", output);
+		}
+	}
+	
+	private synchronized void modus(Object[] data) throws Exception {
+		//Empfangen des Modus des Spiels
+		mod = modus.valueOf((String) data[1]);
+		netzwerk.print("!KONTRA", String.valueOf(graphik.kontra()));
+	}
+	
+	private synchronized void spielt(Object[] data) {
+		int spielt = (int) data[1];
+		int mitspieler = (int) data[2];
+		graphik.spielt(spielt, mitspieler);
+	}
+	
+	private synchronized void sieger(Object[] data) {
+		//empfängt die Sieger
+		int s1 = (int) data[1];
+		int s2 = (int) data[2];
+
+		//und gibt sie an die Graphik weiter
+		graphik.sieger(s1, s2);
+	}
+	
+	private synchronized void id(Object[] data) {
+		//ID des Spielers empfangen
+		ID = (int) data[1];
+		
+		netzwerk.setID(ID);
+		graphik.setID(ID);
+	}
+	
+	private synchronized void hochzeit(Object[] data) throws Exception {
+		String antwort = graphik.hochzeit();
+		
+		if(antwort.equals("JA")) {
+			netzwerk.print("!HOCHZEIT", antwort);
+			Karte k = graphik.hochzeitKarte();
+			String[] output = new String[] {
+				k.gibFarbe().toString(), 
+				k.gibWert().toString()
+			};
+			netzwerk.print("!KARTE", output);
+		} else {
+			netzwerk.print("!HOCHZEIT", antwort);
+		}
+	}
+	
+	private synchronized void kontra(Object[] data) {
+		boolean[] kontra = new boolean[4];
+		for(int i = 1; i < 5; i++) {
+			if(data[i].equals("true"))
+				kontra[i] = true;
+			else 
+				kontra[i] = false;
+		}
+		graphik.kontra(kontra);
+	}
+	
+	private synchronized void geklopft(Object[] data) {
+		boolean[] geklopft = new boolean[4];
+		for(int i = 1; i < 5; i++) {
+			if(data[i].equals("true"))
+				geklopft[i] = true;
+			else
+				geklopft[i] = false;
+		}
+		graphik.geklopft(geklopft);
 	}
 
 	/**
