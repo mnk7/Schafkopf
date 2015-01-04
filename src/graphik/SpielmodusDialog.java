@@ -84,7 +84,7 @@ public class SpielmodusDialog extends JFrame {
 		//Wartet solange, bis ein Wert ausgewählt wurde
 		while(rueckgabe == null) {
 			try {
-				Thread.sleep(400);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -142,7 +142,7 @@ public class SpielmodusDialog extends JFrame {
 		case "SI":
 			return modus.SI;
 		case "Nichts":
-			return null;
+			return modus.NICHTS;
 		}
 		
 		return null;

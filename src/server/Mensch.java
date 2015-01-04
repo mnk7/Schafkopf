@@ -26,8 +26,8 @@ public class Mensch extends Thread implements Spieler {
 	private String antwort;
 	private Model model;
 	private Karte karte;
-	
-	private boolean kontra;
+
+	private boolean modelupdate = false;
 	
 	public Mensch(Socket client, Server server) throws Exception {
 		
@@ -49,35 +49,33 @@ public class Mensch extends Thread implements Spieler {
 				Object[] data = netzwerk.read();
 				
 				if(data[0].equals("!NAME")) {
-					name = (String) data[1];
+					name = data[1].toString();
 					break;
 				} if(data[0].equals("!ERSTE3")) {
-					antwort = (String) data[1];
+					antwort = data[1].toString();
 					break;
 				} if(data[0].equals("!SPIEL")) {
 					model = (Model) data[1];
+					modelupdate = true;
 					break;
 				} if(data[0].equals("!SPIELSTDU")) {
-					antwort = (String) data[1];
+					antwort = data[1].toString();
 					break;
 				} if(data[0].equals("!KONTRA")) {
-					if(data[1].equals("true")) {
-						kontra = true;
-					} else {
-						kontra = false;
-					}	
+					antwort = data[1].toString();
 					break;
 				} if(data[0].equals("!HOCHZEIT")) {
 					//Antwort JA + Karte oder NEIN
-					antwort = (String) data[1];
+					antwort = data[1].toString();
 					if(antwort.equals("JA")) {
 						model = (Model) data[2];
+						modelupdate = true;
 					}
 					break;
 				} if(data[0].equals("!KARTE")) {	
 					karte = new Karte(
-							Karte.farbe.valueOf((String) data[1]),
-							Karte.wert.valueOf((String) data[2]));
+							Karte.farbe.valueOf(data[1].toString()),
+							Karte.wert.valueOf(data[2].toString()));
 					break;
 				}
 			} catch (Exception e) {
@@ -94,7 +92,6 @@ public class Mensch extends Thread implements Spieler {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
 			}
 		}
 		
@@ -104,11 +101,14 @@ public class Mensch extends Thread implements Spieler {
 		return a;
 	}
 	
-	public synchronized boolean gibKontra() {
-		return kontra;
-	}
-	
 	public synchronized Model gibModel() {
+		while(!modelupdate) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+			}
+		}
+		modelupdate = false;
 		return model; 
 	}
 	
@@ -140,11 +140,11 @@ public class Mensch extends Thread implements Spieler {
 	}
 
 	public synchronized void spielen(Model model) throws Exception {
-			netzwerk.printModel("!SPIEL", model);
+		netzwerk.printModel("!SPIEL", model);
 	}
 
 	public synchronized void spielstDu(Model model) throws Exception {
-			netzwerk.printModel("!SPIELSTDU", model);
+		netzwerk.printModel("!SPIELSTDU", model);
 	} 
 	
 	public synchronized void spieler(int spielt, int mitspieler) throws Exception {

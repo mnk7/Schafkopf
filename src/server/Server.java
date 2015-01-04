@@ -141,24 +141,25 @@ public class Server {
         		//Am Anfang jeder Runde ein neues Model erzeugen
         		model = new Model();
         		
+        		//Übergibt die Spieler dem Model und gibt jedem Spieler eine ID, die seiner Stelle in <spieler> entspricht
         		spielerVorbereiten();
-        		
-        		//Wenn ein Fehler aufgetreten ist
-        		if(nocheins) {
-        			break;
-        		}
 
+        		//Mischt die Karten und teilt die ersten 3 aus
 	        	model.mischen();
 	        	model.ersteKartenGeben();
 	        	
+	        	//Frägt alle Spieler, ob sie klopfen wollen
 	        	klopfen();
 	        	
+	        	//Teilt die Karten ganz aus
 	        	model.zweiteKartenGeben();
 	        	
+	        	//Frägt alle Spieler, was sie Spielen wollen
+	        	//Ermittelt danach das Spiel, das gespielt wird und führt gegebenenfalls eine Hochzeit durch
 	        	werspielt();
 	        	
 	        	//will niemand spielen geht es zur nächsten Runde
-	        	if(mod.equals(null)) {
+	        	if(mod.equals(modus.NICHTS) || spielt == -1) {
 	        		stock();
 	        		continue;
 	        	}
@@ -247,6 +248,8 @@ public class Server {
         		spieler.get(i).erste3(model);
         		if(spieler.get(i).gibAntwort().equals("JA")) {
         			geklopft[i] = true;
+        		} else {
+        			geklopft[i] = false;
         		}
         	}
         	
@@ -359,7 +362,14 @@ public class Server {
         	}	
         	
         	for(int i = 0; i < 4; i++) {
+        		//Ruft ab, ob Kontra gegeben wird oder nicht
         		spieler.get(i).kontra(kontra); 
+        		
+        		if(spieler.get(i).gibAntwort().equals("JA")) {
+        			kontra[i] = true;
+        		} else {
+        			kontra[i] = false;
+        		}
         	}
         }
         
@@ -376,11 +386,7 @@ public class Server {
         /**
          * Beendet die Runde
          */
-        private synchronized void rundeBeenden() {
-        	for(int i = 0; i < 4; i++) {
-        		kontra[i] = spieler.get(i).gibKontra();
-        	}
-        	
+        private synchronized void rundeBeenden() {        	
         	int pSpielt;
         	if(mod.equals(modus.SI)) {
         		//Der Spieler hat alle Punkte

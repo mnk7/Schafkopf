@@ -21,7 +21,8 @@ public class Model {
 		GEIERdu,
 		WENZdu,
 		SOLOeichelDU, SOLOgrasDU, SOLOherzDU, SOLOschellenDU,
-		SI
+		SI,
+		NICHTS
 	};
 	
 	private String[] spielernamen;
@@ -71,7 +72,6 @@ public class Model {
 	
 	/**
 	 * Erstellt ein Model aus übergebenen Daten (client)
-	 * @param kartendeck
 	 * @param spielerhand
 	 * @param tisch
 	 * @param letzerStich
@@ -131,7 +131,7 @@ public class Model {
 	}
 	
 	/**
-	 * Mischt das Kartendeck fünf mal
+	 * Mischt das Kartendeck zehn mal
 	 */
 	public void mischen() {
 		mischen(10);
@@ -244,6 +244,12 @@ public class Model {
     	//Ist einer der Modi null wird der andere zurückgegeben
     	if(m1 == null) return m2;
     	if(m2 == null) return m1;
+    	
+    	//Wenn jemand nichts spielt
+    	//Achtung!! spielen beide nichts, so kann es sein, dass am Ende 
+    	//modus.NICHTS an den Server zurückgegeben wird!
+    	if(m1.equals(modus.NICHTS)) return m2;
+    	if(m2.equals(modus.NICHTS)) return m1;
     	
     	int nr1 = m1.ordinal();
     	int nr2 = m2.ordinal();

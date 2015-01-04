@@ -96,12 +96,6 @@ public class Bot implements Spieler {
 	}
 
 	@Override
-	public boolean gibKontra() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public void name() {
 		// TODO Auto-generated method stub
 		

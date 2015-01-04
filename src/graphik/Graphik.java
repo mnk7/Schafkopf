@@ -270,11 +270,16 @@ public class Graphik extends JFrame implements View {
 	public modus spielstDu() {
 		while(true) {
 			SpielmodusDialog dialog = new SpielmodusDialog();
+			//Dialog an Hauptfenster binden
+			dialog.setLocationRelativeTo(this);
 			modus m = dialog.modusWahl();
 			
-			//Prüft Clien-seitig, ob ein Sauspiel oder ein Si gespielt werden können.
+			//Prüft Client-seitig, ob ein Sauspiel oder ein Si gespielt werden können.
 			//Eine Hochzeit wird Server-seitig geprüft
-			if(m.toString().substring(0, 7).equals("SAUSPIEL")) {
+			if(m.equals(modus.SAUSPIELeichel)
+					|| m.equals(modus.SAUSPIELgras)
+					|| m.equals(modus.SAUSPIELherz)
+					|| m.equals(modus.SAUSPIELschellen)) {
 				Karte.farbe f = dialog.farbe(m);
 				if(new Regelwahl().sauspielMoeglich(f, model.gibModel(), ID)) {
 					
@@ -302,22 +307,22 @@ public class Graphik extends JFrame implements View {
 	 * Gibt zurück, ob der Spieler klopft
 	 * @return
 	 */
-	public boolean klopfstDu() {
+	public String klopfstDu() {
 		if(javax.swing.JOptionPane.showConfirmDialog(this, "Wilst du klopfen?") == 0)
-			return false;
+			return "JA";
 		else
-			return true;	
+			return "NEIN";	
 	}
 	
 	/**
 	 * Gibt zurück, ob der Spieler klopft
 	 * @return
 	 */
-	public boolean kontra() {
+	public String kontra() {
 		if(javax.swing.JOptionPane.showConfirmDialog(this, "Kontra?") == 0)
-			return false;
+			return "JA";
 		else
-			return true;	
+			return "NEIN";	
 	}
 	
 	/**
@@ -354,7 +359,7 @@ public class Graphik extends JFrame implements View {
 	public String hochzeit() {
 		if(JOptionPane.showConfirmDialog(this, "Willst du heiraten?") == JOptionPane.OK_OPTION)
 			return "JA";
-		return null;
+		return "NEIN";
 	}
 
 	/**
@@ -375,8 +380,9 @@ public class Graphik extends JFrame implements View {
 	 */
 	public void spielt(int spielt, int mitspieler) { 
 		 nachricht(spielt, "Ich spiel!");
-		 if(mitspieler != 4) 
+		 if(mitspieler != 4) {
 			 nachricht(mitspieler, "Und ich hab geheiratet");
+		 }
 	}
 
 	/**
@@ -385,8 +391,9 @@ public class Graphik extends JFrame implements View {
 	 */
 	public void kontra(boolean[] kontra) {
 		for(int i = 0; i < 4; i++) {
-			if(kontra[i])
+			if(kontra[i]) {
 				nachricht(i, "Kontra!");
+			}
 		}
 	}
 
@@ -396,8 +403,9 @@ public class Graphik extends JFrame implements View {
 	 */
 	public void geklopft(boolean[] geklopft) {
 		for(int i = 0; i < 4; i++) {
-			if(geklopft[i]) 
+			if(geklopft[i]) {
 				nachricht(i, "[Klopf] [Klopf]");
+			}
 		}
 	}
 }

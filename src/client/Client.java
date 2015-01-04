@@ -134,7 +134,7 @@ public class Client implements View{
 		//Namen der Mitspieler empfangen
 		String[] namen = new String[4];
 		for(int i = 0; i < 4; i++) {
-			namen[i] = (String) data[i+1];
+			namen[i] = data[i+1].toString();
 		}
 		//Speichert die Namen der Mitspieler
 		graphik.setzeNamen(namen);
@@ -144,7 +144,7 @@ public class Client implements View{
 		//Model empfangen
 		model.setzeModel((Model) data[1]);
 		//Klopfen des Spielers abwarten
-		netzwerk.print("!ERSTE3", String.valueOf(graphik.klopfstDu()));
+		netzwerk.print("!ERSTE3", graphik.klopfstDu());
 	}
 	
 	private synchronized void spiel(Object[] data) throws Exception {
@@ -180,7 +180,7 @@ public class Client implements View{
 	
 	private synchronized void modus(Object[] data) throws Exception {
 		//Empfangen des Modus des Spiels
-		mod = modus.valueOf((String) data[1]);
+		mod = modus.valueOf(data[1].toString());
 		netzwerk.print("!KONTRA", String.valueOf(graphik.kontra()));
 	}
 	
@@ -201,7 +201,7 @@ public class Client implements View{
 	
 	private synchronized void id(Object[] data) {
 		//ID des Spielers empfangen
-		ID = Integer.parseInt((String) data[1]);
+		ID = Integer.parseInt(data[1].toString());
 		
 		netzwerk.setID(ID);
 		graphik.setID(ID);
@@ -225,8 +225,9 @@ public class Client implements View{
 	
 	private synchronized void kontra(Object[] data) {
 		boolean[] kontra = new boolean[4];
+		//data[0] enthält den Steuerbefehl
 		for(int i = 1; i < 5; i++) {
-			if(data[i].equals("true"))
+			if(data[i].toString().equals("true"))
 				kontra[i] = true;
 			else 
 				kontra[i] = false;
@@ -236,8 +237,9 @@ public class Client implements View{
 	
 	private synchronized void geklopft(Object[] data) {
 		boolean[] geklopft = new boolean[4];
+		//data[0] enthält den Steuerbefehl
 		for(int i = 1; i < 5; i++) {
-			if(data[i].equals("true"))
+			if(data[i].toString().equals("true"))
 				geklopft[i - 1] = true;
 			else
 				geklopft[i - 1] = false;

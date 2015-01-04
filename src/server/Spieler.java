@@ -109,12 +109,6 @@ public interface Spieler{
 	 * @throws Exception 
 	 */
 	public void geklopft(boolean[] geklopft) throws Exception;
-	
-	/**
-	 * Gibt zurück, ob Kontra gegeben wurde
-	 * @return kontra?
-	 */
-	public boolean gibKontra();
 
 	/**
 	 * Sendet, welche Spieler Kontra geben
