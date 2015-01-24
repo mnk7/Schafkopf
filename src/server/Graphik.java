@@ -28,25 +28,13 @@ public class Graphik extends JFrame {
 	private JButton end;
 	private JLabel [] PlayerLabel;
 	
-	private Thread serverThread;
 	private Server server;
-	private boolean server_gestartet;
-	
-	//Referenz auf sich selbst
-	private final Graphik g = this;
+	private Graphik g = this;
 	
 	private String logo = "./logo.gif";
 	
 	public Graphik(){
 		super();
-		
-		server_gestartet = false;
-		
-		serverThread = new Thread() {
-			public void run() {
-				server = new Server(g);
-			}
-		};
 		
 		Graphik.class.getResource(logo);
 		//Icon der Anwendung setzen
@@ -80,7 +68,7 @@ public class Graphik extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		
-		for(int i=0;i<4;i++){
+		for(int i = 0;i < 4;i++){
 			PlayerLabel [i] = new JLabel();
 			getContentPane().add(PlayerLabel [i]);
 			PlayerLabel [i].setText("");
@@ -94,9 +82,9 @@ public class Graphik extends JFrame {
 		start.setText("Server starten");
 		start.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				if(!server_gestartet) {
-					serverThread.start();
-					server_gestartet = true;
+				if(server == null) {
+					server = new Server(g);
+					server.start();
 					
 					clear();
 					PlayerLabel[0].setText("Server gestartet");
@@ -116,9 +104,8 @@ public class Graphik extends JFrame {
 		end.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				if(server != null) {
-					serverThread.stop();
+					server.beenden();
 					server = null;
-					server_gestartet = false;
 					
 					clear();
 					PlayerLabel[0].setText("Server beendet");

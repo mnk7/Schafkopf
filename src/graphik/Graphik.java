@@ -408,5 +408,10 @@ public class Graphik extends JFrame implements View {
 			}
 		}
 	}
+	
+	public void beenden() {
+		this.dispose();
+		JOptionPane.showMessageDialog(null, "Der Server hat das Spiel beendet");
+	}
 }
 

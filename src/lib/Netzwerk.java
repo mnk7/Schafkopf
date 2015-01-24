@@ -270,4 +270,17 @@ public abstract class Netzwerk {
 		data[1] = ModelEmpfangen();
 		return data;
 	}
+	
+	/**
+	 * Schließt die Verbindung
+	 */
+	public void beenden() {
+		try {
+			in.close();
+			print("!BEENDEN", "");
+			out.close();
+		} catch (Exception e) {
+			System.err.println("Fehler beim Beenden der Verbindung");
+		}
+	}
 }

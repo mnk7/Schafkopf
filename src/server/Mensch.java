@@ -29,7 +29,11 @@ public class Mensch extends Thread implements Spieler {
 
 	private boolean modelupdate = false;
 	
+	private boolean beenden;
+	
 	public Mensch(Socket client, Server server) throws Exception {
+		
+		beenden = false;
 		
 		antwort = "";
 		
@@ -44,7 +48,7 @@ public class Mensch extends Thread implements Spieler {
 	 */
 	public void run() {
 		
-		while(true) {
+		while(!beenden) {
 			try {
 				Object[] data = netzwerk.read();
 				
@@ -89,10 +93,7 @@ public class Mensch extends Thread implements Spieler {
 	public synchronized String gibAntwort() {
 		//Solange keine Antwort da ist...
 		while(antwort == null) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-			}
+			//vllt. Observer-Pattern?
 		}
 		
 		String a = antwort;
@@ -116,11 +117,17 @@ public class Mensch extends Thread implements Spieler {
 		this.model = m;
 	}
 
-	public synchronized void erste3(Model model) throws Exception {
+	public boolean erste3(Model model) throws Exception {
 		//sendet das Model und erwartet antwort
 		try {
+			setzeModel(model);
 			netzwerk.printModel("!ERSTE3", model);			
-			//horcht nach der Antwort			
+			//horcht nach der Antwort	
+			if(gibAntwort().equals("JA")) {
+				return true;
+			} else {
+				return false;
+			}
 		} catch(Exception e) {
 			throw e;
 		}
@@ -129,7 +136,7 @@ public class Mensch extends Thread implements Spieler {
 	/**
 	 * Sendet die Namen der Mitspieler
 	 */
-	private synchronized void mitspielerNamen() {
+	private void mitspielerNamen() {
 		try {
 			String[] namen = model.gibNamen();
 			netzwerk.print("!MITSPIELER", namen);
@@ -139,15 +146,16 @@ public class Mensch extends Thread implements Spieler {
 		}
 	}
 
-	public synchronized void spielen(Model model) throws Exception {
+	public void spielen(Model model) throws Exception {
 		netzwerk.printModel("!SPIEL", model);
 	}
 
-	public synchronized void spielstDu(Model model) throws Exception {
+	public String spielstDu(Model model) throws Exception {
 		netzwerk.printModel("!SPIELSTDU", model);
+		return gibAntwort();
 	} 
 	
-	public synchronized void spieler(int spielt, int mitspieler) throws Exception {
+	public void spieler(int spielt, int mitspieler) throws Exception {
 		String[] data = new String[] {
 				String.valueOf(spielt),
 				String.valueOf(mitspieler)
@@ -155,12 +163,18 @@ public class Mensch extends Thread implements Spieler {
 		netzwerk.print("!SPIEL", data);
 	}
 
-	public synchronized void modus(lib.Model.modus m) throws Exception {
+	public boolean modus(lib.Model.modus m) throws Exception {
 		netzwerk.print("!MODUS", m.toString());
+		
 		//gibt zurück, ob Kontra gegeben wurde
+		if(gibAntwort().equals("JA")) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
-	public synchronized void sieger(int s1, int s2) throws Exception {
+	public void sieger(int s1, int s2) throws Exception {
 		String[] data = new String[] {
 			String.valueOf(s1),
 			String.valueOf(s2)
@@ -176,20 +190,16 @@ public class Mensch extends Thread implements Spieler {
 	public String gibName() {
 		//Gefährlich, aber der Name ist für den weiteren Ablauf wichtig
 		while(name == null) {
-			try {
-				name();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			//evtl Observer-Pattern?
 		}
 		return name;
 	}
 
-	public synchronized void name() throws Exception {
+	public void name() throws Exception {
 		netzwerk.print("!NAME", "");
 	}
 
-	public synchronized void setzeID(int ID) throws Exception {
+	public void setzeID(int ID) throws Exception {
 		netzwerk.setID(ID);
 		netzwerk.print("!ID", String.valueOf(ID));
 		
@@ -198,14 +208,22 @@ public class Mensch extends Thread implements Spieler {
 	}
 
 	public synchronized Karte gibKarte() throws InterruptedException {	
+		while(karte == null) {
+			//vlt. Observer-Pattern?
+		}
 		Karte k = karte;
 		//löscht die eingelesene Karte, um nicht zweimal die gleiche zurückzugeben
 		karte = null;
 		return k;
 	}
 
-	public synchronized void hochzeit() throws Exception {
+	public synchronized boolean hochzeit() throws Exception {
 		netzwerk.print("!HOCHZEIT", "");
+		if(gibAntwort().equals("JA")) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public synchronized void geklopft(boolean[] geklopft) throws Exception {
@@ -230,6 +248,11 @@ public class Mensch extends Thread implements Spieler {
 			}
 		}
 		netzwerk.print("!KONTRA", data);
+	}
+
+	public void beenden() {
+		beenden = true;
+		netzwerk.beenden();
 	}
 
 }

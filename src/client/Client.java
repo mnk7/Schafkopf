@@ -117,6 +117,9 @@ public class Client implements View{
 					geklopft(data);
 					continue;
 				}
+				if(data[0].equals("!BEENDEN")) {
+					beenden();
+				}
 			} catch (Exception e) {
 				//Wenn ein Fehler auftritt aus der Schleife ausbrechen
 				e.printStackTrace();
@@ -253,6 +256,11 @@ public class Client implements View{
 	public synchronized void update(ModelMVC model) throws Exception {
 		this.model = model;
 		update = true;
+	}
+	
+	public void beenden() {
+		netzwerk.beenden();
+		graphik.beenden();
 	}
 
 }

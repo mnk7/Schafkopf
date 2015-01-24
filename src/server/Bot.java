@@ -7,7 +7,8 @@ import lib.Model.modus;
 public class Bot implements Spieler {
 
 	@Override
-	public void erste3(Model model) {
+	public boolean erste3(Model model) {
+		return false;
 	} 
 
 	@Override
@@ -15,13 +16,13 @@ public class Bot implements Spieler {
 	}
 
 	@Override
-	public void spielstDu(Model model) {
-		// TODO Auto-generated method stub
+	public String spielstDu(Model model) {
+		return "";
 	}
 
 	@Override
-	public void modus(lib.Model.modus m) {
-
+	public boolean modus(lib.Model.modus m) {
+		return false;
 	} 
 
 	@Override
@@ -33,7 +34,7 @@ public class Bot implements Spieler {
 	@Override
 	public String gibIP() {
 		// TODO Auto-generated method stub
-		return "127.0.0.1";
+		return "local";
 	}
 
 	@Override
@@ -66,9 +67,8 @@ public class Bot implements Spieler {
 	}
 
 	@Override
-	public void hochzeit() {
-		// TODO Auto-generated method stub
-		
+	public boolean hochzeit() {
+		return false;
 	}
 
 	@Override
@@ -97,6 +97,12 @@ public class Bot implements Spieler {
 
 	@Override
 	public void name() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void beenden() {
 		// TODO Auto-generated method stub
 		
 	}

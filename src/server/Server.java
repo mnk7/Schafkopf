@@ -13,13 +13,13 @@ import lib.Karte;
 import lib.Model;
 import lib.Model.modus;
 
-public class Server {
+public class Server extends Thread {
 	
 		private static final int PORT = 35555;
 	
 		//Server, der die Verbindungen verwaltet
 		private ServerSocket server;
-		private Thread listener;
+		private boolean beenden;
 		
 		//Speichert den Spielstand
 		private Model model;
@@ -53,6 +53,9 @@ public class Server {
          * Erstellt einen neuen Server
          **/
         public Server(Graphik graphik) {
+        	super();
+        	
+        	beenden = false;
         	
         	model = new Model();
               
@@ -60,9 +63,6 @@ public class Server {
         	spielerzahl = 4;
         	
         	geklopft = new boolean[4];
-        	for(int i = 0; i < 4; i++) {
-        		geklopft[i] = false;
-        	}
         	
         	kontra = new boolean[4];
         	
@@ -78,9 +78,6 @@ public class Server {
         		//Server für jeden Port
 				server = new ServerSocket(PORT);
         		
-        		//Startet das Spiel
-        		start();
-        		
 			} catch (IOException e) {
 				e.printStackTrace();
 				//Alle Spieler zurücksetzen
@@ -94,9 +91,9 @@ public class Server {
         /**
          * Nimmt die Verbindungen auf
          */
-        private void start() {
+        public void run() {
         	try {
-        		while(true) {
+        		while(!beenden) {
         			//Akzeptiert die Verbindung
 	        		Socket client = server.accept();
 	        		
@@ -244,12 +241,9 @@ public class Server {
          */
         private void klopfen() throws Exception {
         	for(int i = 0; i < 4; i++) {
-        		//Speichert, ob ein Spieler geklopft hat etc.
-        		spieler.get(i).erste3(model);
-        		if(spieler.get(i).gibAntwort().equals("JA")) {
-        			geklopft[i] = true;
-        		} else {
-        			geklopft[i] = false;
+        		synchronized(geklopft) {
+	        		//Speichert, ob ein Spieler geklopft hat etc.
+	        		geklopft[i] = spieler.get(i).erste3(model);
         		}
         	}
         	
@@ -268,10 +262,8 @@ public class Server {
         	ArrayList<modus> spielfolge = new ArrayList<modus>();
         	
         	for(int i = 0; i < 4; i++) {
-        		//speichert, was der Spieler spielen will
-        		spieler.get(i).spielstDu(model);
         		try {
-        			spielfolge.add(modus.valueOf(spieler.get(i).gibAntwort()));
+        			spielfolge.add(modus.valueOf(spieler.get(i).spielstDu(model)));
         		} catch(Exception e) {
         			//Wird ein Fehler zurückgegeben, so wird dieser Spieler nicht berücksichtigt
         			spielfolge.remove(i);
@@ -318,9 +310,8 @@ public class Server {
         		for(int i = 0; i < 4; i++) {
         			
         			if(i != spielt) {
-        				spieler.get(i).hochzeit();
         				
-        				if(spieler.get(i).gibAntwort().equals("JA")) {
+        				if(spieler.get(i).hochzeit()) {
         					//Wenn die Hochzeit angenommen wird
         					Karte k = spieler.get(i).gibKarte();
         					
@@ -336,21 +327,23 @@ public class Server {
         					return false;
         				}
         			} else {
-        				return false;
+        				continue;
         			}
         		}
     		} else {
     			return false;
     		}
-			return false;
+    		
+    		//Diese Fall ist nicht möglich, da i != spielt irgendwann zutrifft
+    		return false;
         }
         
         private void kontra() throws Exception {
-        	//Sendet den Modus an alle Spieler und empfängt, ob kontra gegeben wurde
+        	//Sendet den Modus an alle Spieler und empfängt, ob Kontra gegeben wurde
         	for(int i = 0; i < 4; i++) {
 				try {
-					spieler.get(i).modus(mod);
-					//Wenn eine Hochzeit gespielt wird, werden beide spielenden gesendet
+					kontra[i] = spieler.get(i).modus(mod);
+					//Wenn eine Hochzeit gespielt wird, werden beide Spielenden gesendet
 					int mit = 4;
 					if(mod.equals(modus.HOCHZEIT)) {
 						mit = mitspieler;
@@ -362,14 +355,7 @@ public class Server {
         	}	
         	
         	for(int i = 0; i < 4; i++) {
-        		//Ruft ab, ob Kontra gegeben wird oder nicht
-        		spieler.get(i).kontra(kontra); 
-        		
-        		if(spieler.get(i).gibAntwort().equals("JA")) {
-        			kontra[i] = true;
-        		} else {
-        			kontra[i] = false;
-        		}
+        		spieler.get(i).kontra(kontra);
         	}
         }
         
@@ -459,6 +445,7 @@ public class Server {
         public synchronized void entferneSpieler(Spieler s) {
         	spieler.remove(s);
         	try {
+        		s.beenden();
 				javax.swing.JOptionPane.showMessageDialog(graphik, "Spieler " + s.gibName() +" wurde entfernt");
 			} catch (Exception e) {
 			}
@@ -468,7 +455,7 @@ public class Server {
         }
         
         /**
-         * Setzt die Spielerzahl
+         * Setzt die Spielerzahl (menschliche Spieler)
          * @param spielerzahl
          */
         public void setzeSpielerzahl(int spielerzahl) {
@@ -493,11 +480,14 @@ public class Server {
         /**
          * Beendet den Server
          */
-        public synchronized void beenden() {
+        @SuppressWarnings("deprecation")
+		public synchronized void beenden() {
         	try {
-        		listener.stop();
+        		beenden = true;
 				server.close();
-				spieler = null;
+				for(int i = 0; i < spieler.size(); i++) {
+					spieler.get(i).beenden();
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 				//Programm beenden

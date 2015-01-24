@@ -27,7 +27,7 @@ public interface Spieler{
 	 * @return
 	 * @throws Exception  
 	 */
-	public void erste3(Model model) throws Exception;
+	public boolean erste3(Model model) throws Exception;
 	
 	/**
 	 * Führt einen Spielzug aus und gibt das aktualisierte Model zurück
@@ -43,14 +43,15 @@ public interface Spieler{
 	 * @return
 	 * @throws Exception 
 	 */
-	public void spielstDu(Model model) throws Exception;
+	public String spielstDu(Model model) throws Exception;
 	
 	/**
 	 * Übergibt den Spielern den Modus und fragt nach Kontra
 	 * @param m
+	 * @return 
 	 * @throws Exception 
 	 */
-	public void modus(modus m) throws Exception;
+	public boolean modus(modus m) throws Exception;
 	
 	/**
 	 * Sendet die Sieger einer Runde
@@ -93,7 +94,7 @@ public interface Spieler{
 	 * Frägt, ob eine Hochzeit angenommen wird
 	 * @throws Exception 
 	 */
-	public void hochzeit() throws Exception;
+	public boolean hochzeit() throws Exception;
 
 	/**
 	 * Gibt die Spielenden an alle weiter
@@ -117,6 +118,8 @@ public interface Spieler{
 	 */
 	public void kontra(boolean[] kontra) throws Exception;
 
-	public void setzeModel(Model model);  
+	public void setzeModel(Model model);
+
+	public void beenden();
 
 }
