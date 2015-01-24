@@ -81,10 +81,13 @@ public class Mensch extends Thread implements Spieler {
 							Karte.farbe.valueOf(data[1].toString()),
 							Karte.wert.valueOf(data[2].toString()));
 					break;
+				} if(data[0].equals("!BEENDEN")) {
+					beenden();
+					break;
 				}
 			} catch (Exception e) {
 				//Benachrichtige Server, dass ein Spieler entfernt wurde
-				server.entferneSpieler(this);
+				abmelden();
 				break;
 			}
 		}
@@ -190,7 +193,11 @@ public class Mensch extends Thread implements Spieler {
 	public String gibName() {
 		//Gefährlich, aber der Name ist für den weiteren Ablauf wichtig
 		while(name == null) {
-			//evtl Observer-Pattern?
+			try {
+				name();
+				Thread.sleep(1000);
+			} catch (Exception e) {
+			}
 		}
 		return name;
 	}
@@ -253,6 +260,15 @@ public class Mensch extends Thread implements Spieler {
 	public void beenden() {
 		beenden = true;
 		netzwerk.beenden();
+		server.entferneSpieler(this);
+	}
+	
+	public void abmelden() {
+		try {
+			netzwerk.print("!BEENDEN", "");
+		} catch (Exception e) {
+		}
+		beenden();
 	}
 
 }

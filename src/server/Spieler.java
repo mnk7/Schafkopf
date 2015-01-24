@@ -120,6 +120,15 @@ public interface Spieler{
 
 	public void setzeModel(Model model);
 
+	/**
+	 * Beendet den Spieler-Thread Server-seitig
+	 */
 	public void beenden();
+
+	/**
+	 * Sendet ein Beenden-Signal an den Client
+	 * und beendet Server-seitig
+	 */
+	public void abmelden();
 
 }

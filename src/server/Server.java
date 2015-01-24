@@ -74,6 +74,20 @@ public class Server extends Thread {
         	
         	this.graphik = graphik;
         	
+        	//Aktualisiert ständig das GUI
+        	new Thread() {
+        		public void run() {
+        			while(this.isAlive()) {
+        				try {
+							Thread.sleep(2000);
+						} catch (InterruptedException e) {
+							//Schweig
+						}
+        				ViewTextSetzen();
+        			}
+        		}
+        	}.start();
+        	
         	try {
         		//Server für jeden Port
 				server = new ServerSocket(PORT);
@@ -104,8 +118,6 @@ public class Server extends Thread {
 	        		//Fragt nach dem Namen des Spielers
 	        		neuerSpieler.name();
 	        		
-	        		ViewTextSetzen();
-	        		
 	        		//Wenn die maximale Anzahl an Spielern erreicht ist und nicht gerade gespielt wird
 	        		if(spieler.size() == spielerzahl && nocheins) {
 	        			nocheins = false;
@@ -120,7 +132,7 @@ public class Server extends Thread {
         		e.printStackTrace();
         		//Alle Spieler zurücksetzen
         		for(int i = 0; i < spieler.size(); i++) {
-        			entferneSpieler(spieler.get(i));
+        			spieler.get(i).abmelden();
         		}
         	}
         }
@@ -445,12 +457,9 @@ public class Server extends Thread {
         public synchronized void entferneSpieler(Spieler s) {
         	spieler.remove(s);
         	try {
-        		s.beenden();
 				javax.swing.JOptionPane.showMessageDialog(graphik, "Spieler " + s.gibName() +" wurde entfernt");
 			} catch (Exception e) {
 			}
-        	//Graphik updaten
-        	ViewTextSetzen();
         	nocheins = true;
         }
         
@@ -486,8 +495,10 @@ public class Server extends Thread {
         		beenden = true;
 				server.close();
 				for(int i = 0; i < spieler.size(); i++) {
-					spieler.get(i).beenden();
+					spieler.get(i).abmelden();
 				}
+				
+				this.suspend();
 			} catch (IOException e) {
 				e.printStackTrace();
 				//Programm beenden

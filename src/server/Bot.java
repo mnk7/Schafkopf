@@ -107,4 +107,10 @@ public class Bot implements Spieler {
 		
 	}
 
+	@Override
+	public void abmelden() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

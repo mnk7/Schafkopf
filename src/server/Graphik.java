@@ -88,10 +88,7 @@ public class Graphik extends JFrame {
 					
 					clear();
 					PlayerLabel[0].setText("Server gestartet");
-					start.setText("Aktualisieren");
-				} else {
-					//erneuert die Anzeige der Spieler
-					server.ViewTextSetzen();
+					start.setText("Läuft...");
 				}
 			}
 		});

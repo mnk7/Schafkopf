@@ -54,7 +54,7 @@ public class Client implements View{
 		
 		listener.start();
 		
-		graphik = new Graphik(model);
+		graphik = new Graphik(model, this);
 		model.addBeobachter(graphik);
 		
 		//Menü wieder sichtbar machen
@@ -261,6 +261,14 @@ public class Client implements View{
 	public void beenden() {
 		netzwerk.beenden();
 		graphik.beenden();
+	}
+	
+	public void abmelden() {
+		try {
+			netzwerk.print("!BEENDEN", "");
+		} catch (Exception e) {
+		}
+		beenden();
 	}
 
 }

@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
 import javax.swing.JButton;
@@ -19,6 +21,7 @@ import regeln.Regelwahl;
 import lib.Karte;
 import lib.Model;  
 import lib.Model.modus;
+import client.Client;
 import client.ModelMVC;
 import client.View; 
 
@@ -54,7 +57,7 @@ public class Graphik extends JFrame implements View {
 	//Hintergrund
 	private JPanel hintergrund;	
 	
-	public Graphik(ModelMVC model) {
+	public Graphik(ModelMVC model, final Client client) {
 		super();
 		//Vorerst keine ID setzen
 		ID = -1;
@@ -72,6 +75,32 @@ public class Graphik extends JFrame implements View {
 		this.setLocationRelativeTo(null);
 		this.initGUI(); 
 		this.setVisible(true);
+		
+		this.addWindowListener(new WindowListener() {
+
+			public void windowClosing(WindowEvent arg0) {
+			}
+
+			public void windowActivated(WindowEvent e) {
+			}
+
+			public void windowClosed(WindowEvent e) {
+				client.abmelden(); 
+			}
+
+			public void windowDeactivated(WindowEvent e) {
+			}
+
+			public void windowDeiconified(WindowEvent e) {
+			}
+
+			public void windowIconified(WindowEvent e) {
+			}
+
+			public void windowOpened(WindowEvent e) {
+			}
+			
+		});
 	}	
 	
 	/**
