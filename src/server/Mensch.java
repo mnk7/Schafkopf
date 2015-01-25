@@ -32,6 +32,7 @@ public class Mensch extends Thread implements Spieler {
 	private boolean beenden;
 	
 	public Mensch(Socket client, Server server) throws Exception {
+		this.setName("Schafkopf-Spieler");
 		
 		beenden = false;
 		
@@ -92,9 +93,9 @@ public class Mensch extends Thread implements Spieler {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+				beenden = true;
 				//Benachrichtige Server, dass ein Spieler entfernt wurde
 				abmelden();
-				break;
 			}
 		}
 	}
@@ -201,10 +202,9 @@ public class Mensch extends Thread implements Spieler {
 	}
 	
 	public String gibName() {
-		//Gefährlich, aber der Name ist für den weiteren Ablauf wichtig
 		while(name == null) {
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(100);
 			} catch (Exception e) {
 			}
 		}
@@ -277,6 +277,7 @@ public class Mensch extends Thread implements Spieler {
 		try {
 			netzwerk.print("!BEENDEN", "");
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		beenden();
 	}

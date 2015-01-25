@@ -189,6 +189,7 @@ public abstract class Netzwerk {
 	 */
 	protected synchronized String einlesen() throws Exception {
 		String input = in.readLine();
+		
 		//§ kommt nicht in der Ausgabe vor!!
 		if(input.equals("§")) {
 			input = "";

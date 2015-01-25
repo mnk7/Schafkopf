@@ -19,6 +19,8 @@ public class Client implements View{
 	
 	//erstellt eine GUI
 	private Graphik graphik;
+	
+	private MenuGUI menu;
 	 
 	//Erstellt ein Model
 	private ModelMVC model;
@@ -44,6 +46,8 @@ public class Client implements View{
 		this.name = name;
 		ID = -1;
 		
+		this.menu = menu;
+		
 		beenden = false;
 		
 		update = false;
@@ -55,14 +59,12 @@ public class Client implements View{
 				listen();
 			}
 		};
+		listener.setName("Schafkopf-Client");
 		
 		listener.start();
 		
 		graphik = new Graphik(model, this);
 		model.addBeobachter(graphik);
-		
-		//Menü wieder sichtbar machen
-		menu.setVisible(true);
 	}
 	
 	/**
@@ -117,8 +119,8 @@ public class Client implements View{
 			} catch (Exception e) {
 				//Wenn ein Fehler auftritt aus der Schleife ausbrechen
 				e.printStackTrace();
+				beenden = true;
 				abmelden();
-				break;
 			}
 		}
 	}
@@ -256,11 +258,14 @@ public class Client implements View{
 	public void beenden() {
 		beenden = true;
 		netzwerk.beenden();
+		netzwerk = null;
 		try {
 			graphik.beenden();
+			graphik = null;
 		} catch(NullPointerException e) {
 			//Dann eben nicht.
 		}
+		menu.beenden();
 	}
 	
 	public void abmelden() {

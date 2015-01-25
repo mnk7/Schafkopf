@@ -169,4 +169,9 @@ public class MenuGUI extends JFrame {
 		NAMElabel.setForeground(Color.BLACK);
 		verbinden();
 	}
+	
+	public void beenden() {
+		client = null;
+		this.setVisible(true);
+	}
 }

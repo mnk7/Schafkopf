@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import regeln.Hochzeit;
 import regeln.Control;
@@ -43,10 +45,12 @@ public class Server extends Thread {
         private int spielt;
         private int mitspieler;
         
-        //fragt ab, ob gerade kein Spiel läuft
+        //fragt ab, ob noch ein Spiel gestartet werden kann
         private boolean nocheins;
         
         private final Graphik graphik;
+        
+        private final Lock lock;
         
         /**
          * Erstellt einen Server auf dem Standardport
@@ -63,6 +67,7 @@ public class Server extends Thread {
          **/
         public Server(Graphik graphik, int port) {
         	super();
+        	this.setName("Schafkopf-Server");
         	
         	this.PORT = port;
         	
@@ -85,30 +90,13 @@ public class Server extends Thread {
         	
         	this.graphik = graphik;
         	
-        	//Aktualisiert ständig das GUI
-        	final Server s = this;
-        	new Thread() {
-        		public void run() {
-        			while(s.isAlive()) {
-        				try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e) {
-							//Schweig
-						}
-        				ViewTextSetzen();
-        			}
-        		}
-        	}.start();
+        	lock = new ReentrantLock();
         	
         	try {
 				server = new ServerSocket(PORT);
         		
 			} catch (IOException e) {
 				e.printStackTrace();
-				//Alle Spieler zurücksetzen
-        		for(int i = 0; i < spieler.size(); i++) {
-        			entferneSpieler(spieler.get(i));
-        		}
 			}
         	
         } 
@@ -128,6 +116,8 @@ public class Server extends Thread {
 	        		
 	        		neuerSpieler.name();
 	        		
+	        		ViewTextSetzen();
+	        		
 	        		//Wenn die maximale Anzahl an Spielern erreicht ist und nicht gerade gespielt wird
 	        		if(spieler.size() == spielerzahl && nocheins) {
 	        			nocheins = false;
@@ -135,6 +125,7 @@ public class Server extends Thread {
 	        			for(int i = spielerzahl; i < 4; i++) {
 	        				spieler.add(new Bot());
 	        			}
+	        			neuesSpiel();
 	        		} 
         		}
         	} catch(Exception e) {
@@ -143,6 +134,7 @@ public class Server extends Thread {
         		for(int i = 0; i < spieler.size(); i++) {
         			spieler.get(i).abmelden();
         		}
+        		beenden = true;
         	}
         }
         
@@ -262,10 +254,10 @@ public class Server extends Thread {
          */
         private void klopfen() throws Exception {
         	for(int i = 0; i < 4; i++) {
-        		synchronized(geklopft) {
-	        		//Speichert, ob ein Spieler geklopft hat etc.
-	        		geklopft[i] = spieler.get(i).erste3(model);
-        		}
+        		lock.lock();
+	        	//Speichert, ob ein Spieler geklopft hat etc.
+	        	geklopft[i] = spieler.get(i).erste3(model);
+        		lock.unlock();
         	}
         	
         	//Spieler benachrichtigen, wer geklopft hat
@@ -469,6 +461,8 @@ public class Server extends Thread {
 				javax.swing.JOptionPane.showMessageDialog(graphik, "Spieler " + s.gibName() +" wurde entfernt");
 			} catch (Exception e) {
 			}
+        	
+        	ViewTextSetzen();
         	nocheins = true;
         }
         
@@ -503,8 +497,10 @@ public class Server extends Thread {
         	try {
         		beenden = true;
 				server.close();
-				for(int i = 0; i < spieler.size(); i++) {
-					spieler.get(i).abmelden();
+				//Spieler werden entfernt
+				ArrayList<Spieler> s = (ArrayList<Spieler>) spieler.clone();
+				for(int i = 0; i < s.size(); i++) {
+					s.get(i).abmelden();
 				}
 				
 				this.suspend();
