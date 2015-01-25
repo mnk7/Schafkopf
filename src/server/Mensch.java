@@ -52,40 +52,46 @@ public class Mensch extends Thread implements Spieler {
 			try {
 				Object[] data = netzwerk.read();
 				
-				if(data[0].equals("!NAME")) {
+				switch(data[0].toString()) {
+				case "!NAME":
 					name = data[1].toString();
 					break;
-				} if(data[0].equals("!ERSTE3")) {
+				case "!ERSTE3":
 					antwort = data[1].toString();
 					break;
-				} if(data[0].equals("!SPIEL")) {
-					model = (Model) data[1];
-					modelupdate = true;
+				case "!SPIEL":
+					try {
+						model = (Model) data[1];
+						modelupdate = true;
+					} catch(ClassCastException e) {
+						e.printStackTrace();
+					}
 					break;
-				} if(data[0].equals("!SPIELSTDU")) {
+				case "!SPIELSTDU":
 					antwort = data[1].toString();
 					break;
-				} if(data[0].equals("!KONTRA")) {
+				case "!KONTRA":
 					antwort = data[1].toString();
 					break;
-				} if(data[0].equals("!HOCHZEIT")) {
-					//Antwort JA + Karte oder NEIN
+				case "!HOCHZEIT":
+					//Antwort: JA + Karte oder NEIN
 					antwort = data[1].toString();
 					if(antwort.equals("JA")) {
 						model = (Model) data[2];
 						modelupdate = true;
 					}
 					break;
-				} if(data[0].equals("!KARTE")) {	
+				case "!KARTE":	
 					karte = new Karte(
 							Karte.farbe.valueOf(data[1].toString()),
 							Karte.wert.valueOf(data[2].toString()));
 					break;
-				} if(data[0].equals("!BEENDEN")) {
+				case "!BEENDEN":
 					beenden();
 					break;
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				//Benachrichtige Server, dass ein Spieler entfernt wurde
 				abmelden();
 				break;
@@ -97,6 +103,10 @@ public class Mensch extends Thread implements Spieler {
 		//Solange keine Antwort da ist...
 		while(antwort == null) {
 			//vllt. Observer-Pattern?
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+			}
 		}
 		
 		String a = antwort;
@@ -194,7 +204,6 @@ public class Mensch extends Thread implements Spieler {
 		//Gefährlich, aber der Name ist für den weiteren Ablauf wichtig
 		while(name == null) {
 			try {
-				name();
 				Thread.sleep(1000);
 			} catch (Exception e) {
 			}
@@ -217,6 +226,7 @@ public class Mensch extends Thread implements Spieler {
 	public synchronized Karte gibKarte() throws InterruptedException {	
 		while(karte == null) {
 			//vlt. Observer-Pattern?
+			Thread.sleep(100);
 		}
 		Karte k = karte;
 		//löscht die eingelesene Karte, um nicht zweimal die gleiche zurückzugeben

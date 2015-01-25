@@ -170,7 +170,7 @@ public abstract class Netzwerk {
 			//keine Leerzeichen
 			output = "§";
 		}
-		System.out.println("\t\t[SEND]" + output);
+		System.out.println("\t\t" + spielerID + "[SEND]" + output);
 		out.println(output);
 	}
 	
@@ -277,7 +277,6 @@ public abstract class Netzwerk {
 	public void beenden() {
 		try {
 			in.close();
-			print("!BEENDEN", "");
 			out.close();
 		} catch (Exception e) {
 			System.err.println("Fehler beim Beenden der Verbindung");

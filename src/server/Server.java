@@ -1,6 +1,5 @@
 package server;
 
-import java.awt.HeadlessException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -15,7 +14,7 @@ import lib.Model.modus;
 
 public class Server extends Thread {
 	
-		private static final int PORT = 35555;
+		private static int PORT = 35555;
 	
 		//Server, der die Verbindungen verwaltet
 		private ServerSocket server;
@@ -48,12 +47,24 @@ public class Server extends Thread {
         private boolean nocheins;
         
         private final Graphik graphik;
+        
+        /**
+         * Erstellt einen Server auf dem Standardport
+         * @param graphik
+         */
+        public Server(Graphik graphik) {
+        	this(graphik, PORT);
+        }
                 
         /**
          * Erstellt einen neuen Server
+         * @param graphik
+         * @param port
          **/
-        public Server(Graphik graphik) {
+        public Server(Graphik graphik, int port) {
         	super();
+        	
+        	this.PORT = port;
         	
         	beenden = false;
         	
@@ -75,9 +86,10 @@ public class Server extends Thread {
         	this.graphik = graphik;
         	
         	//Aktualisiert ständig das GUI
+        	final Server s = this;
         	new Thread() {
         		public void run() {
-        			while(this.isAlive()) {
+        			while(s.isAlive()) {
         				try {
 							Thread.sleep(2000);
 						} catch (InterruptedException e) {
@@ -89,7 +101,6 @@ public class Server extends Thread {
         	}.start();
         	
         	try {
-        		//Server für jeden Port
 				server = new ServerSocket(PORT);
         		
 			} catch (IOException e) {
@@ -115,7 +126,6 @@ public class Server extends Thread {
 	        		neuerSpieler.start();
 	        		spieler.add(neuerSpieler);
 	        		
-	        		//Fragt nach dem Namen des Spielers
 	        		neuerSpieler.name();
 	        		
 	        		//Wenn die maximale Anzahl an Spielern erreicht ist und nicht gerade gespielt wird
@@ -125,7 +135,6 @@ public class Server extends Thread {
 	        			for(int i = spielerzahl; i < 4; i++) {
 	        				spieler.add(new Bot());
 	        			}
-	        			neuesSpiel();
 	        		} 
         		}
         	} catch(Exception e) {

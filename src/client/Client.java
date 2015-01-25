@@ -31,6 +31,8 @@ public class Client implements View{
 	//ID des Spielers
 	private int ID;
 	
+	private boolean beenden;
+	
 	private boolean update;
 	
 	
@@ -41,6 +43,8 @@ public class Client implements View{
 		this.IP = IP;
 		this.name = name;
 		ID = -1;
+		
+		beenden = false;
 		
 		update = false;
 		
@@ -65,64 +69,55 @@ public class Client implements View{
 	 * Empfängt Daten vom Server 
 	 */
 	private synchronized void listen() {
-		while(true) {
+		while(!beenden) {
 			try {				
 				Object[] data = netzwerk.read();
 
-				if(data[0].equals("!NAME")) {
+				switch(data[0].toString()) {
+				case "!NAME":
 					name(data);
-					continue;
-				} 
-				if(data[0].equals("!MITSPIELER")) {
+					break;
+				case "!MITSPIELER":
 					mitspieler(data);
-					continue;
-				} 
-				if(data[0].equals("!ERSTE3")) {
+					break;
+				case "!ERSTE3":
 					erste3(data);
-					continue;
-				}
-				if(data[0].equals("!SPIEL")) {
+					break;
+				case "!SPIEL":
 					spiel(data);
-					continue;
-				} 
-				if(data[0].equals("!SPIELSTDU")) {
+					break;
+				case "!SPIELSTDU":
 					spielstdu(data);
-					continue;
-				}
-				if(data[0].equals("!MODUS")) {
+					break;
+				case "!MODUS":
 					modus(data);
-					continue;
-				} 
-				if(data[0].equals("!SPIELT")) {
+					break;
+				case "!SPIELT":
 					spielt(data);
-					continue;
-				} 
-				if(data[0].equals("!SIEGER")) {
+					break;
+				case "!SIEGER":
 					sieger(data);
-					continue;
-				} 
-				if(data[0].equals("!ID")) {
+					break;
+				case "!ID":
 					id(data);
-					continue;
-				} 
-				if(data[0].equals("!HOCHZEIT")) {
+					break;
+				case "!HOCHZEIT":
 					hochzeit(data);
-					continue;
-				} 
-				if(data[0].equals("!KONTRA")) {
+					break;
+				case "!KONTRA":
 					kontra(data);
-					continue;
-				} 
-				if(data[0].equals("!GEKLOPFT")) {
+					break;
+				case "!GEKLOPFT":
 					geklopft(data);
-					continue;
-				}
-				if(data[0].equals("!BEENDEN")) {
+					break;
+				case "!BEENDEN":
 					beenden();
+					break;
 				}
 			} catch (Exception e) {
 				//Wenn ein Fehler auftritt aus der Schleife ausbrechen
 				e.printStackTrace();
+				abmelden();
 				break;
 			}
 		}
@@ -259,14 +254,20 @@ public class Client implements View{
 	}
 	
 	public void beenden() {
+		beenden = true;
 		netzwerk.beenden();
-		graphik.beenden();
+		try {
+			graphik.beenden();
+		} catch(NullPointerException e) {
+			//Dann eben nicht.
+		}
 	}
 	
 	public void abmelden() {
 		try {
 			netzwerk.print("!BEENDEN", "");
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		beenden();
 	}

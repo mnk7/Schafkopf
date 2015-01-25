@@ -116,6 +116,7 @@ public class Graphik extends JFrame {
 	}
 	
 	public synchronized void textSetzen(ArrayList<Spieler> s) { 
+		clear();
 		ArrayList <Spieler> spieler = s;		
 		
 		for(int i = 0; i < 4; i++){

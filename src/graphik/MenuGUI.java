@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,7 +20,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import client.Client;
 
-public class MenuGUI extends JFrame{
+public class MenuGUI extends JFrame {
 
 	/**
 	 * Startet den Client und die Graphik
@@ -87,9 +88,6 @@ public class MenuGUI extends JFrame{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("SCHOAFKOPF-APP");
 		this.setResizable(false);
-		//this.setCursor(CROSSHAIR_CURSOR);
-		//this.setUndecorated(true);
-		//this.setState(ICONIFIED);
 		
 		//Icon der Anwendung setzen
 		ImageIcon icon = new ImageIcon(logo);
