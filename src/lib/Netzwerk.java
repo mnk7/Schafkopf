@@ -206,7 +206,7 @@ public abstract class Netzwerk {
 	 * @param data
 	 * @throws Exception
 	 */
-	public synchronized void print(String steuer, String data) throws Exception {
+	public void print(String steuer, String data) throws Exception {
 		String[] d = new String[1];
 		d[0] = data;
 		print(steuer, d);
@@ -218,7 +218,7 @@ public abstract class Netzwerk {
 	 * @param data
 	 * @throws Exception
 	 */
-	public synchronized void print(String steuer, String[] data) throws Exception {
+	public void print(String steuer, String[] data) throws Exception {
 		send(steuer);
 		for(int i = 0; i < data.length; i++) {
 			send(data[i]);
@@ -232,7 +232,7 @@ public abstract class Netzwerk {
 	 * @param data
 	 * @throws Exception
 	 */
-	public synchronized void printModel(String steuer, Model data) throws Exception {
+	public void printModel(String steuer, Model data) throws Exception {
 		send("!MODEL");
 		send(steuer);
 		ModelSenden(data);
@@ -243,7 +243,7 @@ public abstract class Netzwerk {
 	 * @return Steuerbefehl und Datensätze
 	 * @throws Exception
 	 */
-	public synchronized Object[] read() throws Exception {
+	public Object[] read() throws Exception {
 		ArrayList<String> data = new ArrayList<String>();		
 		data.add(einlesen());
 		

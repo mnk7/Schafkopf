@@ -274,7 +274,7 @@ public class Server extends Thread {
         			spielfolge.add(modus.valueOf(spieler.get(i).spielstDu(model)));
         		} catch(Exception e) {
         			//Wird ein Fehler zurückgegeben, so wird dieser Spieler nicht berücksichtigt
-        			spielfolge.remove(i);
+        			spielfolge.add(modus.NICHTS);
         		}
         	}
         	
