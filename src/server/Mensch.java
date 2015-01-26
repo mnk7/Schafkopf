@@ -56,24 +56,20 @@ public class Mensch extends Thread implements Spieler {
 				switch(data[0].toString()) {
 				case "!NAME":
 					name = data[1].toString();
-					break;
+					continue;
 				case "!ERSTE3":
 					antwort = data[1].toString();
-					break;
+					continue;
 				case "!SPIEL":
-					try {
-						model = (Model) data[1];
-						modelupdate = true;
-					} catch(ClassCastException e) {
-						e.printStackTrace();
-					}
-					break;
+					model = (Model) data[1];
+					modelupdate = true;
+					continue;
 				case "!SPIELSTDU":
 					antwort = data[1].toString();
-					break;
+					continue;
 				case "!KONTRA":
 					antwort = data[1].toString();
-					break;
+					continue;
 				case "!HOCHZEIT":
 					//Antwort: JA + Karte oder NEIN
 					antwort = data[1].toString();
@@ -81,15 +77,17 @@ public class Mensch extends Thread implements Spieler {
 						model = (Model) data[2];
 						modelupdate = true;
 					}
-					break;
+					continue;
 				case "!KARTE":	
 					karte = new Karte(
 							Karte.farbe.valueOf(data[1].toString()),
 							Karte.wert.valueOf(data[2].toString()));
-					break;
+					continue;
 				case "!BEENDEN":
 					beenden();
-					break;
+					continue;
+				default: 
+					continue;
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -116,7 +114,7 @@ public class Mensch extends Thread implements Spieler {
 		return a;
 	}
 	
-	public synchronized Model gibModel() {
+	public Model gibModel() {
 		while(!modelupdate) {
 			try {
 				Thread.sleep(100);
@@ -133,17 +131,13 @@ public class Mensch extends Thread implements Spieler {
 
 	public boolean erste3(Model model) throws Exception {
 		//sendet das Model und erwartet antwort
-		try {
-			setzeModel(model);
-			netzwerk.printModel("!ERSTE3", model);			
-			//horcht nach der Antwort	
-			if(gibAntwort().equals("JA")) {
-				return true;
-			} else {
-				return false;
-			}
-		} catch(Exception e) {
-			throw e;
+		setzeModel(model);
+		netzwerk.printModel("!ERSTE3", model);			
+		//horcht nach der Antwort	
+		if(gibAntwort().equals("JA")) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 	
@@ -223,7 +217,7 @@ public class Mensch extends Thread implements Spieler {
 		mitspielerNamen();
 	}
 
-	public synchronized Karte gibKarte() throws InterruptedException {	
+	public Karte gibKarte() throws InterruptedException {	
 		while(karte == null) {
 			//vlt. Observer-Pattern?
 			Thread.sleep(100);
@@ -234,7 +228,7 @@ public class Mensch extends Thread implements Spieler {
 		return k;
 	}
 
-	public synchronized boolean hochzeit() throws Exception {
+	public boolean hochzeit() throws Exception {
 		netzwerk.print("!HOCHZEIT", "");
 		if(gibAntwort().equals("JA")) {
 			return true;
@@ -243,7 +237,7 @@ public class Mensch extends Thread implements Spieler {
 		}
 	}
 
-	public synchronized void geklopft(boolean[] geklopft) throws Exception {
+	public void geklopft(boolean[] geklopft) throws Exception {
 		String[] data = new String[4];
 		for(int i = 0; i < 4; i++) {
 			if(geklopft[i]) {

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public abstract class Netzwerk {
 	 
-	protected int spielerID;
+	protected int spielerID = -1;
 	
 	//Addresse des Clients
 	protected String ip;
@@ -165,7 +165,7 @@ public abstract class Netzwerk {
 	 * Sendet Antworten z.B. ob geklopft wird, oder was gespielt wird
 	 * @param modus
 	 */
-	protected synchronized void send(String output) throws Exception {
+	protected void send(String output) throws Exception {
 		if(output.equals("") || output == null) {
 			//keine Leerzeichen
 			output = "§";
@@ -187,7 +187,7 @@ public abstract class Netzwerk {
 	 * @return input
 	 * @throws Exception 
 	 */
-	protected synchronized String einlesen() throws Exception {
+	protected String einlesen() throws Exception {
 		String input = in.readLine();
 		
 		//§ kommt nicht in der Ausgabe vor!!
@@ -265,7 +265,7 @@ public abstract class Netzwerk {
 	 * @return Steuerbefehl und Model
 	 * @throws Exception
 	 */
-	protected synchronized Object[] readModel() throws Exception {
+	protected Object[] readModel() throws Exception {
 		Object[] data = new Object[2];
 		data[0] = einlesen();
 		data[1] = ModelEmpfangen();

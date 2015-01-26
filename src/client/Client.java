@@ -70,7 +70,7 @@ public class Client implements View{
 	/**
 	 * Empfängt Daten vom Server 
 	 */
-	private synchronized void listen() {
+	private void listen() {
 		while(!beenden) {
 			try {				
 				Object[] data = netzwerk.read();
@@ -78,43 +78,43 @@ public class Client implements View{
 				switch(data[0].toString()) {
 				case "!NAME":
 					name(data);
-					break;
+					continue;
 				case "!MITSPIELER":
 					mitspieler(data);
-					break;
+					continue;
 				case "!ERSTE3":
 					erste3(data);
-					break;
+					continue;
 				case "!SPIEL":
 					spiel(data);
-					break;
+					continue;
 				case "!SPIELSTDU":
 					spielstdu(data);
-					break;
+					continue;
 				case "!MODUS":
 					modus(data);
-					break;
+					continue;
 				case "!SPIELT":
 					spielt(data);
-					break;
+					continue;
 				case "!SIEGER":
 					sieger(data);
-					break;
+					continue;
 				case "!ID":
 					id(data);
-					break;
+					continue;
 				case "!HOCHZEIT":
 					hochzeit(data);
-					break;
+					continue;
 				case "!KONTRA":
 					kontra(data);
-					break;
+					continue;
 				case "!GEKLOPFT":
 					geklopft(data);
-					break;
+					continue;
 				case "!BEENDEN":
 					beenden();
-					break;
+					continue;
 				}
 			} catch (Exception e) {
 				//Wenn ein Fehler auftritt aus der Schleife ausbrechen
@@ -125,12 +125,12 @@ public class Client implements View{
 		}
 	}
 	
-	private synchronized void name(Object[] data) throws Exception {
+	private void name(Object[] data) throws Exception {
 		//Senden des Namens
 		netzwerk.print("!NAME", name);
 	}
 	
-	private synchronized void mitspieler(Object[] data) {
+	private void mitspieler(Object[] data) {
 		//Namen der Mitspieler empfangen
 		String[] namen = new String[4];
 		for(int i = 0; i < 4; i++) {
@@ -140,14 +140,14 @@ public class Client implements View{
 		graphik.setzeNamen(namen);
 	}
 	
-	private synchronized void erste3(Object[] data) throws Exception {
+	private void erste3(Object[] data) throws Exception {
 		//Model empfangen
 		model.setzeModel((Model) data[1]);
 		//Klopfen des Spielers abwarten
 		netzwerk.print("!ERSTE3", graphik.klopfstDu());
 	}
 	
-	private synchronized void spiel(Object[] data) throws Exception {
+	private void spiel(Object[] data) throws Exception {
 		//Model empfangen
 		model.setzeModel((Model) data[1]);
 		//Signal an Graphik
@@ -160,7 +160,7 @@ public class Client implements View{
 		update = false;
 	}
 	
-	private synchronized void spielstdu(Object[] data) throws Exception {
+	private void spielstdu(Object[] data) throws Exception {
 		//empfängt das neue Model
 		model.setzeModel((Model) data[1]);
 		//Sendet den Spielmodus
@@ -178,19 +178,19 @@ public class Client implements View{
 		}
 	}
 	
-	private synchronized void modus(Object[] data) throws Exception {
+	private void modus(Object[] data) throws Exception {
 		//Empfangen des Modus des Spiels
 		mod = modus.valueOf(data[1].toString());
 		netzwerk.print("!KONTRA", String.valueOf(graphik.kontra()));
 	}
 	
-	private synchronized void spielt(Object[] data) {
+	private void spielt(Object[] data) {
 		int spielt = (int) data[1];
 		int mitspieler = (int) data[2];
 		graphik.spielt(spielt, mitspieler);
 	}
 	
-	private synchronized void sieger(Object[] data) {
+	private void sieger(Object[] data) {
 		//empfängt die Sieger
 		int s1 = (int) data[1];
 		int s2 = (int) data[2];
@@ -199,7 +199,7 @@ public class Client implements View{
 		graphik.sieger(s1, s2);
 	}
 	
-	private synchronized void id(Object[] data) {
+	private void id(Object[] data) {
 		//ID des Spielers empfangen
 		ID = Integer.parseInt(data[1].toString());
 		
@@ -207,7 +207,7 @@ public class Client implements View{
 		graphik.setID(ID);
 	}
 	
-	private synchronized void hochzeit(Object[] data) throws Exception {
+	private void hochzeit(Object[] data) throws Exception {
 		String antwort = graphik.hochzeit();
 		
 		if(antwort.equals("JA")) {
@@ -223,7 +223,7 @@ public class Client implements View{
 		}
 	}
 	
-	private synchronized void kontra(Object[] data) {
+	private void kontra(Object[] data) {
 		boolean[] kontra = new boolean[4];
 		//data[0] enthält den Steuerbefehl
 		for(int i = 1; i < 5; i++) {
@@ -235,7 +235,7 @@ public class Client implements View{
 		graphik.kontra(kontra);
 	}
 	
-	private synchronized void geklopft(Object[] data) {
+	private void geklopft(Object[] data) {
 		boolean[] geklopft = new boolean[4];
 		//data[0] enthält den Steuerbefehl
 		for(int i = 1; i < 5; i++) {

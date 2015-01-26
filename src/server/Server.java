@@ -50,8 +50,6 @@ public class Server extends Thread {
         
         private final Graphik graphik;
         
-        private final Lock lock;
-        
         /**
          * Erstellt einen Server auf dem Standardport
          * @param graphik
@@ -89,8 +87,6 @@ public class Server extends Thread {
         	nocheins = true;
         	
         	this.graphik = graphik;
-        	
-        	lock = new ReentrantLock();
         	
         	try {
 				server = new ServerSocket(PORT);
@@ -143,7 +139,7 @@ public class Server extends Thread {
          * Unbedingt in einzelne Methoden ausgliedern!
          * @throws Exception 
          */
-        private synchronized void neuesSpiel() throws Exception {
+        private void neuesSpiel() throws Exception {
         	
         	//Spiel wurde gestartet
         	while(!nocheins) {
@@ -228,6 +224,7 @@ public class Server extends Thread {
          * @throws Exception
          */
         private void spielerVorbereiten() throws Exception {
+        	
         	//Anzeigen der Spieler
         	for(int i = 0; i < 4; i++) {
         		model.setzeName(i, spieler.get(i).gibName());
@@ -241,7 +238,7 @@ public class Server extends Thread {
 				} catch (Exception e) {
 					e.printStackTrace();
 					//Bei Fehler abbrechen
-					entferneSpieler(spieler.get(i));
+					spieler.get(i).abmelden();
 					nocheins = true;
 					throw e;
 				}
@@ -254,10 +251,8 @@ public class Server extends Thread {
          */
         private void klopfen() throws Exception {
         	for(int i = 0; i < 4; i++) {
-        		lock.lock();
 	        	//Speichert, ob ein Spieler geklopft hat etc.
 	        	geklopft[i] = spieler.get(i).erste3(model);
-        		lock.unlock();
         	}
         	
         	//Spieler benachrichtigen, wer geklopft hat
