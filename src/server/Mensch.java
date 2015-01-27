@@ -12,7 +12,7 @@ import lib.Model;
 import lib.Model.modus;
 import server.Netzwerk;
 
-public class Mensch extends Thread implements Spieler {
+public class Mensch implements Spieler {
 	
 	private Netzwerk netzwerk;
 	
@@ -32,7 +32,6 @@ public class Mensch extends Thread implements Spieler {
 	private boolean beenden;
 	
 	public Mensch(Socket client, Server server) throws Exception {
-		this.setName("Schafkopf-Spieler");
 		
 		beenden = false;
 		
@@ -42,12 +41,18 @@ public class Mensch extends Thread implements Spieler {
 		
 		//Errichtet neue Verbindung
 		netzwerk = new Netzwerk(client);
+		
+		new Thread() {
+			public void run() {
+				listen();
+			}
+		}.start();
 	}
 	
 	/**
 	 * Horcht auf Befehle vom Client
 	 */
-	public void run() {
+	public void listen() {
 		
 		while(!beenden) {
 			try {

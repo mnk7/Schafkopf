@@ -107,7 +107,6 @@ public class Server extends Thread {
 	        		Socket client = server.accept();
 	        		
 	        		Mensch neuerSpieler = new Mensch(client, this);
-	        		neuerSpieler.start();
 	        		spieler.add(neuerSpieler);
 	        		
 	        		neuerSpieler.name();
