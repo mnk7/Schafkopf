@@ -170,7 +170,6 @@ public abstract class Netzwerk {
 			//keine Leerzeichen
 			output = "§";
 		}
-		System.out.println("\t\t" + spielerID + "[SEND]" + output);
 		out.println(output);
 	}
 	
@@ -194,8 +193,6 @@ public abstract class Netzwerk {
 		if(input.equals("§")) {
 			input = "";
 		}
-		
-		System.out.println("[READ]" + input);
 		
 		return input;
 	}

@@ -297,7 +297,8 @@ public class Graphik extends JFrame implements View {
 	 * @return
 	 */
 	public modus spielstDu() {
-		while(true) {
+		boolean fertig = false;
+		while(!fertig) {
 			SpielmodusDialog dialog = new SpielmodusDialog();
 			//Dialog an Hauptfenster binden
 			dialog.setLocationRelativeTo(this);
@@ -313,6 +314,7 @@ public class Graphik extends JFrame implements View {
 				if(new Regelwahl().sauspielMoeglich(f, model.gibModel(), ID)) {
 					
 					dialog.dispose();
+					fertig = true;
 					return m;
 				} else {
 					JOptionPane.showMessageDialog(this, "Das geht nicht!");
@@ -321,6 +323,7 @@ public class Graphik extends JFrame implements View {
 			} if(m.equals(modus.SI)) {
 				if(new Regelwahl().siMoeglich(model.gibModel(), ID)) {
 					dialog.dispose();
+					fertig = true;
 					return m;
 				} else {
 					JOptionPane.showMessageDialog(this, "Das geht nicht!");
@@ -328,8 +331,10 @@ public class Graphik extends JFrame implements View {
 				}
 			} 			
 			dialog.dispose();
+			fertig = true;
 			return m;
 		}
+		return modus.NICHTS;
 	}
 	
 	/**
@@ -337,7 +342,7 @@ public class Graphik extends JFrame implements View {
 	 * @return
 	 */
 	public String klopfstDu() {
-		if(javax.swing.JOptionPane.showConfirmDialog(this, "Wilst du klopfen?") == 0)
+		if(javax.swing.JOptionPane.showConfirmDialog(this, "Willst du klopfen?") == 0)
 			return "JA";
 		else
 			return "NEIN";	

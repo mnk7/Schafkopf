@@ -43,7 +43,7 @@ public interface Spieler{
 	 * @return
 	 * @throws Exception 
 	 */
-	public String spielstDu(Model model) throws Exception;
+	public lib.Model.modus spielstDu(Model model) throws Exception;
 	
 	/**
 	 * Übergibt den Spielern den Modus und fragt nach Kontra

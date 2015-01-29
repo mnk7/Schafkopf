@@ -166,7 +166,7 @@ public class Server extends Thread {
 	        	//will niemand spielen geht es zur nächsten Runde
 	        	if(mod.equals(modus.NICHTS) || spielt == -1) {
 	        		stock();
-	        		continue;
+	        		break;
 	        	}
 	        	//legt die Regeln fest
 	        	regeln = regelwahl.wahl(mod, model, spielt);
@@ -270,8 +270,9 @@ public class Server extends Thread {
         	
         	for(int i = 0; i < 4; i++) {
         		try {
-        			spielfolge.add(modus.valueOf(spieler.get(i).spielstDu(model)));
+        			spielfolge.add(spieler.get(i).spielstDu(model));
         		} catch(Exception e) {
+        			e.printStackTrace();
         			//Wird ein Fehler zurückgegeben, so wird dieser Spieler nicht berücksichtigt
         			spielfolge.add(modus.NICHTS);
         		}

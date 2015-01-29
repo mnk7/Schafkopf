@@ -16,8 +16,8 @@ public class Bot implements Spieler {
 	}
 
 	@Override
-	public String spielstDu(Model model) {
-		return "";
+	public modus spielstDu(Model model) {
+		return modus.NICHTS;
 	}
 
 	@Override
@@ -46,12 +46,6 @@ public class Bot implements Spieler {
 	public void setzeID(int ID) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public String gibAntwort() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -111,6 +105,12 @@ public class Bot implements Spieler {
 	public void abmelden() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public String gibAntwort() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

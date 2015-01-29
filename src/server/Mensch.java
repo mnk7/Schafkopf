@@ -163,9 +163,9 @@ public class Mensch implements Spieler {
 		netzwerk.printModel("!SPIEL", model);
 	}
 
-	public String spielstDu(Model model) throws Exception {
+	public modus spielstDu(Model model) throws Exception {
 		netzwerk.printModel("!SPIELSTDU", model);
-		return gibAntwort();
+		return modus.valueOf(gibAntwort());
 	} 
 	
 	public void spieler(int spielt, int mitspieler) throws Exception {
