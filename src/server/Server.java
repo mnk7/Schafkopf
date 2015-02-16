@@ -140,6 +140,9 @@ public class Server extends Thread {
          */
         private void neuesSpiel() throws Exception {
         	
+        	synchronized (model) {
+        	synchronized (spieler) {
+        	
         	//Spiel wurde gestartet
         	while(!nocheins) {
         		
@@ -216,6 +219,8 @@ public class Server extends Thread {
 	        	//neu Runde
 	        	naechster();
         	}
+        	}//synchronized spieler
+        	}//synchronized model
         }
         
         /**
@@ -249,16 +254,22 @@ public class Server extends Thread {
          * @throws Exception
          */
         private void klopfen() throws Exception {
-        	for(int i = 0; i < 4; i++) {
-	        	//Speichert, ob ein Spieler geklopft hat etc.
-	        	geklopft[i] = spieler.get(i).erste3(model);
+        	erste3();
+        	klopfenAbfragen();
+        }
+        	private void erste3() throws Exception {
+        		for(int i = 0; i < 4; i++) {
+    	        	//Speichert, ob ein Spieler geklopft hat etc.
+    	        	geklopft[i] = spieler.get(i).erste3(model);
+            	}
         	}
         	
-        	//Spieler benachrichtigen, wer geklopft hat
-        	for(int i = 0; i < 4; i++) {
-        		spieler.get(i).geklopft(geklopft);
+        	private void klopfenAbfragen() throws Exception {
+        		//Spieler benachrichtigen, wer geklopft hat
+            	for(int i = 0; i < 4; i++) {
+            		spieler.get(i).geklopft(geklopft);
+            	}
         	}
-        }
         
         /**
          * Ermittelt, welcher Spieler spielt

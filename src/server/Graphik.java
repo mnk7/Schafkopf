@@ -54,7 +54,7 @@ public class Graphik extends JFrame {
 	public void initGUI() {
 		this.setSize(330, 240);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setTitle("SCHOAFKOPF-SERVER");
+		this.setTitle("SCHAFKOPF-SERVER");
 		this.setResizable(false);
 		
 		this.setLayout(null);

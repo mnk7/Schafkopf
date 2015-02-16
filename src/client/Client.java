@@ -6,7 +6,7 @@ import lib.Model.modus;
 import graphik.Graphik;
 import graphik.MenuGUI;
 
-public class Client implements View{
+public class Client{
 
 	//Enthält die Verbindung zum Server
 	private Netzwerk netzwerk;
@@ -23,7 +23,7 @@ public class Client implements View{
 	private MenuGUI menu;
 	 
 	//Erstellt ein Model
-	private ModelMVC model;
+	private Model model;
 	
 	//Modus des Spiels speichern
 	private modus mod;
@@ -35,13 +35,8 @@ public class Client implements View{
 	
 	private boolean beenden;
 	
-	private boolean update;
 	
-	
-	public Client(String IP, String name, MenuGUI menu) throws Exception{		
-		model = new ModelMVC();
-		model.addBeobachter(this);
-		
+	public Client(String IP, String name, MenuGUI menu) throws Exception{				
 		this.IP = IP;
 		this.name = name;
 		ID = -1;
@@ -49,8 +44,6 @@ public class Client implements View{
 		this.menu = menu;
 		
 		beenden = false;
-		
-		update = false;
 		
 		netzwerk = new Netzwerk(ID, IP);
 		
@@ -64,7 +57,6 @@ public class Client implements View{
 		listener.start();
 		
 		graphik = new Graphik(model, this);
-		model.addBeobachter(graphik);
 	}
 	
 	/**
@@ -142,27 +134,20 @@ public class Client implements View{
 	
 	private void erste3(Object[] data) throws Exception {
 		//Model empfangen
-		model.setzeModel((Model) data[1]);
+		graphik.setModel((Model) data[1]);
 		//Klopfen des Spielers abwarten
 		netzwerk.print("!ERSTE3", graphik.klopfstDu());
 	}
 	
 	private void spiel(Object[] data) throws Exception {
 		//Model empfangen
-		model.setzeModel((Model) data[1]);
-		//Signal an Graphik
-		graphik.spiel();
-		
-		while(!update) {
-			Thread.sleep(500);
-		}
-		netzwerk.printModel("!SPIEL", model.gibModel());
-		update = false;
+		graphik.setModel((Model) data[1]);
+		netzwerk.printModel("!SPIEL", graphik.spiel());
 	}
 	
 	private void spielstdu(Object[] data) throws Exception {
 		//empfängt das neue Model
-		model.setzeModel((Model) data[1]);
+		graphik.setModel((Model) data[1]);
 		//Sendet den Spielmodus
 		String antwort = graphik.spielstDu().toString();
 		netzwerk.print("!SPIELSTDU", antwort);
@@ -227,7 +212,7 @@ public class Client implements View{
 		boolean[] kontra = new boolean[4];
 		//data[0] enthält den Steuerbefehl
 		for(int i = 1; i < 5; i++) {
-			if(data[i].toString().equals("true"))
+			if(data[i].toString().equals("JA"))
 				kontra[i] = true;
 			else 
 				kontra[i] = false;
@@ -239,20 +224,12 @@ public class Client implements View{
 		boolean[] geklopft = new boolean[4];
 		//data[0] enthält den Steuerbefehl
 		for(int i = 1; i < 5; i++) {
-			if(data[i].toString().equals("true"))
+			if(data[i].toString().equals("JA"))
 				geklopft[i - 1] = true;
 			else
 				geklopft[i - 1] = false;
 		}
 		graphik.geklopft(geklopft);
-	}
-
-	/**
-	 * Aktualisiert das Model
-	 */
-	public synchronized void update(ModelMVC model) throws Exception {
-		this.model = model;
-		update = true;
 	}
 	
 	public void beenden() {

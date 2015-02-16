@@ -21,9 +21,7 @@ import regeln.Regelwahl;
 import lib.Karte;
 import lib.Model;  
 import lib.Model.modus;
-import client.Client;
-import client.ModelMVC;
-import client.View; 
+import client.Client; 
 
 import java.awt.BorderLayout;
 
@@ -31,13 +29,12 @@ import javax.swing.JPanel;
 
 import regeln.Sauspiel;
 
-public class Graphik extends JFrame implements View {	
+public class Graphik extends JFrame {	
+	
+	Model model;
 	
 	//Enthält die Controll -> kontrolliert einen Spielzug
 	private Control control;
-	
-	//Das Model
-	private ModelMVC model;
 	
 	private int ID;
 	private String[] namen;
@@ -57,7 +54,7 @@ public class Graphik extends JFrame implements View {
 	//Hintergrund
 	private JPanel hintergrund;	
 	
-	public Graphik(ModelMVC model, final Client client) {
+	public Graphik(Model model, final Client client) {
 		super();
 		//Vorerst keine ID setzen
 		ID = -1;
@@ -66,7 +63,7 @@ public class Graphik extends JFrame implements View {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		setTitle("Schoafkopf-Äpp");
+		setTitle("Schafkopf-App");
 		this.setSize(1290, 700);
 		//arrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrg
 		this.setResizable(false);
@@ -177,20 +174,17 @@ public class Graphik extends JFrame implements View {
 	}
 	
 	/**
-	 * aktualisiert das Model
+	 * Aktualisiert das Model
+	 * @param model
 	 */
-	public void update(ModelMVC model) {
-		this.model = model;	
-		//Extrahiert das Model aus dem MVC-Wrapper
-		Model m = this.model.gibModel();
-		
+	public void setModel(Model model) {
 		//aktualiseren der Anzeige
-		spielerKarten.update(m.gibSpielerKarten(ID));
-		
-		tisch.setzeKarten(m.gibTisch());
-		
+		spielerKarten.update(model.gibSpielerKarten(ID));
+				
+		tisch.setzeKarten(model.gibTisch());
+				
 		for(int i = 0; i < 3; i++) {
-			gegenspielerKarten[i].entferneKarte(m.gibSpielerKarten(ID).size() - 1);
+			gegenspielerKarten[i].entferneKarte(model.gibSpielerKarten(ID).size() - 1);
 		}
 	}
 	
@@ -260,27 +254,27 @@ public class Graphik extends JFrame implements View {
 	/**
 	 * Spielzug des Spielers durchführen
 	 */
-	public void spiel() {
+	public Model spiel() {
 		Karte gespielt = spielerKarten.spiel();
-		Model m = model.gibModel();
 		boolean ok = false;
 		
 		do {
 			try {
-				m.setTisch(ID, gespielt);
-				if(control.erlaubt(m)) {
-					model.setzeModel(m);
+				model.setTisch(ID, gespielt);
+				if(control.erlaubt(model)) {
 					ok = true;
 				} else
-					m.undo(ID);
+					model.undo(ID);
 			} catch (Exception e) {
 				e.printStackTrace();
 				//nächster Versuch
-				m.undo(ID);
+				model.undo(ID);
 				continue;
 			}
 			
 		} while(!ok);
+		
+		return model;
 	}
 	
 	/**
@@ -288,7 +282,7 @@ public class Graphik extends JFrame implements View {
 	 * @param mod
 	 */
 	public void setzeModus(modus mod) {
-		control = new Regelwahl().wahl(mod, model.gibModel(), ID);
+		control = new Regelwahl().wahl(mod, model, ID);
 	}
 	
 	/**
@@ -311,7 +305,7 @@ public class Graphik extends JFrame implements View {
 					|| m.equals(modus.SAUSPIELherz)
 					|| m.equals(modus.SAUSPIELschellen)) {
 				Karte.farbe f = dialog.farbe(m);
-				if(new Regelwahl().sauspielMoeglich(f, model.gibModel(), ID)) {
+				if(new Regelwahl().sauspielMoeglich(f, model, ID)) {
 					
 					dialog.dispose();
 					fertig = true;
@@ -321,7 +315,7 @@ public class Graphik extends JFrame implements View {
 					continue;
 				}
 			} if(m.equals(modus.SI)) {
-				if(new Regelwahl().siMoeglich(model.gibModel(), ID)) {
+				if(new Regelwahl().siMoeglich(model, ID)) {
 					dialog.dispose();
 					fertig = true;
 					return m;

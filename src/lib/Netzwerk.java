@@ -171,6 +171,7 @@ public abstract class Netzwerk {
 			output = "§";
 		}
 		out.println(output);
+		System.out.println("[PRINT] " + output);
 	}
 	
 	/**
@@ -188,35 +189,36 @@ public abstract class Netzwerk {
 	 */
 	protected String einlesen() throws Exception {
 		String input = in.readLine();
+		System.out.println("[READ] " + input);
 		
 		//§ kommt nicht in der Ausgabe vor!!
 		if(input.equals("§")) {
 			input = "";
 		}
 		
-		return input;
+		return input; 
 	}
 	
 	/**
-	 * Schreibt einen Datensatz mit Steuerbefehl in den Stream
-	 * @param steuer
+	 * Schreibt einen Datensatz mit Flag in den Stream
+	 * @param flag
 	 * @param data
 	 * @throws Exception
 	 */
-	public void print(String steuer, String data) throws Exception {
+	public void print(String flag, String data) throws Exception {
 		String[] d = new String[1];
 		d[0] = data;
-		print(steuer, d);
+		print(flag, d);
 	}
 	
 	/**
-	 * Schreibt eine Reihe von Datensätzen mit Steuerbefehl
-	 * @param steuer
+	 * Schreibt eine Reihe von Datensätzen mit Falg
+	 * @param flag
 	 * @param data
 	 * @throws Exception
 	 */
-	public void print(String steuer, String[] data) throws Exception {
-		send(steuer);
+	public void print(String flag, String[] data) throws Exception {
+		send(flag);
 		for(int i = 0; i < data.length; i++) {
 			send(data[i]);
 		}
@@ -224,20 +226,20 @@ public abstract class Netzwerk {
 	}
 	
 	/**
-	 * Sendet ein Model mit Steuerbefehl
-	 * @param steuer
+	 * Sendet ein Model mit Flag
+	 * @param flag
 	 * @param data
 	 * @throws Exception
 	 */
-	public void printModel(String steuer, Model data) throws Exception {
+	public void printModel(String flag, Model data) throws Exception {
 		send("!MODEL");
-		send(steuer);
+		send(flag);
 		ModelSenden(data);
 	}
 	
 	/**
 	 * Liest eine Reihe von Datensätzen
-	 * @return Steuerbefehl und Datensätze
+	 * @return Flag und Datensätze
 	 * @throws Exception
 	 */
 	public Object[] read() throws Exception {
@@ -259,7 +261,7 @@ public abstract class Netzwerk {
 	
 	/**
 	 * Liest ein Model
-	 * @return Steuerbefehl und Model
+	 * @return Flag und Model
 	 * @throws Exception
 	 */
 	protected Object[] readModel() throws Exception {

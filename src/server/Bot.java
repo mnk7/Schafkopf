@@ -108,7 +108,7 @@ public class Bot implements Spieler {
 	}
 
 	@Override
-	public String gibAntwort() {
+	public String gibAntwort(String flag) {
 		// TODO Auto-generated method stub
 		return null;
 	}

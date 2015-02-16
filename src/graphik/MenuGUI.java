@@ -86,7 +86,7 @@ public class MenuGUI extends JFrame {
 		//Fenster
 		this.setSize(330, 150);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setTitle("SCHOAFKOPF-APP");
+		this.setTitle("SCHAFKOPF-APP");
 		this.setResizable(false);
 		
 		//Icon der Anwendung setzen

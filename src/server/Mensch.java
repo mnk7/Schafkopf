@@ -6,6 +6,7 @@
 package server;
 
 import java.net.Socket;
+import java.util.HashMap;
 
 import lib.Karte;
 import lib.Model;
@@ -23,7 +24,7 @@ public class Mensch implements Spieler {
 	private String name;
 	
 	//speichert neueste antworten
-	private String antwort;
+	private HashMap<String, Object> antwort;
 	private Model model;
 	private Karte karte;
 
@@ -35,7 +36,7 @@ public class Mensch implements Spieler {
 		
 		beenden = false;
 		
-		antwort = "";
+		antwort = new HashMap<String, Object>();
 		
 		this.server = server;
 		
@@ -62,22 +63,22 @@ public class Mensch implements Spieler {
 				case "!NAME":
 					name = data[1].toString();
 					continue;
+				case "!SPIELSTDU":
+					antwort.put(data[0].toString(), data[1]);
+					continue;
+				case "!KONTRA":
+					antwort.put(data[0].toString(), data[1]);
+					continue;
 				case "!ERSTE3":
-					antwort = data[1].toString();
+					antwort.put(data[0].toString(), data[1]);
 					continue;
 				case "!SPIEL":
 					model = (Model) data[1];
 					modelupdate = true;
 					continue;
-				case "!SPIELSTDU":
-					antwort = data[1].toString();
-					continue;
-				case "!KONTRA":
-					antwort = data[1].toString();
-					continue;
 				case "!HOCHZEIT":
 					//Antwort: JA + Karte oder NEIN
-					antwort = data[1].toString();
+					antwort.put(data[0].toString(), data[1]);
 					if(antwort.equals("JA")) {
 						model = (Model) data[2];
 						modelupdate = true;
@@ -103,26 +104,33 @@ public class Mensch implements Spieler {
 		}
 	}
 	
-	public synchronized String gibAntwort() {
+	public synchronized String gibAntwort(String flag) {
+		String a = "";
 		//Solange keine Antwort da ist...
-		while(antwort == null) {
-			//vllt. Observer-Pattern?
+		do {
+			//aktives Warten
 			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
+				//Wenn null zurückgegeben wird kann ein Fehler auftreten
+				a = antwort.get(flag).toString();
+				if(a == null) {
+					a = "";
+				}
+				
+				Thread.sleep(300);
+			} catch (Exception e) {
+				a = "";
+				continue;
 			}
-		}
+		} while(a.equals(""));
 		
-		String a = antwort;
-		//Eingelesene Antwort löschen
-		antwort = null;
+		antwort.remove(flag);
 		return a;
 	}
 	
 	public Model gibModel() {
 		while(!modelupdate) {
 			try {
-				Thread.sleep(100);
+				Thread.sleep(300);
 			} catch (InterruptedException e) {
 			}
 		}
@@ -139,7 +147,7 @@ public class Mensch implements Spieler {
 		setzeModel(model);
 		netzwerk.printModel("!ERSTE3", model);			
 		//horcht nach der Antwort	
-		if(gibAntwort().equals("JA")) {
+		if(gibAntwort("!ERSTE3").equals("JA")) {
 			return true;
 		} else {
 			return false;
@@ -165,7 +173,7 @@ public class Mensch implements Spieler {
 
 	public modus spielstDu(Model model) throws Exception {
 		netzwerk.printModel("!SPIELSTDU", model);
-		return modus.valueOf(gibAntwort());
+		return modus.valueOf(gibAntwort("!SPIELSTDU"));
 	} 
 	
 	public void spieler(int spielt, int mitspieler) throws Exception {
@@ -180,7 +188,7 @@ public class Mensch implements Spieler {
 		netzwerk.print("!MODUS", m.toString());
 		
 		//gibt zurück, ob Kontra gegeben wurde
-		if(gibAntwort().equals("JA")) {
+		if(gibAntwort("!MODUS").equals("JA")) {
 			return true;
 		} else {
 			return false;
@@ -203,7 +211,7 @@ public class Mensch implements Spieler {
 	public String gibName() {
 		while(name == null) {
 			try {
-				Thread.sleep(100);
+				Thread.sleep(300);
 			} catch (Exception e) {
 			}
 		}
@@ -224,8 +232,7 @@ public class Mensch implements Spieler {
 
 	public Karte gibKarte() throws InterruptedException {	
 		while(karte == null) {
-			//vlt. Observer-Pattern?
-			Thread.sleep(100);
+			Thread.sleep(300);
 		}
 		Karte k = karte;
 		//löscht die eingelesene Karte, um nicht zweimal die gleiche zurückzugeben
@@ -235,7 +242,7 @@ public class Mensch implements Spieler {
 
 	public boolean hochzeit() throws Exception {
 		netzwerk.print("!HOCHZEIT", "");
-		if(gibAntwort().equals("JA")) {
+		if(gibAntwort("!HOCHZEIT").equals("JA")) {
 			return true;
 		} else {
 			return false;
@@ -246,9 +253,9 @@ public class Mensch implements Spieler {
 		String[] data = new String[4];
 		for(int i = 0; i < 4; i++) {
 			if(geklopft[i]) {
-				data[i] = "true";
+				data[i] = "JA";
 			} else {
-				data[i] = "false";
+				data[i] = "NEIN";
 			}
 		}
 		netzwerk.print("!GEKLOPFT", data);
@@ -258,9 +265,9 @@ public class Mensch implements Spieler {
 		String[] data = new String[4];
 		for(int i = 0; i < 4; i++) {
 			if(kontra[i]) {
-				data[i] = "true";
+				data[i] = "JA";
 			} else {
-				data[i] = "false";
+				data[i] = "NEIN";
 			}
 		}
 		netzwerk.print("!KONTRA", data);
