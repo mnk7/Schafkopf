@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -31,7 +32,7 @@ import regeln.Sauspiel;
 
 public class Graphik extends JFrame {	
 	
-	Model model;
+	private Model model;
 	
 	//Enthält die Controll -> kontrolliert einen Spielzug
 	private Control control;
@@ -178,13 +179,14 @@ public class Graphik extends JFrame {
 	 * @param model
 	 */
 	public void setModel(Model model) {
+		this.model = model;
 		//aktualiseren der Anzeige
-		spielerKarten.update(model.gibSpielerKarten(ID));
+		spielerKarten.update(this.model.gibSpielerKarten(ID));
 				
-		tisch.setzeKarten(model.gibTisch());
+		tisch.setzeKarten(this.model.gibTisch());
 				
 		for(int i = 0; i < 3; i++) {
-			gegenspielerKarten[i].entferneKarte(model.gibSpielerKarten(ID).size() - 1);
+			gegenspielerKarten[i].entferneKarte(this.model.gibSpielerKarten(ID).size() - 1);
 		}
 	}
 	
@@ -234,20 +236,19 @@ public class Graphik extends JFrame {
 	 * @param text
 	 */
 	private void nachricht(int spielerID, String text) {
-		if(spielerID == ID)
+		if(spielerID == ID) {
 			spielerMeldungen.nachricht(text);
-		else {
-			int start = ID;
+		} else {
+			//Differenz zwischen eigener ID und der des anderen Spielers
+			//alias wie weit sitzt dieser Spieler entfernt
+			int nr = ID - spielerID;
 			
-			for(int i = 0; i < 3; i++) {
-				//Der Spieler links vom vorherigen Spieler
-				start++;
-				//Nach Nr. 3 wird neu begonnen
-				start %= 4;
-				
-				//Gegenspieler den richtigen Namen zuweisen
-				gegenspielerKarten[i].nachricht(text);
+			//Wenn nr negativ ist, "4 mal in die richtige Richtung" - "Schritte in die falsche Richtung"
+			if(nr < 0) {
+				nr += 4;
 			}
+			
+			gegenspielerKarten[nr - 1].nachricht(text);
 		}
 	}
 	
@@ -347,10 +348,11 @@ public class Graphik extends JFrame {
 	 * @return
 	 */
 	public String kontra() {
-		if(javax.swing.JOptionPane.showConfirmDialog(this, "Kontra?") == 0)
+		if(javax.swing.JOptionPane.showConfirmDialog(this, "Kontra?") == 0) {
 			return "JA";
-		else
+		} else {
 			return "NEIN";	
+		}
 	}
 	
 	/**
@@ -385,8 +387,9 @@ public class Graphik extends JFrame {
 	 * @return
 	 */
 	public String hochzeit() {
-		if(JOptionPane.showConfirmDialog(this, "Willst du heiraten?") == JOptionPane.OK_OPTION)
+		if(JOptionPane.showConfirmDialog(this, "Willst du heiraten?") == JOptionPane.OK_OPTION) {
 			return "JA";
+		}
 		return "NEIN";
 	}
 

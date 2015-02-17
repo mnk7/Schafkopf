@@ -117,12 +117,12 @@ public class Client{
 		}
 	}
 	
-	private void name(Object[] data) throws Exception {
+	private synchronized void name(Object[] data) throws Exception {
 		//Senden des Namens
 		netzwerk.print("!NAME", name);
 	}
 	
-	private void mitspieler(Object[] data) {
+	private synchronized void mitspieler(Object[] data) {
 		//Namen der Mitspieler empfangen
 		String[] namen = new String[4];
 		for(int i = 0; i < 4; i++) {
@@ -132,20 +132,20 @@ public class Client{
 		graphik.setzeNamen(namen);
 	}
 	
-	private void erste3(Object[] data) throws Exception {
+	private synchronized void erste3(Object[] data) throws Exception {
 		//Model empfangen
 		graphik.setModel((Model) data[1]);
 		//Klopfen des Spielers abwarten
 		netzwerk.print("!ERSTE3", graphik.klopfstDu());
 	}
 	
-	private void spiel(Object[] data) throws Exception {
+	private synchronized void spiel(Object[] data) throws Exception {
 		//Model empfangen
 		graphik.setModel((Model) data[1]);
 		netzwerk.printModel("!SPIEL", graphik.spiel());
 	}
 	
-	private void spielstdu(Object[] data) throws Exception {
+	private synchronized void spielstdu(Object[] data) throws Exception {
 		//empfängt das neue Model
 		graphik.setModel((Model) data[1]);
 		//Sendet den Spielmodus
@@ -163,19 +163,19 @@ public class Client{
 		}
 	}
 	
-	private void modus(Object[] data) throws Exception {
+	private synchronized void modus(Object[] data) throws Exception {
 		//Empfangen des Modus des Spiels
 		mod = modus.valueOf(data[1].toString());
 		netzwerk.print("!KONTRA", String.valueOf(graphik.kontra()));
 	}
 	
-	private void spielt(Object[] data) {
+	private synchronized void spielt(Object[] data) {
 		int spielt = (int) data[1];
 		int mitspieler = (int) data[2];
 		graphik.spielt(spielt, mitspieler);
 	}
 	
-	private void sieger(Object[] data) {
+	private synchronized void sieger(Object[] data) {
 		//empfängt die Sieger
 		int s1 = (int) data[1];
 		int s2 = (int) data[2];
@@ -184,7 +184,7 @@ public class Client{
 		graphik.sieger(s1, s2);
 	}
 	
-	private void id(Object[] data) {
+	private synchronized void id(Object[] data) {
 		//ID des Spielers empfangen
 		ID = Integer.parseInt(data[1].toString());
 		
@@ -192,7 +192,7 @@ public class Client{
 		graphik.setID(ID);
 	}
 	
-	private void hochzeit(Object[] data) throws Exception {
+	private synchronized void hochzeit(Object[] data) throws Exception {
 		String antwort = graphik.hochzeit();
 		
 		if(antwort.equals("JA")) {
@@ -208,26 +208,28 @@ public class Client{
 		}
 	}
 	
-	private void kontra(Object[] data) {
+	private synchronized void kontra(Object[] data) {
 		boolean[] kontra = new boolean[4];
-		//data[0] enthält den Steuerbefehl
+		//data[0] enthält das Flag
 		for(int i = 1; i < 5; i++) {
-			if(data[i].toString().equals("JA"))
+			if(data[i].toString().equals("JA")) {
 				kontra[i] = true;
-			else 
+			} else {
 				kontra[i] = false;
+			}
 		}
 		graphik.kontra(kontra);
 	}
 	
-	private void geklopft(Object[] data) {
+	private synchronized void geklopft(Object[] data) {
 		boolean[] geklopft = new boolean[4];
-		//data[0] enthält den Steuerbefehl
+		//data[0] enthält das Flag
 		for(int i = 1; i < 5; i++) {
-			if(data[i].toString().equals("JA"))
+			if(data[i].toString().equals("JA")) {
 				geklopft[i - 1] = true;
-			else
+			} else {
 				geklopft[i - 1] = false;
+			}
 		}
 		graphik.geklopft(geklopft);
 	}

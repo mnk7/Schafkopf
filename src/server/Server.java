@@ -309,7 +309,7 @@ public class Server extends Thread {
         	}
         	
         	//Wenn eine Hochzeit nicht erlaubt ist, wird unter den restlichen Spielen ein höchstes ermittelt
-        	if(mod.equals(modus.HOCHZEIT) && !hochzeit()) {
+        	if(mod.equals(modus.HOCHZEIT) && !hochzeit(spielt)) {
         		spielfolge.remove(spielt);
         		spielt = -1;
         		hoechstesSpiel(spielfolge);
@@ -320,7 +320,7 @@ public class Server extends Thread {
          * Führt eine Hochzeit zwischen zwei Spielern durch
          * @throws Exception 
          */
-        private boolean hochzeit() throws Exception {
+        private boolean hochzeit(int spielt) throws Exception {
         	Hochzeit h = (Hochzeit) regeln;
     		
     		Karte angebot = spieler.get(spielt).gibKarte();
@@ -359,24 +359,33 @@ public class Server extends Thread {
         
         private void kontra() throws Exception {
         	//Sendet den Modus an alle Spieler und empfängt, ob Kontra gegeben wurde
-        	for(int i = 0; i < 4; i++) {
-				try {
-					kontra[i] = spieler.get(i).modus(mod);
-					//Wenn eine Hochzeit gespielt wird, werden beide Spielenden gesendet
-					int mit = 4;
-					if(mod.equals(modus.HOCHZEIT)) {
-						mit = mitspieler;
-					}
-					spieler.get(i).spieler(spielt, mit);
-				} catch (Exception e) {
-					e.printStackTrace(); 
-				}
-        	}	
-        	
-        	for(int i = 0; i < 4; i++) {
-        		spieler.get(i).kontra(kontra);
-        	}
+        	kontraAbfragen();
+        	spielerSenden();
+        	kontraSenden();
         }
+        
+        	private void kontraAbfragen() throws Exception {
+        		for(int i = 0; i < 4; i++) {
+        			kontra[i] = spieler.get(i).modus(mod);
+        		}
+        	}
+        	
+        	private void spielerSenden() throws Exception {
+        		for(int i = 0; i < 4; i++) {
+    				//Wenn eine Hochzeit gespielt wird, werden beide Spielenden gesendet
+    				int mit = 4;
+    				if(mod.equals(modus.HOCHZEIT)) {
+    					mit = mitspieler;
+    				}
+    				spieler.get(i).spieler(spielt, mit);
+            	}	
+        	}
+        	
+        	private void kontraSenden() throws Exception {
+        		for(int i = 0; i < 4; i++) {
+            		spieler.get(i).kontra(kontra);
+            	}
+        	}
         
         /**
          * Der nächste spieler ist an der Reihe

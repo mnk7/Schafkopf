@@ -44,7 +44,7 @@ public class MenuGUI extends JFrame {
 	private JTextField IPtf;
 	private JTextField NAMEtf;
 	
-	private String logo = "./Logo.gif";
+	private String logo = "Logo.gif";
 	
 	public MenuGUI() {
 		super();
