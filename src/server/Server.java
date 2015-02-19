@@ -373,11 +373,8 @@ public class Server extends Thread {
         	//Spielen
         	for(int i = 0; i < 6; i++) {
         		for(int j = 0; j < 4; j++) {
-        			//Übergibt dem Spieler das aktuelle Model und...
-        			spieler.get(i).spielen(model);
-        			//...empfängt das aktualisierte
-        			model = spieler.get(i).gibModel();
-        			
+        			spielModelSenden(i);
+        			spielModelEmpfangen(i);
         			//Wenn ein Fehler auftritt beenden
         			if(model == null) {
         				nocheins = true;
@@ -392,6 +389,16 @@ public class Server extends Thread {
         		model.Stich(sieger);
         	}
         }
+        
+        	private void spielModelSenden(int spielerID) throws Exception {
+        		//Übergibt dem Spieler das aktuelle Model und...
+    			spieler.get(spielerID).spielen(model);
+        	}
+        	
+        	private void spielModelEmpfangen(int spielerID) {
+        		//...empfängt das aktualisierte
+    			model = spieler.get(spielerID).gibModel();
+        	}
         
         /**
          * Der nächste spieler ist an der Reihe

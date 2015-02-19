@@ -23,7 +23,7 @@ public class Meldungen extends JPanel{
 		for(int i = 0; i < meldung.length; i++) {
 			meldung[i] = new JLabel();
 			this.add(meldung[i]);
-			meldung[i].setBounds(0, i*20, 200, 20);
+			meldung[i].setBounds(0, i*20, 300, 20);
 		}
 	}
 	
@@ -33,6 +33,7 @@ public class Meldungen extends JPanel{
 	 */
 	public void festeAnzeige(String text) {
 		meldung[festeAnzeigen].setText(text);
+		meldung[festeAnzeigen].setForeground(java.awt.Color.DARK_GRAY);
 	}
 	
 	/**
@@ -45,7 +46,7 @@ public class Meldungen extends JPanel{
 			meldung[i].setText(meldung[i - 1].getText());
 		}
 		//Zeigt die neue Meldung an
-		meldung[1].setText("  --->" + text);
+		meldung[1].setText(" > " + text);
 	}
 	
 	/**

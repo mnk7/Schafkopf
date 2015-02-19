@@ -181,24 +181,22 @@ public class Model {
 	 */
 	public ArrayList<Karte> setTisch(int spielerID, Karte karte) throws Exception {
 		//Eine Vorsichtsmaßnahme um falsche Züge zu verhindern
-		boolean spielerHatKarteNoch = false;
+		int stelleKarte = -1;
 		for(int i = 0; i < spielerhand.get(spielerID).size(); i++) {
 			if(karte.vergleiche(spielerhand.get(spielerID).get(i))) {
-				spielerHatKarteNoch = true;
+				stelleKarte = i;
 			}
 		}
 		
-		if(spielerHatKarteNoch) {
+		if(stelleKarte != -1) {
 			tisch[spielerID] = karte;
 			
 			//Der Spieler haelt die Karte nicht mehr
-			spielerhand.remove(karte);
+			spielerhand.get(spielerID).remove(stelleKarte);
 			
 		} else {
 			throw new Exception("Der Spieler besitzt diese Karte nicht!");
 		}
-		
-		tisch[spielerID] = karte;
 		
 		return spielerhand.get(spielerID);
 	}

@@ -79,10 +79,6 @@ public class Mensch implements Spieler {
 				case "!HOCHZEIT":
 					//Antwort: JA + Karte oder NEIN
 					antwort.put(data[0].toString(), data[1]);
-					if(antwort.get("!HOCHZEIT").equals("JA")) {
-						model = (Model) data[2];
-						modelupdate = true;
-					}
 					continue;
 				case "!KARTE":	
 					karte = new Karte(
@@ -181,14 +177,14 @@ public class Mensch implements Spieler {
 				String.valueOf(spielt),
 				String.valueOf(mitspieler)
 		};
-		netzwerk.print("!SPIEL", data);
+		netzwerk.print("!SPIELT", data);
 	}
 
 	public boolean modus(lib.Model.modus m) throws Exception {
 		netzwerk.print("!MODUS", m.toString());
 		
 		//gibt zurück, ob Kontra gegeben wurde
-		if(gibAntwort("!MODUS").equals("JA")) {
+		if(gibAntwort("!KONTRA").equals("JA")) {
 			return true;
 		} else {
 			return false;

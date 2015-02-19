@@ -111,9 +111,9 @@ public class Regelwahl {
 			if(y.get(i).gibFarbe().equals(farb) 
 					&& y.get(i).gibWert().equals(Karte.wert.SAU) 
 					&& !istTrumpf(y.get(i).gibWert(),y.get(i).gibFarbe())){
-				return true;
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 }

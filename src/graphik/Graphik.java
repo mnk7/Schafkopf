@@ -240,7 +240,7 @@ public class Graphik extends JFrame {
 		boolean ok = false;
 		
 		do {
-			model.setTisch(ID, gespielt);
+			spielerKarten.update(model.setTisch(ID, gespielt));
 			if(control.erlaubt(model)) {
 				ok = true;
 			} else {
@@ -257,7 +257,7 @@ public class Graphik extends JFrame {
 	 */
 	public void setzeModus(modus mod) {
 		control = new Regelwahl().wahl(mod, model, ID);
-		nachricht(ID, "Es wird ein " + mod.toString() + "gespielt");
+		nachricht(ID, "Es wird ein " + mod.toString() + " gespielt");
 	}
 	
 	/**
@@ -388,7 +388,7 @@ public class Graphik extends JFrame {
 	 * @param mitspieler 
 	 */
 	public void spielt(int spielt, int mitspieler) { 
-		 nachricht(spielt, "Ich spiel!");
+		 nachricht(spielt, "Ich spiel");
 		 if(mitspieler != 4) {
 			 nachricht(mitspieler, "Und ich hab geheiratet");
 		 }

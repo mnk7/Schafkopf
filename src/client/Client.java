@@ -167,12 +167,13 @@ public class Client{
 	private synchronized void modus(Object[] data) throws Exception {
 		//Empfangen des Modus des Spiels
 		mod = modus.valueOf(data[1].toString());
+		graphik.setzeModus(mod);
 		netzwerk.print("!KONTRA", String.valueOf(graphik.kontra()));
 	}
 	
 	private synchronized void spielt(Object[] data) {
-		int spielt = (int) data[1];
-		int mitspieler = (int) data[2];
+		int spielt = Integer.parseInt(data[1].toString());
+		int mitspieler = Integer.parseInt(data[2].toString());
 		graphik.spielt(spielt, mitspieler);
 	}
 	
@@ -214,9 +215,9 @@ public class Client{
 		//data[0] enthält das Flag
 		for(int i = 1; i < 5; i++) {
 			if(data[i].toString().equals("JA")) {
-				kontra[i] = true;
+				kontra[i - 1] = true;
 			} else {
-				kontra[i] = false;
+				kontra[i - 1] = false;
 			}
 		}
 		graphik.kontra(kontra);
