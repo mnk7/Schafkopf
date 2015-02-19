@@ -118,6 +118,10 @@ public interface Spieler{
 	 */
 	public void kontra(boolean[] kontra) throws Exception;
 
+	/**
+	 * Aktualisiert das Model
+	 * @param model
+	 */
 	public void setzeModel(Model model);
 
 	/**
@@ -130,5 +134,16 @@ public interface Spieler{
 	 * und beendet Server-seitig
 	 */
 	public void abmelden();
+ 
+	/**
+	 * schließt die Runde für die Spieler ab und sendet den Kontostand
+	 */
+	public void rundeZuende(int kontostand);
+
+	/**
+	 * Gibt den Kontostand aus
+	 * @param integer
+	 */
+	public void konto(int kontostand);
 
 }

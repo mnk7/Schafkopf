@@ -105,6 +105,12 @@ public class Client{
 				case "!GEKLOPFT":
 					geklopft(data);
 					continue;
+				case "!ENDE":
+					abschliessen(Integer.parseInt(data[1].toString()));
+					continue;
+				case "!KONTO":
+					konto(Integer.parseInt(data[1].toString()));
+					continue;
 				case "!BEENDEN":
 					beenden();
 					continue;
@@ -234,6 +240,16 @@ public class Client{
 			}
 		}
 		graphik.geklopft(geklopft);
+	}
+	
+	private synchronized void abschliessen(int konto) {
+		graphik.konto(konto);
+		model = new Model();
+		graphik.setModel(model);
+	}
+	
+	private synchronized void konto(int konto) {
+		graphik.konto(konto);
 	}
 	
 	/**

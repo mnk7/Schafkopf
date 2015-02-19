@@ -113,4 +113,16 @@ public class Bot implements Spieler {
 		return null;
 	}
 
+	@Override
+	public void rundeZuende(int kontostand) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void konto(int kontostand) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

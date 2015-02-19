@@ -35,6 +35,10 @@ public class Server extends Thread {
         
         //Speichert die Höhe des Stocks
         private int stock;
+        //Speichert den Tarif
+        private int tarif;
+        //Geld der einzelnen Spieler
+        private ArrayList<Integer> konto;
         
         //speichert den Spielmodus
         private modus mod;
@@ -83,6 +87,11 @@ public class Server extends Thread {
         	regelwahl = new Regelwahl();
         	
         	stock = 0;
+        	tarif = 10;
+        	konto = new ArrayList<Integer>();
+        	for(int i = 0; i < 4; i++) {
+        		konto.add(10*tarif);
+        	}
         	
         	nocheins = true;
         	
@@ -151,6 +160,7 @@ public class Server extends Thread {
         		
         		//Übergibt die Spieler dem Model und gibt jedem Spieler eine ID, die seiner Stelle in <spieler> entspricht
         		spielerVorbereiten();
+        		kontoAusgeben();
 
         		//Mischt die Karten und teilt die ersten 3 aus
 	        	model.mischen();
@@ -169,13 +179,17 @@ public class Server extends Thread {
 	        	//will niemand spielen geht es zur nächsten Runde
 	        	if(mod.equals(modus.NICHTS) || spielt == -1) {
 	        		stock();
-	        		break;
+	        		kontostand();
+	        		naechster();
+	        		continue;
 	        	}
 	        	//legt die Regeln fest
 	        	regeln = regelwahl.wahl(mod, model, spielt);
 	        	if(regeln == null) {
 	        		stock();
-	        		break;
+	        		kontostand();
+	        		naechster();
+	        		continue;
 	        	}
 	        	
 	        	//Wenn keine Hochzeit gespielt wird, Mitspieler feststellen
@@ -189,11 +203,14 @@ public class Server extends Thread {
 	        	//Wenn ein Si gespielt wird die Runde gar nicht erst spielen
 	        	if(mod.equals(modus.SI)) {
 	        		rundeBeenden();
+	        		kontostand();
+	        		naechster();
 	        		continue;
 	        	}
 	        	
 	        	spiel();
 
+	        	kontostand();
 	        	rundeBeenden();
 	        	
 	        	//neu Runde
@@ -375,11 +392,6 @@ public class Server extends Thread {
         		for(int j = 0; j < 4; j++) {
         			spielModelSenden(i);
         			spielModelEmpfangen(i);
-        			//Wenn ein Fehler auftritt beenden
-        			if(model == null) {
-        				nocheins = true;
-        				break;
-        			}
         		}
         		//Wenn ein Fehler aufgetreten ist
         		if(nocheins) break;
@@ -456,10 +468,12 @@ public class Server extends Thread {
         	//Den Spielern Geld abziehen oder hinzufügen
         	for(int i = 0; i < 4; i++) {
         		if(i == spielt || i == mitspieler) {
-        			
+        			//Vorläufig
+        			konto.set(i, konto.get(i) + tarif);
         		}
         		if(i == spielt + 10 || i == mitspieler + 10) {
-        			
+        			//Vorläufig
+        			konto.set(i, konto.get(i) + tarif);
         		}
         	}
         }
@@ -468,7 +482,22 @@ public class Server extends Thread {
          * Füllt den Stock auf
          */
         private void stock() {
-        	
+        	stock += (tarif * 4);
+        	for(int i = 0; i < 4; i++) {
+        		konto.set(i, konto.get(i) - tarif);
+        	}
+        }
+        
+        private void kontoAusgeben() {
+        	for(int i = 0; i < 4; i++) {
+        		spieler.get(i).konto(konto.get(i));
+        	}
+        }
+        
+        private void kontostand() {
+        	for(int i = 0; i < 4; i++) {
+        		spieler.get(i).rundeZuende(konto.get(i));
+        	}
         }
         
         /**

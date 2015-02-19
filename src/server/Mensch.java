@@ -268,6 +268,23 @@ public class Mensch implements Spieler {
 		}
 		netzwerk.print("!KONTRA", data);
 	}
+	
+	public void konto(int kontostand) {
+		try {
+			netzwerk.print("!KONTO", String.valueOf(kontostand));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	 
+	public void rundeZuende(int kontostand) {
+		try {
+			netzwerk.print("!ENDE", String.valueOf(kontostand));
+			antwort.clear();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void beenden() {
 		beenden = true;

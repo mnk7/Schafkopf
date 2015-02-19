@@ -64,6 +64,7 @@ public class Graphik extends JFrame {
 			public void windowClosing(WindowEvent arg0) {
 			}
 			public void windowActivated(WindowEvent e) {
+				repaint();
 			}
 			public void windowClosed(WindowEvent e) {
 				client.abmelden(); 
@@ -75,6 +76,7 @@ public class Graphik extends JFrame {
 			public void windowIconified(WindowEvent e) {
 			}
 			public void windowOpened(WindowEvent e) {
+				repaint();
 			}
 		});
 	}	
@@ -416,6 +418,10 @@ public class Graphik extends JFrame {
 				nachricht(i, "[Klopf] [Klopf]");
 			}
 		}
+	}
+	
+	public void konto(int kontostand) {
+		nachricht(ID, "Kontostand: " + String.valueOf(kontostand));
 	}
 	
 	public void beenden() {
