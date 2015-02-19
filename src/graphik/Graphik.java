@@ -25,6 +25,8 @@ public class Graphik extends JFrame {
 	private int ID;
 	private String[] namen;
 	
+	private boolean keinKontra;
+	
 	//GUI
 	//Karten des Spielers
 	private Spieler spielerKarten;
@@ -44,6 +46,8 @@ public class Graphik extends JFrame {
 		super();
 		//Vorerst keine ID setzen
 		ID = -1;
+		
+		keinKontra = false;
 		
 		this.model = model;
 		
@@ -247,6 +251,8 @@ public class Graphik extends JFrame {
 				ok = true;
 			} else {
 				model.undo(ID);
+				JOptionPane.showMessageDialog(this, "Diese Karte ist nicht erlaubt");
+				gespielt = spielerKarten.spiel();
 			}
 		} while(!ok);
 		
@@ -327,10 +333,14 @@ public class Graphik extends JFrame {
 	 * @return
 	 */
 	public String kontra() {
-		if(javax.swing.JOptionPane.showConfirmDialog(this, "Kontra?") == 0) {
-			return "JA";
+		if(!keinKontra) {
+			if(javax.swing.JOptionPane.showConfirmDialog(this, "Kontra?") == 0) {
+				return "JA";
+			} else {
+				return "NEIN";	
+			}
 		} else {
-			return "NEIN";	
+			return "NEIN";
 		}
 	}
 	
@@ -390,10 +400,16 @@ public class Graphik extends JFrame {
 	 * @param mitspieler 
 	 */
 	public void spielt(int spielt, int mitspieler) { 
-		 nachricht(spielt, "Ich spiel");
-		 if(mitspieler != 4) {
-			 nachricht(mitspieler, "Und ich hab geheiratet");
-		 }
+		nachricht(spielt, "Ich spiel");
+		if(mitspieler != 4) {
+			nachricht(mitspieler, "Und ich hab geheiratet");
+		}
+		
+		if(ID == spielt || ID == mitspieler) {
+			keinKontra = true;
+		} else {
+			keinKontra = false;
+		}
 	}
 
 	/**

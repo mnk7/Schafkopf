@@ -19,46 +19,32 @@ public class Regelwahl {
 		switch (mod) {
 		case GEIERdu: 
 		case GEIER: 
-				x = new Geier(); 
-			break;
+			return new Geier(); 
 		case WENZdu:  
 		case WENZ: 
-			x = new Wenz(); 
-			break;
+			return new Wenz(); 
 		case SOLOeichelDU: 
 		case SOLOeichel: 
-			x = new Solo(Karte.farbe.EICHEL); 
-			break; 
+			return new Solo(Karte.farbe.EICHEL); 
 		case SOLOgrasDU: 
 		case SOLOgras: 
-			x = new Solo(Karte.farbe.GRAS); 
-			break;
+			return new Solo(Karte.farbe.GRAS); 
 		case SOLOherzDU: 
 		case SOLOherz: 
-			x = new Solo(Karte.farbe.HERZ); 
-			break;
+			return new Solo(Karte.farbe.HERZ); 
 		case SOLOschellenDU: 
 		case SOLOschellen: 
-			x = new Solo(Karte.farbe.SCHELLEN); 
-			break;
+			return new Solo(Karte.farbe.SCHELLEN); 
 		case SAUSPIELeichel: 
-			if(sauspielMoeglich(Karte.farbe.EICHEL, m, position)) 
-				x = new Sauspiel(Karte.farbe.EICHEL); 
-			break;
+			return new Sauspiel(Karte.farbe.EICHEL); 
 		case SAUSPIELgras: 
-			if(sauspielMoeglich(Karte.farbe.GRAS, m, position)) 
-				x = new Sauspiel(Karte.farbe.GRAS);
-			break;
+			return new Sauspiel(Karte.farbe.GRAS);
 		case SAUSPIELherz: 
-			if(sauspielMoeglich(Karte.farbe.HERZ, m, position)) 
-				x = new Sauspiel(Karte.farbe.HERZ);
-			break;
+			return new Sauspiel(Karte.farbe.HERZ);
 		case SAUSPIELschellen: 
-			if(sauspielMoeglich(Karte.farbe.SCHELLEN, m, position)) 
-				x = new Sauspiel(Karte.farbe.SCHELLEN);
-			break;
+			return new Sauspiel(Karte.farbe.SCHELLEN);
 		case HOCHZEIT: 
-			x = new Hochzeit();
+			return new Hochzeit();
 		}
 		return x;
 	}

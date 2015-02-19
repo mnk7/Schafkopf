@@ -100,7 +100,7 @@ public abstract class Netzwerk {
 		}
 		Karte[] tisch = new Karte[4];
 		Karte[] letzterStich = new Karte[4];
-		ArrayList<Integer> punkte = new ArrayList<Integer>();
+		ArrayList<Integer> punkte = this.model.gibPunkte();
 		
 		//Die Karten des Spielers
 		for(int i = 0; i < 6; i++) {

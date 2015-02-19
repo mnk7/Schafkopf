@@ -185,8 +185,8 @@ public class Client{
 	
 	private synchronized void sieger(Object[] data) {
 		//empfängt die Sieger
-		int s1 = (int) data[1];
-		int s2 = (int) data[2];
+		int s1 = Integer.parseInt(data[1].toString());
+		int s2 = Integer.parseInt(data[2].toString());
 
 		//und gibt sie an die Graphik weiter
 		graphik.sieger(s1, s2);

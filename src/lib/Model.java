@@ -275,7 +275,7 @@ public class Model {
     	if(nr2 > 12 && nr2 < 17) nr2 = 13;
     	
     	//Nur wenn der zweite Modus besser ist wird dieser zurückgegeben
-    	if(nr1 < nr2) return m1;
+    	if(nr1 > nr2) return m1;
     	else return m2;
     }
     
@@ -346,6 +346,14 @@ public class Model {
 			}
 		} catch(Exception e) {
 		}
+	}
+
+	/**
+	 * Setzt die Punkte der einzelnen Spieler
+	 * @param punkte
+	 */
+	public void setPunkte(ArrayList<Integer> punkte) {
+		this.punkte = punkte;
 	}
 	
 }

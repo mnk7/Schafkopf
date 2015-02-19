@@ -286,7 +286,19 @@ public class Server extends Thread {
         		}
         	}
         	
+        	modus[] werspieltwas = new modus[4];
+        	for(int i = 0; i < 4; i++) {
+        		werspieltwas[i] = spielfolge.get(i);
+        	}
+        	
         	hoechstesSpiel(spielfolge);
+        	
+        	//Wenn zwei Spieler das Gleiche spielen, spielt der, der zuerst spielt
+        	for(int i = werspieltwas.length - 1; i >= 0; i--) {
+        		if(werspieltwas[i].equals(mod)) {
+        			spielt = i;
+        		}
+        	}
         }
         
         /**
@@ -296,21 +308,14 @@ public class Server extends Thread {
          */
         private void hoechstesSpiel(ArrayList<modus> spielfolge) throws Exception {
         	//ermittelt das höchstwertige Spiel
-        	//Wenn zwei Spieler das Gleiche spielen, spielt der, der weiter vorn sitzt.
-        	//Deshalb wird spielfolge rückwärts durchlaufen
         	mod = spielfolge.get(spielfolge.size() - 1);
         	for(int i = spielfolge.size() - 2; i >= 0; i--) {
         		mod = model.werSpielt(mod, spielfolge.get(i));
-        		
-        		if(mod.equals(spielfolge.get(i))) {
-        			spielt = i;
-        		}
         	}
         	
         	//Wenn eine Hochzeit nicht erlaubt ist, wird unter den restlichen Spielen ein höchstes ermittelt
         	if(mod.equals(modus.HOCHZEIT) && !hochzeit(spielt)) {
         		spielfolge.remove(spielt);
-        		spielt = -1;
         		hoechstesSpiel(spielfolge);
         	}
         }
@@ -358,8 +363,8 @@ public class Server extends Thread {
         
         private void kontra() throws Exception {
         	//Sendet den Modus an alle Spieler und empfängt, ob Kontra gegeben wurde
-        	kontraAbfragen();
         	spielerSenden();
+        	kontraAbfragen();
         	kontraSenden();
         }
         
@@ -388,16 +393,21 @@ public class Server extends Thread {
         
         private void spiel() throws Exception {
         	//Spielen
+        	//Speichert, wer zuerst auskartet
+        	int start = 0;
         	for(int i = 0; i < 6; i++) {
         		for(int j = 0; j < 4; j++) {
-        			spielModelSenden(i);
-        			spielModelEmpfangen(i);
+        			//Es ist immer derjenige zuerst mit auskarten dran, der den letzten Stich gewonnen hat
+        			int spielerID = start + j;
+        			spielerID %= 4;
+        			
+        			spielModelSenden(spielerID);
+        			spielModelEmpfangen(spielerID);
         		}
-        		//Wenn ein Fehler aufgetreten ist
-        		if(nocheins) break;
         		
         		//einen Stich zuteilen
         		int sieger = regeln.sieger(model);
+        		start = sieger;
         		model.Stich(sieger);
         	}
         }
