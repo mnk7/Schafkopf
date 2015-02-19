@@ -1,5 +1,7 @@
 package client;
 
+import javax.swing.SwingUtilities;
+
 import lib.Karte;
 import lib.Model;
 import lib.Model.modus;
@@ -53,7 +55,6 @@ public class Client{
 			}
 		};
 		listener.setName("Schafkopf-Client");
-		
 		listener.start();
 		
 		graphik = new Graphik(model, this);
@@ -134,20 +135,20 @@ public class Client{
 	
 	private synchronized void erste3(Object[] data) throws Exception {
 		//Model empfangen
-		graphik.setModel((Model) data[1]);
+		graphikUpdate((Model) data[1]);
 		//Klopfen des Spielers abwarten
 		netzwerk.print("!ERSTE3", graphik.klopfstDu());
 	}
 	
 	private synchronized void spiel(Object[] data) throws Exception {
 		//Model empfangen
-		graphik.setModel((Model) data[1]);
+		graphikUpdate((Model) data[1]);
 		netzwerk.printModel("!SPIEL", graphik.spiel());
 	}
 	
 	private synchronized void spielstdu(Object[] data) throws Exception {
 		//empfängt das neue Model
-		graphik.setModel((Model) data[1]);
+		graphikUpdate((Model) data[1]);
 		//Sendet den Spielmodus
 		String antwort = graphik.spielstDu().toString();
 		netzwerk.print("!SPIELSTDU", antwort);
@@ -232,6 +233,15 @@ public class Client{
 			}
 		}
 		graphik.geklopft(geklopft);
+	}
+	
+	/**
+	 * Aktualisiert die Graphik
+	 * @param m
+	 */
+	private void graphikUpdate(Model m) {
+		graphik.setModel(m);
+		graphik.repaint();
 	}
 	
 	public void beenden() {

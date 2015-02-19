@@ -90,6 +90,7 @@ public class KartenLabel extends JLabel {
 		}
 		
 		this.setIcon(new ImageIcon(bild));
+		this.setVisible(true);
 	}
 	
 	//Für skalierbare Karten

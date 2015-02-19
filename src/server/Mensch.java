@@ -79,7 +79,7 @@ public class Mensch implements Spieler {
 				case "!HOCHZEIT":
 					//Antwort: JA + Karte oder NEIN
 					antwort.put(data[0].toString(), data[1]);
-					if(antwort.equals("JA")) {
+					if(antwort.get("!HOCHZEIT").equals("JA")) {
 						model = (Model) data[2];
 						modelupdate = true;
 					}
@@ -261,7 +261,7 @@ public class Mensch implements Spieler {
 		netzwerk.print("!GEKLOPFT", data);
 	}
 
-	public synchronized void kontra(boolean[] kontra) throws Exception {
+	public void kontra(boolean[] kontra) throws Exception {
 		String[] data = new String[4];
 		for(int i = 0; i < 4; i++) {
 			if(kontra[i]) {

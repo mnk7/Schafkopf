@@ -7,6 +7,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 
 import lib.Karte.farbe;
@@ -85,6 +86,7 @@ public class SpielmodusDialog extends JFrame {
 		while(rueckgabe == null) {
 			try {
 				Thread.sleep(300);
+				this.repaint();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -108,6 +110,8 @@ public class SpielmodusDialog extends JFrame {
 				return modus.SAUSPIELherz;
 			if(farbwahl.isSelected(farben[3].getModel()))
 				return modus.SAUSPIELschellen;
+			JOptionPane.showMessageDialog(this, "Wählen sie eine Farbe");
+			return null;
 		case "Geier":
 			if(tout.isSelected())
 				return modus.GEIERdu;
@@ -139,6 +143,8 @@ public class SpielmodusDialog extends JFrame {
 					return modus.SOLOschellenDU;
 				return modus.SOLOschellen;
 			}
+			JOptionPane.showMessageDialog(this, "Bitte wählen sie eine Farbe");
+			return null;
 		case "SI":
 			return modus.SI;
 		case "Nichts":

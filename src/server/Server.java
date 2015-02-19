@@ -299,8 +299,10 @@ public class Server extends Thread {
          */
         private void hoechstesSpiel(ArrayList<modus> spielfolge) throws Exception {
         	//ermittelt das höchstwertige Spiel
-        	mod = spielfolge.get(0);
-        	for(int i = 1; i < 4; i++) {
+        	//Wenn zwei Spieler das Gleiche spielen, spielt der, der weiter vorn sitzt.
+        	//Deshalb wird spielfolge rückwärts durchlaufen
+        	mod = spielfolge.get(spielfolge.size() - 1);
+        	for(int i = spielfolge.size() - 2; i >= 0; i--) {
         		mod = model.werSpielt(mod, spielfolge.get(i));
         		
         		if(mod.equals(spielfolge.get(i))) {
@@ -321,7 +323,7 @@ public class Server extends Thread {
          * @throws Exception 
          */
         private boolean hochzeit(int spielt) throws Exception {
-        	Hochzeit h = (Hochzeit) regeln;
+        	Hochzeit h = new Hochzeit();
     		
     		Karte angebot = spieler.get(spielt).gibKarte();
     		

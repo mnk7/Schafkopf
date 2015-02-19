@@ -30,6 +30,7 @@ public class KartenButton extends JButton {
 	public void setzeKarte(Karte karte) {
 		this.karte = karte;
 		label.setBild(this.karte);
+		this.setVisible(true);
 	}
 	
 	/**

@@ -326,4 +326,18 @@ public class Model {
 		return spielernamen;
 	}
 	
+	/**
+	 * [DEBUG] Gibt die Karten eines Spielers aus
+	 * @param spielerID
+	 */
+	public void ausgeben(int spielerID) {
+		try {
+			for(int i = 0; i < spielerhand.get(spielerID).size(); i++) {
+				System.out.println(spielerhand.get(spielerID).get(i).gibFarbe());
+				System.out.println(spielerhand.get(spielerID).get(i).gibWert());
+			}
+		} catch(Exception e) {
+		}
+	}
+	
 }

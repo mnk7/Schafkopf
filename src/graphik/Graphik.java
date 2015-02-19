@@ -78,26 +78,19 @@ public class Graphik extends JFrame {
 
 			public void windowClosing(WindowEvent arg0) {
 			}
-
 			public void windowActivated(WindowEvent e) {
 			}
-
 			public void windowClosed(WindowEvent e) {
 				client.abmelden(); 
 			}
-
 			public void windowDeactivated(WindowEvent e) {
 			}
-
 			public void windowDeiconified(WindowEvent e) {
 			}
-
 			public void windowIconified(WindowEvent e) {
 			}
-
 			public void windowOpened(WindowEvent e) {
 			}
-			
 		});
 	}	
 	
@@ -186,7 +179,7 @@ public class Graphik extends JFrame {
 		tisch.setzeKarten(this.model.gibTisch());
 				
 		for(int i = 0; i < 3; i++) {
-			gegenspielerKarten[i].entferneKarte(this.model.gibSpielerKarten(ID).size() - 1);
+			gegenspielerKarten[i].update(this.model.gibSpielerKarten(ID).size() - 1);
 		}
 	}
 	
@@ -241,7 +234,7 @@ public class Graphik extends JFrame {
 		} else {
 			//Differenz zwischen eigener ID und der des anderen Spielers
 			//alias wie weit sitzt dieser Spieler entfernt
-			int nr = ID - spielerID;
+			int nr = spielerID - ID;
 			
 			//Wenn nr negativ ist, "4 mal in die richtige Richtung" - "Schritte in die falsche Richtung"
 			if(nr < 0) {
@@ -313,6 +306,7 @@ public class Graphik extends JFrame {
 					return m;
 				} else {
 					JOptionPane.showMessageDialog(this, "Das geht nicht!");
+					dialog.dispose();
 					continue;
 				}
 			} if(m.equals(modus.SI)) {
@@ -322,6 +316,7 @@ public class Graphik extends JFrame {
 					return m;
 				} else {
 					JOptionPane.showMessageDialog(this, "Das geht nicht!");
+					dialog.dispose();
 					continue;
 				}
 			} 			
@@ -337,10 +332,11 @@ public class Graphik extends JFrame {
 	 * @return
 	 */
 	public String klopfstDu() {
-		if(javax.swing.JOptionPane.showConfirmDialog(this, "Willst du klopfen?") == 0)
+		if(javax.swing.JOptionPane.showConfirmDialog(this, "Willst du klopfen?") == 0) {
 			return "JA";
-		else
+		} else {
 			return "NEIN";	
+		}
 	}
 	
 	/**
