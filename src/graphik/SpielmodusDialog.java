@@ -20,10 +20,14 @@ public class SpielmodusDialog extends JFrame {
 	private ButtonGroup farbwahl;
 	private JRadioButton[] farben;
 	
+	private JFrame root;
+	
 	private modus rueckgabe;
 	
-	public SpielmodusDialog() {
+	public SpielmodusDialog(JFrame root) {
 		super();
+		
+		this.root = root;
 		
 		this.setVisible(true);
 		this.setLayout(null);
@@ -82,11 +86,12 @@ public class SpielmodusDialog extends JFrame {
 	 * @return Modus
 	 */
 	public modus modusWahl() {
+		root.toFront();
+		this.toFront();
 		//Wartet solange, bis ein Wert ausgewählt wurde
 		while(rueckgabe == null) {
 			try {
 				Thread.sleep(300);
-				this.repaint();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

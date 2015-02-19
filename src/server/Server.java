@@ -192,27 +192,7 @@ public class Server extends Thread {
 	        		continue;
 	        	}
 	        	
-	        	//Spielen
-	        	for(int i = 0; i < 6; i++) {
-	        		for(int j = 0; j < 4; j++) {
-	        			//Übergibt dem Spieler das aktuelle Model und...
-	        			spieler.get(i).spielen(model);
-	        			//...empfängt das aktualisierte
-	        			model = spieler.get(i).gibModel();
-	        			
-	        			//Wenn ein Fehler auftritt beenden
-	        			if(model == null) {
-	        				nocheins = true;
-	        				break;
-	        			}
-	        		}
-	        		//Wenn ein Fehler aufgetreten ist
-	        		if(nocheins) break;
-	        		
-	        		//einen Stich zuteilen
-	        		int sieger = regeln.sieger(model);
-	        		model.Stich(sieger);
-	        	}
+	        	spiel();
 
 	        	rundeBeenden();
 	        	
@@ -388,6 +368,30 @@ public class Server extends Thread {
             		spieler.get(i).kontra(kontra);
             	}
         	}
+        
+        private void spiel() throws Exception {
+        	//Spielen
+        	for(int i = 0; i < 6; i++) {
+        		for(int j = 0; j < 4; j++) {
+        			//Übergibt dem Spieler das aktuelle Model und...
+        			spieler.get(i).spielen(model);
+        			//...empfängt das aktualisierte
+        			model = spieler.get(i).gibModel();
+        			
+        			//Wenn ein Fehler auftritt beenden
+        			if(model == null) {
+        				nocheins = true;
+        				break;
+        			}
+        		}
+        		//Wenn ein Fehler aufgetreten ist
+        		if(nocheins) break;
+        		
+        		//einen Stich zuteilen
+        		int sieger = regeln.sieger(model);
+        		model.Stich(sieger);
+        	}
+        }
         
         /**
          * Der nächste spieler ist an der Reihe

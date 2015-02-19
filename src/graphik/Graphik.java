@@ -1,34 +1,19 @@
 package graphik;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import regeln.Control;
-import regeln.Hochzeit;
 import regeln.Regelwahl;
 import lib.Karte;
 import lib.Model;  
 import lib.Model.modus;
 import client.Client; 
 
-import java.awt.BorderLayout;
-
 import javax.swing.JPanel;
-
-import regeln.Sauspiel;
 
 public class Graphik extends JFrame {	
 	
@@ -247,25 +232,20 @@ public class Graphik extends JFrame {
 	
 	/**
 	 * Spielzug des Spielers durchführen
+	 * @throws Exception 
 	 */
-	public Model spiel() {
+	public Model spiel() throws Exception {
+		this.toFront();
 		Karte gespielt = spielerKarten.spiel();
 		boolean ok = false;
 		
 		do {
-			try {
-				model.setTisch(ID, gespielt);
-				if(control.erlaubt(model)) {
-					ok = true;
-				} else
-					model.undo(ID);
-			} catch (Exception e) {
-				e.printStackTrace();
-				//nächster Versuch
+			model.setTisch(ID, gespielt);
+			if(control.erlaubt(model)) {
+				ok = true;
+			} else {
 				model.undo(ID);
-				continue;
 			}
-			
 		} while(!ok);
 		
 		return model;
@@ -277,6 +257,7 @@ public class Graphik extends JFrame {
 	 */
 	public void setzeModus(modus mod) {
 		control = new Regelwahl().wahl(mod, model, ID);
+		nachricht(ID, "Es wird ein " + mod.toString() + "gespielt");
 	}
 	
 	/**
@@ -287,7 +268,7 @@ public class Graphik extends JFrame {
 	public modus spielstDu() {
 		boolean fertig = false;
 		while(!fertig) {
-			SpielmodusDialog dialog = new SpielmodusDialog();
+			SpielmodusDialog dialog = new SpielmodusDialog(this);
 			//Dialog an Hauptfenster binden
 			dialog.setLocationRelativeTo(this);
 			modus m = dialog.modusWahl();
@@ -363,18 +344,19 @@ public class Graphik extends JFrame {
 		//Wenn die spielenden verloren haben
 		if(s1 > 9) {
 			for(int i = 0; i < 4; i++) {
-				if(i == s1)
+				if(i == s1) {
 					nachricht(i, "Zefix!");
-				else if(i == s2)
+				} else if(i == s2) {
 					nachricht(i, "Oh nöö!");
-				else {		 
+				} else {		 
 					nachricht(i, "Na toll.");
 				}
 			}
 		} else { //Ansonsten
 			nachricht(s1, "Jawooooohl!");
-			if(s2 != 4)
+			if(s2 != 4) {
 				nachricht(s2, "Ja geht doch!");
+			}
 		}
 	}
 

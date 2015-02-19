@@ -72,7 +72,7 @@ public class Spieler extends JPanel {
 		aktiviert(true);
 		while(gespielt == null) {
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
