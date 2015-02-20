@@ -13,11 +13,11 @@ public class Spielerhand extends JPanel {
 		
 		this.setLayout(null);
 		
-		this.setSize(420, 100);
+		this.setSize(420, 120);
 		
 		karten = new ArrayList<KartenLabel>();
 		for(int i = 0; i < 6; i++) {
-			karten.add(new KartenLabel(null, 60, 100));
+			karten.add(new KartenLabel(null, 80, 120));
 			this.add(karten.get(i));
 			karten.get(i).setLocation(70*i, 0);
 			karten.get(i).setVisible(true);

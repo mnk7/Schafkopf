@@ -332,23 +332,18 @@ public class Server extends Thread {
     		if(h.hochzeitMoeglich(model, spielt, angebot)) {
         		for(int i = 0; i < 4; i++) {
         			
-        			if(i != spielt) {
+        			if(i != spielt && spieler.get(i).hochzeit()) {
+        				//Wenn die Hochzeit angenommen wird
+        				Karte k = spieler.get(i).gibKarte();
         				
-        				if(spieler.get(i).hochzeit()) {
-        					//Wenn die Hochzeit angenommen wird
-        					Karte k = spieler.get(i).gibKarte();
-        					
-        					//Wenn die Karte ein Trumpf ist
-	        				if(!h.istTrumpf(k.gibWert(), k.gibFarbe())) {
-	        					model.hochzeit(spielt, i, angebot, k);
-	        					mitspieler = i;
-	        					return true;
-	        				} else {
-	        					return false;
-	        				}
-        				} else {
-        					return false;
-        				}
+        				//Wenn die Karte kein Trumpf ist
+	        			if(!h.istTrumpf(k.gibWert(), k.gibFarbe())) {
+	        				model.hochzeit(spielt, i, angebot, k);
+	        				mitspieler = i;
+	        				return true;
+	        			} else {
+	        				return false;
+	        			}
         			} else {
         				continue;
         			}
@@ -483,7 +478,7 @@ public class Server extends Thread {
         		}
         		if(i == spielt + 10 || i == mitspieler + 10) {
         			//Vorläufig
-        			konto.set(i, konto.get(i) + tarif);
+        			konto.set(i, konto.get(i) - tarif);
         		}
         	}
         }

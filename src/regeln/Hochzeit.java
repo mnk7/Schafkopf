@@ -228,14 +228,31 @@ public class Hochzeit implements Control {
 	public int mitspieler(Model m) {
 		return -1;
 	}
+	
+	public boolean hochzeitMoeglich(ArrayList<Karte> spielerhand) {
+		int anzahl_Truempfe = 0;
+		for(int i = 0; i < spielerhand.size(); i++) {
+			if(istTrumpf(spielerhand.get(i).gibWert(), spielerhand.get(i).gibFarbe())) {
+				anzahl_Truempfe++;
+			}
+		}
+		
+		if(anzahl_Truempfe == 1) {
+			return true;
+		}
+		
+		return false;
+	}
 
 	public boolean hochzeitMoeglich(Model m, int position, Karte angebot){
+		if(!istTrumpf(angebot.gibWert(), angebot.gibFarbe())) {
+			return false;
+		}
 		ArrayList<Karte> hand;
 		hand = m.gibSpielerKarten(position);
 		for(int i = 0; i < hand.size(); i++){
-			if((!hand.get(i).gibWert().equals(angebot.gibWert()) 
-					&& !hand.get(i).gibFarbe().equals(angebot.gibFarbe())) 
-					&& istTrumpf(hand.get(i).gibWert(),hand.get(i).gibFarbe())){
+			if(istTrumpf(hand.get(i).gibWert(), hand.get(i).gibFarbe()) 
+					&& !hand.get(i).vergleiche(angebot)){
 				return false;
 			} 
 		}

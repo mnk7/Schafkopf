@@ -1,8 +1,5 @@
 package graphik;
 
-import java.awt.BorderLayout;
-import java.awt.Graphics;
-
 import javax.swing.JPanel;
 
 import lib.Karte;
@@ -31,7 +28,7 @@ public class Tisch extends JPanel {
 	/**
 	 * Setzt die Position der Karten
 	 */
-	private void kartenPosition() {
+	public void kartenPosition() {
 		//evtl. gleiche Koordinaten in Variable speichern
 		//Links
 		karten[0].setLocation(0, this.getHeight() / 4);

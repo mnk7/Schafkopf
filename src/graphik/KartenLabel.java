@@ -24,8 +24,8 @@ public class KartenLabel extends JLabel {
 	private BufferedImage icon;
 	
 	//Speichert Höhe und Weite des Panels
-	private int width = 60;
-	private int height = 100;
+	private int width = 80;
+	private int height = 120;
 	
 	/**
 	 * Zeigt eine Karte an, die Karte wird immer kleinstmöglich angezeigt

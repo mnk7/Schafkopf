@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import regeln.Control;
+import regeln.Hochzeit;
 import regeln.Regelwahl;
 import lib.Karte;
 import lib.Model;  
@@ -110,6 +111,7 @@ public class Graphik extends JFrame {
 			hintergrund.add(tisch);
 			//Der Hintergrund wird + -förmig aufgeteilt
 			tisch.setBounds(breite, hoehe, breite, hoehe);
+			tisch.kartenPosition();
 			tisch.setVisible(true);
 			
 			gegenspielerKarten = new Gegenspieler[3];
@@ -166,11 +168,22 @@ public class Graphik extends JFrame {
 		this.model = model;
 		//aktualiseren der Anzeige
 		spielerKarten.update(this.model.gibSpielerKarten(ID));
-				
-		tisch.setzeKarten(this.model.gibTisch());
+		
+		//Passt die Karten auf dem Tisch an die Spieler an
+		Karte[] gespielt = new Karte[4];
+		gespielt[3] = this.model.gibTisch()[ID]; 
+		for(int i = 0; i < 3; i++) {
+			gespielt[i] = this.model.gibTisch()[(ID + 1 + i)%4];
+		}
+		
+		tisch.setzeKarten(gespielt);
 				
 		for(int i = 0; i < 3; i++) {
-			gegenspielerKarten[i].update(this.model.gibSpielerKarten(ID).size() - 1);
+			if(gespielt[i] == null) {
+				gegenspielerKarten[i].update(this.model.gibSpielerKarten(ID).size() - 1);
+			} else {
+				gegenspielerKarten[i].update(this.model.gibSpielerKarten(ID).size() - 2);
+			}
 		}
 	}
 	
@@ -242,6 +255,8 @@ public class Graphik extends JFrame {
 	 */
 	public Model spiel() throws Exception {
 		this.toFront();
+		//Nochmal Anzeige aktualisieren
+		this.setModel(model);
 		Karte gespielt = spielerKarten.spiel();
 		boolean ok = false;
 		
@@ -255,6 +270,9 @@ public class Graphik extends JFrame {
 				gespielt = spielerKarten.spiel();
 			}
 		} while(!ok);
+		
+		//aktualisiert die Anzeige
+		this.setModel(model);
 		
 		return model;
 	}
@@ -281,34 +299,31 @@ public class Graphik extends JFrame {
 			dialog.setLocationRelativeTo(this);
 			modus m = dialog.modusWahl();
 			
-			//Prüft Client-seitig, ob ein Sauspiel oder ein Si gespielt werden können.
-			//Eine Hochzeit wird Server-seitig geprüft
+			//Prüft Client-seitig, ob ein Sauspiel, eine Hochzeit oder ein Si gespielt werden können.
+			//Eine Hochzeit wird teilweise Server-seitig geprüft
 			if(m.equals(modus.SAUSPIELeichel)
 					|| m.equals(modus.SAUSPIELgras)
 					|| m.equals(modus.SAUSPIELherz)
 					|| m.equals(modus.SAUSPIELschellen)) {
 				Karte.farbe f = dialog.farbe(m);
-				if(new Regelwahl().sauspielMoeglich(f, model, ID)) {
-					
-					dialog.dispose();
-					fertig = true;
-					return m;
-				} else {
+				if(!new Regelwahl().sauspielMoeglich(f, model, ID)) {
 					JOptionPane.showMessageDialog(this, "Das geht nicht!");
 					dialog.dispose();
 					continue;
 				}
 			} if(m.equals(modus.SI)) {
-				if(new Regelwahl().siMoeglich(model, ID)) {
-					dialog.dispose();
-					fertig = true;
-					return m;
-				} else {
+				if(!new Regelwahl().siMoeglich(model, ID)) {
 					JOptionPane.showMessageDialog(this, "Das geht nicht!");
 					dialog.dispose();
 					continue;
 				}
-			} 			
+			} if(m.equals(modus.HOCHZEIT)) {
+				if(!new Hochzeit().hochzeitMoeglich(model.gibSpielerKarten(ID))) {
+					JOptionPane.showMessageDialog(this, "Das geht nicht!");
+					dialog.dispose();
+					continue;
+				}
+			}
 			dialog.dispose();
 			fertig = true;
 			return m;
@@ -441,8 +456,8 @@ public class Graphik extends JFrame {
 	}
 	
 	public void beenden() {
-		this.dispose();
 		JOptionPane.showMessageDialog(null, "Der Server hat das Spiel beendet");
+		this.dispose();
 	}
 }
 
