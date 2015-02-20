@@ -1,5 +1,6 @@
 package graphik;
 
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -29,8 +30,10 @@ public class SpielmodusDialog extends JFrame {
 		
 		this.root = root;
 		
+		this.setUndecorated(true);
 		this.setVisible(true);
 		this.setLayout(null);
+		this.setAlwaysOnTop(true);
 		
 		spiele = new JButton[7];
 		
@@ -176,5 +179,8 @@ public class SpielmodusDialog extends JFrame {
 		
 		return null;
 	}
-
+	
+	public void reset() {
+		rueckgabe = null;
+	}
 }

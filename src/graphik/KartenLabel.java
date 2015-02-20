@@ -38,6 +38,7 @@ public class KartenLabel extends JLabel {
 		
 		this.setLayout(null);
 		this.setSize(this.width, this.height);
+		this.setBackground(new Color(0,0,0,0));
 		
 		setBild(bild);
 		

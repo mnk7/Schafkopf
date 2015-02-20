@@ -1,5 +1,6 @@
 package graphik;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -25,6 +26,7 @@ public class Gegenspieler extends JPanel {
 		super();
 		
 		this.setLayout(null);
+		this.setBackground(new Color(0,0,0,0));
 		 
 		kartenzahl = 6;
 		

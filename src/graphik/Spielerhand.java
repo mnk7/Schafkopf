@@ -1,5 +1,6 @@
 package graphik;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -12,6 +13,7 @@ public class Spielerhand extends JPanel {
 		super();
 		
 		this.setLayout(null);
+		this.setBackground(new Color(0,0,0,0));
 		
 		this.setSize(440, 120);
 		

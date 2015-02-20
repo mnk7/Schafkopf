@@ -88,7 +88,6 @@ public class MenuGUI extends JFrame {
 		//Icon der Anwendung setzen
 		ImageIcon icon = new ImageIcon(logo);
 		this.setIconImage(icon.getImage());
-		JFrame.setDefaultLookAndFeelDecorated(true);
 		
 		this.setLayout(null);
 		//Lässt alles so aussehen wie im jeweiligen OS üblich

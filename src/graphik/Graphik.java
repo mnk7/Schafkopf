@@ -5,6 +5,7 @@ import java.awt.event.WindowListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import regeln.Control;
@@ -20,6 +21,7 @@ import javax.swing.JPanel;
 public class Graphik extends JFrame {	
 	
 	private String logo = "Logo.gif";
+	private String hintergrundbild = "hintergrund1.jpg";
 	
 	private Model model;
 	
@@ -44,7 +46,7 @@ public class Graphik extends JFrame {
 	private Tisch tisch;
 	
 	//Hintergrund
-	private JPanel hintergrund;	
+	private JLabel hintergrund;	
 	
 	public Graphik(Model model, final Client client) {
 		super();
@@ -76,7 +78,6 @@ public class Graphik extends JFrame {
 			public void windowClosing(WindowEvent arg0) {
 			}
 			public void windowActivated(WindowEvent e) {
-				update();
 			}
 			public void windowClosed(WindowEvent e) {
 				client.abmelden(); 
@@ -88,7 +89,6 @@ public class Graphik extends JFrame {
 			public void windowIconified(WindowEvent e) {
 			}
 			public void windowOpened(WindowEvent e) {
-				update();
 			}
 		});
 	}	
@@ -99,10 +99,11 @@ public class Graphik extends JFrame {
 	private void initGUI() {
 		try {
 		
-			hintergrund = new JPanel();
+			hintergrund = new JLabel();
 			getContentPane().add(hintergrund);
 			//Das letzte fünftel des Fensters ist für Spielermeldungen
 			hintergrund.setBounds(0, 0, this.getWidth(), this.getHeight());
+			hintergrund.setIcon(new ImageIcon(hintergrundbild));
 			hintergrund.setVisible(true);
 			hintergrund.setLayout(null);
 			
@@ -313,8 +314,9 @@ public class Graphik extends JFrame {
 		boolean fertig = false;
 		while(!fertig) {
 			SpielmodusDialog dialog = new SpielmodusDialog(this);
-			//Dialog an Hauptfenster binden
-			dialog.setLocationRelativeTo(this);
+			//Dialog an Hauptfenster binden -> linke obere Ecke
+			dialog.setLocation((int)this.getContentPane().getLocationOnScreen().getX(),
+					(int) this.getContentPane().getLocationOnScreen().getY());
 			modus m = dialog.modusWahl();
 			
 			//Prüft Client-seitig, ob ein Sauspiel, eine Hochzeit oder ein Si gespielt werden können.
@@ -326,19 +328,19 @@ public class Graphik extends JFrame {
 				Karte.farbe f = dialog.farbe(m);
 				if(!new Regelwahl().sauspielMoeglich(f, model, ID)) {
 					JOptionPane.showMessageDialog(this, "Das geht nicht!");
-					dialog.dispose();
+					dialog.reset();
 					continue;
 				}
 			} if(m.equals(modus.SI)) {
 				if(!new Regelwahl().siMoeglich(model, ID)) {
 					JOptionPane.showMessageDialog(this, "Das geht nicht!");
-					dialog.dispose();
+					dialog.reset();
 					continue;
 				}
 			} if(m.equals(modus.HOCHZEIT)) {
 				if(!new Hochzeit().hochzeitMoeglich(model.gibSpielerKarten(ID))) {
 					JOptionPane.showMessageDialog(this, "Das geht nicht!");
-					dialog.dispose();
+					dialog.reset();
 					continue;
 				}
 			}

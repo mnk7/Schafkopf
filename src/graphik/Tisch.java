@@ -1,5 +1,7 @@
 package graphik;
 
+import java.awt.Color;
+
 import javax.swing.JPanel;
 
 import lib.Karte;
@@ -13,6 +15,7 @@ public class Tisch extends JPanel {
 		super();
 		
 		this.setLayout(null);
+		this.setBackground(new Color(0,0,0,0));
 		
 		karten = new KartenLabel[4];
 		//Setzt die Größe der Karten

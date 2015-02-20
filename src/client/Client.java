@@ -49,6 +49,11 @@ public class Client{
 		
 		netzwerk = new Netzwerk(ID, IP);
 		
+		//Vorerst leeres Model erzeugen
+		model = new Model();
+				
+		graphik = new Graphik(model, this);
+		
 		listener = new Thread() {
 			public void run() {
 				listen();
@@ -56,8 +61,6 @@ public class Client{
 		};
 		listener.setName("Schafkopf-Client");
 		listener.start();
-		
-		graphik = new Graphik(model, this);
 	}
 	
 	/**

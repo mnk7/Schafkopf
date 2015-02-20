@@ -1,5 +1,6 @@
 package graphik;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class Spieler extends JPanel {
 		super();
 		
 		this.setLayout(null);
+		this.setBackground(new Color(0,0,0,0));
 		this.setSize(420, 100);
 		
 		karten = new ArrayList<KartenButton>();		
@@ -45,6 +47,9 @@ public class Spieler extends JPanel {
 	 */
 	public void update(ArrayList<Karte> model) {
 		ArrayList<Karte> spielerkarten = model;
+		if(model == null) {
+			model = new ArrayList<Karte>();
+		}
 		
 		for(int i = 0; i < spielerkarten.size(); i++) {
 			//neues Bild zuteilen

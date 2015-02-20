@@ -1,6 +1,8 @@
 package graphik;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 
 import javax.swing.JLabel;
@@ -17,6 +19,7 @@ public class Meldungen extends JPanel{
 		super();
 		
 		this.setLayout(null);
+		this.setBackground(new Color(0,0,0,0));
 		this.setSize(200, histLaenge*20);
 		
 		meldung = new JLabel[histLaenge];
@@ -24,6 +27,8 @@ public class Meldungen extends JPanel{
 			meldung[i] = new JLabel();
 			this.add(meldung[i]);
 			meldung[i].setBounds(0, i*20, 300, 20);
+			meldung[i].setBackground(new Color(0,0,0,0));
+			meldung[i].setForeground(Color.white);
 		}
 	}
 	
@@ -33,7 +38,8 @@ public class Meldungen extends JPanel{
 	 */
 	public void festeAnzeige(String text) {
 		meldung[festeAnzeigen].setText(text);
-		meldung[festeAnzeigen].setForeground(java.awt.Color.DARK_GRAY);
+		Font schrift = meldung[festeAnzeigen].getFont();
+		meldung[festeAnzeigen].setFont(schrift.deriveFont(schrift.BOLD+ schrift.ITALIC));
 	}
 	
 	/**
@@ -43,6 +49,7 @@ public class Meldungen extends JPanel{
 	public void nachricht(String text) {
 		for(int i = meldung.length - 1; i > festeAnzeigen; i--) {
 			//Rückt alle Anzeigen eins nach unten
+			meldung[i].setText("");
 			meldung[i].setText(meldung[i - 1].getText());
 		}
 		//Zeigt die neue Meldung an

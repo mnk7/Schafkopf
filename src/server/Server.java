@@ -302,7 +302,10 @@ public class Server extends Thread {
         }
         
         private modus bestesSpielFinden(ArrayList<modus> spielfolge) {
-        	if(spielfolge.size() < 2) {
+        	if(spielfolge.size() == 0) {
+        		return modus.NICHTS;
+        	}
+        	if(spielfolge.size() == 1) {
         		return spielfolge.get(0);
         	}
         	//ermittelt das höchstwertige Spiel
