@@ -278,7 +278,7 @@ public class Server extends Thread {
         	
         	for(int i = 0; i < 4; i++) {
         		try {
-        			spielfolge.add(spieler.get(i).spielstDu(model));
+        			spielfolge.add(spieler.get(i).spielstDu(model, bestesSpielFinden(spielfolge)));
         		} catch(Exception e) {
         			e.printStackTrace();
         			//Wird ein Fehler zurückgegeben, so wird dieser Spieler nicht berücksichtigt
@@ -299,6 +299,18 @@ public class Server extends Thread {
         			spielt = i;
         		}
         	}
+        }
+        
+        private modus bestesSpielFinden(ArrayList<modus> spielfolge) {
+        	if(spielfolge.size() < 2) {
+        		return spielfolge.get(0);
+        	}
+        	//ermittelt das höchstwertige Spiel
+        	modus modus = spielfolge.get(spielfolge.size() - 1);
+        	for(int i = spielfolge.size() - 2; i >= 0; i--) {
+        		modus = model.werSpielt(modus, spielfolge.get(i));
+        	}
+        	return modus;
         }
         
         /**

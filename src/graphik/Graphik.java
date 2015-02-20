@@ -3,6 +3,7 @@ package graphik;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -17,6 +18,8 @@ import client.Client;
 import javax.swing.JPanel;
 
 public class Graphik extends JFrame {	
+	
+	private String logo = "Logo.gif";
 	
 	private Model model;
 	
@@ -52,9 +55,13 @@ public class Graphik extends JFrame {
 		
 		this.model = model;
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		setTitle("Schafkopf-App");
+		this.setTitle("Schafkopf-App");
+		//Icon der Anwendung setzen
+		ImageIcon icon = new ImageIcon(logo);
+		this.setIconImage(icon.getImage());
+		
 		this.setSize(1290, 700);
 		//arrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrg
 		this.setResizable(false);
@@ -69,7 +76,7 @@ public class Graphik extends JFrame {
 			public void windowClosing(WindowEvent arg0) {
 			}
 			public void windowActivated(WindowEvent e) {
-				repaint();
+				update();
 			}
 			public void windowClosed(WindowEvent e) {
 				client.abmelden(); 
@@ -81,7 +88,7 @@ public class Graphik extends JFrame {
 			public void windowIconified(WindowEvent e) {
 			}
 			public void windowOpened(WindowEvent e) {
-				repaint();
+				update();
 			}
 		});
 	}	
@@ -158,6 +165,13 @@ public class Graphik extends JFrame {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Zeichnet das Fenster neu
+	 */
+	public void update() {
+		setModel(model);
 	}
 	
 	/**
@@ -256,7 +270,7 @@ public class Graphik extends JFrame {
 	public Model spiel() throws Exception {
 		this.toFront();
 		//Nochmal Anzeige aktualisieren
-		this.setModel(model);
+		this.update();
 		Karte gespielt = spielerKarten.spiel();
 		boolean ok = false;
 		
@@ -272,7 +286,7 @@ public class Graphik extends JFrame {
 		} while(!ok);
 		
 		//aktualisiert die Anzeige
-		this.setModel(model);
+		this.update();
 		
 		return model;
 	}
@@ -284,6 +298,10 @@ public class Graphik extends JFrame {
 	public void setzeModus(modus mod) {
 		control = new Regelwahl().wahl(mod, model, ID);
 		nachricht(ID, "Es wird ein " + mod.toString() + " gespielt");
+	}
+	
+	public void bestesspiel(String mod) {
+		nachricht(ID, "Bisher höchstes Spiel ist " + mod);
 	}
 	
 	/**

@@ -16,7 +16,7 @@ public class Bot implements Spieler {
 	}
 
 	@Override
-	public modus spielstDu(Model model) {
+	public modus spielstDu(Model model, modus m) {
 		return modus.NICHTS;
 	}
 

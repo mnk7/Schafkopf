@@ -13,7 +13,7 @@ public class Spielerhand extends JPanel {
 		
 		this.setLayout(null);
 		
-		this.setSize(420, 120);
+		this.setSize(440, 120);
 		
 		karten = new ArrayList<KartenLabel>();
 		for(int i = 0; i < 6; i++) {

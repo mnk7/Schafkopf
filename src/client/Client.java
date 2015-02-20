@@ -87,6 +87,9 @@ public class Client{
 				case "!MODUS":
 					modus(data);
 					continue;
+				case "!BESTESSPIEL":
+					bestesspiel(data);
+					continue;
 				case "!SPIELT":
 					spielt(data);
 					continue;
@@ -124,6 +127,11 @@ public class Client{
 		}
 	}
 	
+	private void bestesspiel(Object[] data) {
+		//zeigt dem Spieler an, welches Spiel das bisher höchste ist
+		graphik.bestesspiel(data[1].toString());
+	}
+
 	private synchronized void name(Object[] data) throws Exception {
 		//Senden des Namens
 		netzwerk.print("!NAME", name);

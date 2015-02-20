@@ -16,7 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import client.Client;
 
@@ -48,9 +47,6 @@ public class MenuGUI extends JFrame {
 	
 	public MenuGUI() {
 		super();
-		
-		//Grafiken einlesen
-		MenuGUI.class.getResource(logo);
 		
 		try {
 			initGUI();
@@ -92,6 +88,7 @@ public class MenuGUI extends JFrame {
 		//Icon der Anwendung setzen
 		ImageIcon icon = new ImageIcon(logo);
 		this.setIconImage(icon.getImage());
+		JFrame.setDefaultLookAndFeelDecorated(true);
 		
 		this.setLayout(null);
 		//Lässt alles so aussehen wie im jeweiligen OS üblich

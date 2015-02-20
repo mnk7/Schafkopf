@@ -37,13 +37,14 @@ public interface Spieler{
 	public void spielen(Model model) throws Exception;
 	
 	/**
-	 * Übernimmt ein Model und gibt zurück, ob und was gespielt wird
+	 * Übernimmt ein Model und das bislang höchste Spiel und gibt zurück, ob und was gespielt wird
 	 * Bei keinem Spiel wird >> null << zurückgegeben
 	 * @param model
+	 * @param modus
 	 * @return
 	 * @throws Exception 
 	 */
-	public lib.Model.modus spielstDu(Model model) throws Exception;
+	public lib.Model.modus spielstDu(Model model, modus m) throws Exception;
 	
 	/**
 	 * Übergibt den Spielern den Modus und fragt nach Kontra
