@@ -425,6 +425,11 @@ public class Server extends Thread {
         	private void spielModelSenden(int spielerID) throws Exception {
         		//Übergibt dem Spieler das aktuelle Model und...
     			spieler.get(spielerID).spielen(model);
+    			for(int i = 0; i < 4; i++) {
+    				if(i != spielerID) {
+    					spieler.get(i).update(model);
+    				}
+    			}
         	}
         	
         	private void spielModelEmpfangen(int spielerID) {

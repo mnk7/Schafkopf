@@ -8,6 +8,8 @@ import lib.Model.modus;
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 public class Regelwahl {
 	
 	public Regelwahl() {
@@ -15,7 +17,6 @@ public class Regelwahl {
 	}
 	
 	public Control wahl(modus mod, Model m, int position) {
-		Control x = null;
 		switch (mod) {
 		case GEIERdu: 
 		case GEIER: 
@@ -46,7 +47,31 @@ public class Regelwahl {
 		case HOCHZEIT: 
 			return new Hochzeit();
 		}
-		return x;
+		return null;
+	}
+	/**
+	 * Prüft Client-seitig, ob ein Sauspiel, eine Hochzeit oder ein Si gespielt werden können.
+	 * Eine Hochzeit wird teilweise Server-seitig geprüft
+	 */
+	public boolean darfGespieltWerden(modus m, Model model, int ID, Karte.farbe f) {
+		if(m.equals(modus.SAUSPIELeichel)
+				|| m.equals(modus.SAUSPIELgras)
+				|| m.equals(modus.SAUSPIELherz)
+				|| m.equals(modus.SAUSPIELschellen)) {
+			if(sauspielMoeglich(f, model, ID)) {
+				return false;
+			}
+		} if(m.equals(modus.SI)) {
+			if(siMoeglich(model, ID)) {
+				return false;
+			}
+		} if(m.equals(modus.HOCHZEIT)) {
+			if(!new Hochzeit().hochzeitMoeglich(model.gibSpielerKarten(ID))) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	public boolean istTrumpf(Karte.wert angespielt, Karte.farbe angespielt2) {

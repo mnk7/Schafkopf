@@ -81,16 +81,16 @@ public class KartenLabel extends JLabel {
 	 */
 	public void setBild(Karte karte) {
 		if(karte == null) {
-			bild =  "karten/rueckseite.jpg";
+			bild =  "karten" + File.separator + "rueckseite.jpg";
 		} else {
 			//Zeigt das zur Karte gehörende Bild
-			bild =  "karten/" + 
+			bild =  "karten" + File.separator + 
 					karte.gibFarbe().toString().toLowerCase() + 
 					karte.gibWert().toString().toLowerCase() + 
 					".jpg";
 		}
 		
-		this.setIcon(new ImageIcon(bild));
+		this.setIcon(new ImageIcon(getClass().getClassLoader().getResource(bild)));
 		this.setVisible(true);
 	}
 	

@@ -125,4 +125,10 @@ public class Bot implements Spieler {
 		
 	}
 
+	@Override
+	public void update(Model model) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

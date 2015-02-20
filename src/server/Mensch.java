@@ -270,6 +270,14 @@ public class Mensch implements Spieler {
 		netzwerk.print("!KONTRA", data);
 	}
 	
+	public void update(Model model) {
+		try {
+			netzwerk.printModel("!UPDATE", model);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void konto(int kontostand) {
 		try {
 			netzwerk.print("!KONTO", String.valueOf(kontostand));
@@ -301,5 +309,4 @@ public class Mensch implements Spieler {
 		}
 		beenden();
 	}
-
 }

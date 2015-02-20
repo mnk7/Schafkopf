@@ -1,5 +1,6 @@
 package graphik;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,39 +8,32 @@ import java.awt.event.ActionListener;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import lib.Karte.farbe;
 import lib.Model.modus;
 
-public class SpielmodusDialog extends JFrame {
+public class SpielmodusDialog extends JPanel {
 	
 	private JButton[] spiele;
 	private JCheckBox tout;
 	private ButtonGroup farbwahl;
 	private JRadioButton[] farben;
 	
-	private JFrame root;
-	
 	private modus rueckgabe;
 	
-	public SpielmodusDialog(JFrame root) {
+	public SpielmodusDialog() {
 		super();
-		
-		this.root = root;
-		
-		this.setUndecorated(true);
-		this.setVisible(true);
+
 		this.setLayout(null);
-		this.setAlwaysOnTop(true);
 		
 		spiele = new JButton[7];
 		
 		for(int i = 0; i < spiele.length; i++) {
 			spiele[i] = new JButton();
-			getContentPane().add(spiele[i]);
+			this.add(spiele[i]);
 			spiele[i].setVisible(true);
 			spiele[i].setBounds(0, i*40, 150, 30);
 			spiele[i].addActionListener(new ActionListener() {
@@ -59,7 +53,7 @@ public class SpielmodusDialog extends JFrame {
 		spiele[6].setText("Nichts");
 		
 		tout = new JCheckBox();
-		getContentPane().add(tout);
+		this.add(tout);
 		tout.setBounds(200, 0, 100, 30);
 		//Tout oder nicht Tout? Das ist hier die Frage!
 		tout.setText("Tout ?");
@@ -70,7 +64,7 @@ public class SpielmodusDialog extends JFrame {
 		farben = new JRadioButton[4];
 		for(int i = 0; i < 4; i++) {
 			farben[i] = new JRadioButton();
-			getContentPane().add(farben[i]);
+			this.add(farben[i]);
 			farbwahl.add(farben[i]);
 			farben[i].setVisible(true);
 			farben[i].setBounds(200, 50 * (i + 1), 100, 30);
@@ -80,8 +74,6 @@ public class SpielmodusDialog extends JFrame {
 		farben[1].setText("Gras");
 		farben[2].setText("Herz");
 		farben[3].setText("Schellen");
-		
-		this.setSize(300, 300);
 	}
 
 	/**
@@ -89,8 +81,6 @@ public class SpielmodusDialog extends JFrame {
 	 * @return Modus
 	 */
 	public modus modusWahl() {
-		root.toFront();
-		this.toFront();
 		//Wartet solange, bis ein Wert ausgewählt wurde
 		while(rueckgabe == null) {
 			try {

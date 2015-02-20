@@ -111,6 +111,9 @@ public class Client{
 				case "!GEKLOPFT":
 					geklopft(data);
 					continue;
+				case "!UPDATE":
+					graphikUpdate((Model) data[1]);
+					continue;
 				case "!ENDE":
 					abschliessen(Integer.parseInt(data[1].toString()));
 					continue;

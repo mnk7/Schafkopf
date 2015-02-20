@@ -54,6 +54,7 @@ public class Meldungen extends JPanel{
 		}
 		//Zeigt die neue Meldung an
 		meldung[1].setText(" > " + text);
+		repaint();
 	}
 	
 	/**

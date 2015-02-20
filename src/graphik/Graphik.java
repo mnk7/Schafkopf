@@ -2,7 +2,10 @@ package graphik;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,7 +24,7 @@ import javax.swing.JPanel;
 public class Graphik extends JFrame {	
 	
 	private String logo = "Logo.gif";
-	private String hintergrundbild = "hintergrund1.jpg";
+	private String hintergrundbild = "karten" + File.separator + "hintergrund1.jpg";
 	
 	private Model model;
 	
@@ -45,6 +48,8 @@ public class Graphik extends JFrame {
 	//Tisch
 	private Tisch tisch;
 	
+	private SpielmodusDialog dialog;
+	
 	//Hintergrund
 	private JLabel hintergrund;	
 	
@@ -61,7 +66,7 @@ public class Graphik extends JFrame {
 		
 		this.setTitle("Schafkopf-App");
 		//Icon der Anwendung setzen
-		ImageIcon icon = new ImageIcon(logo);
+		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(logo));
 		this.setIconImage(icon.getImage());
 		
 		this.setSize(1290, 700);
@@ -103,7 +108,7 @@ public class Graphik extends JFrame {
 			getContentPane().add(hintergrund);
 			//Das letzte fünftel des Fensters ist für Spielermeldungen
 			hintergrund.setBounds(0, 0, this.getWidth(), this.getHeight());
-			hintergrund.setIcon(new ImageIcon(hintergrundbild));
+			hintergrund.setIcon(new ImageIcon(getClass().getClassLoader().getResource(hintergrundbild)));
 			hintergrund.setVisible(true);
 			hintergrund.setLayout(null);
 			
@@ -160,6 +165,11 @@ public class Graphik extends JFrame {
 			spielerMeldungen.setVisible(true);
 			//erste Ausgabe
 			spielerMeldungen.nachricht("Mit Server verbunden");
+			
+			dialog = new SpielmodusDialog();
+			hintergrund.add(dialog);
+			dialog.setBounds(0, 0, 300, 300);
+			dialog.setVisible(false);
 			
 			//-------------------------------------------------------------hintergrund
 		
@@ -312,39 +322,19 @@ public class Graphik extends JFrame {
 	 */
 	public modus spielstDu() {
 		boolean fertig = false;
-		while(!fertig) {
-			SpielmodusDialog dialog = new SpielmodusDialog(this);
-			//Dialog an Hauptfenster binden -> linke obere Ecke
-			dialog.setLocation((int)this.getContentPane().getLocationOnScreen().getX(),
-					(int) this.getContentPane().getLocationOnScreen().getY());
+		this.toFront();
+		dialog.setVisible(true);
+		while(!fertig) {			
 			modus m = dialog.modusWahl();
 			
-			//Prüft Client-seitig, ob ein Sauspiel, eine Hochzeit oder ein Si gespielt werden können.
-			//Eine Hochzeit wird teilweise Server-seitig geprüft
-			if(m.equals(modus.SAUSPIELeichel)
-					|| m.equals(modus.SAUSPIELgras)
-					|| m.equals(modus.SAUSPIELherz)
-					|| m.equals(modus.SAUSPIELschellen)) {
-				Karte.farbe f = dialog.farbe(m);
-				if(!new Regelwahl().sauspielMoeglich(f, model, ID)) {
-					JOptionPane.showMessageDialog(this, "Das geht nicht!");
-					dialog.reset();
-					continue;
-				}
-			} if(m.equals(modus.SI)) {
-				if(!new Regelwahl().siMoeglich(model, ID)) {
-					JOptionPane.showMessageDialog(this, "Das geht nicht!");
-					dialog.reset();
-					continue;
-				}
-			} if(m.equals(modus.HOCHZEIT)) {
-				if(!new Hochzeit().hochzeitMoeglich(model.gibSpielerKarten(ID))) {
-					JOptionPane.showMessageDialog(this, "Das geht nicht!");
-					dialog.reset();
-					continue;
-				}
+			//Prüft, ob die Karte erlaubt ist
+			if(!new Regelwahl().darfGespieltWerden(m, model, ID, dialog.farbe(m))) {
+				JOptionPane.showMessageDialog(this, "Das geht nicht!");
+				dialog.reset();
+				continue;
 			}
-			dialog.dispose();
+			dialog.setVisible(false);
+			dialog.reset();
 			fertig = true;
 			return m;
 		}

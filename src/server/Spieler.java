@@ -147,4 +147,10 @@ public interface Spieler{
 	 */
 	public void konto(int kontostand);
 
+	/**
+	 * Aktualisiert das Model des Spielers
+	 * @param model
+	 */
+	public void update(Model model);
+
 }
