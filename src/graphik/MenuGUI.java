@@ -30,7 +30,7 @@ public class MenuGUI extends JFrame {
 			public void run() { 
 				MenuGUI inst = new MenuGUI();
 			}
-		}); 
+		});  
 	}
 	
 	private Client client; 
@@ -86,7 +86,8 @@ public class MenuGUI extends JFrame {
 		this.setResizable(false);
 		
 		//Icon der Anwendung setzen
-		ImageIcon icon = new ImageIcon(logo);
+		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(logo));
+		//ImageIcon icon = new ImageIcon(logo);
 		this.setIconImage(icon.getImage());
 		
 		this.setLayout(null);

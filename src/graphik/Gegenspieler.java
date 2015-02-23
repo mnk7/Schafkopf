@@ -47,7 +47,7 @@ public class Gegenspieler extends JPanel {
 	}
 	
 	/**
-	 * Entfernt eine Karte aus der Hand des Gegenspielers
+	 * Zeigt kartenzahl Karten beim Gegenspieler an
 	 */
 	public void update(int kartenzahl) {
 		this.kartenzahl = kartenzahl;

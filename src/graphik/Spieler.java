@@ -58,7 +58,7 @@ public class Spieler extends JPanel {
 		
 		//schon gespielte Karten werden abgeschaltet
 		for(int i = 5; i >= spielerkarten.size(); i--) {
-			karten.get(i).setVisible(false);
+			karten.get(i).setVisible(false); 
 			karten.get(i).setEnabled(false);
 		}
 	}	

@@ -21,7 +21,7 @@ import client.Client;
 
 import javax.swing.JPanel;
 
-public class Graphik extends JFrame {	
+public class Graphik extends JFrame implements View{	
 	
 	private String logo = "Logo.gif";
 	private String hintergrundbild = "karten" + File.separator + "hintergrund1.jpg";
@@ -67,7 +67,8 @@ public class Graphik extends JFrame {
 		this.setTitle("Schafkopf-App");
 		//Icon der Anwendung setzen
 		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(logo));
-		this.setIconImage(icon.getImage());
+		//ImageIcon icon = new ImageIcon(logo);
+		this.setIconImage(icon.getImage()); 
 		
 		this.setSize(1290, 700);
 		//arrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrg
@@ -109,6 +110,7 @@ public class Graphik extends JFrame {
 			//Das letzte fünftel des Fensters ist für Spielermeldungen
 			hintergrund.setBounds(0, 0, this.getWidth(), this.getHeight());
 			hintergrund.setIcon(new ImageIcon(getClass().getClassLoader().getResource(hintergrundbild)));
+			//hintergrund.setIcon(new ImageIcon(hintergrundbild));
 			hintergrund.setVisible(true);
 			hintergrund.setLayout(null);
 			
@@ -204,26 +206,29 @@ public class Graphik extends JFrame {
 		tisch.setzeKarten(gespielt);
 				
 		for(int i = 0; i < 3; i++) {
-			if(gespielt[i] == null) {
-				gegenspielerKarten[i].update(this.model.gibSpielerKarten(ID).size() - 1);
+			int angezeigteKarten = this.model.gibSpielerKarten(ID).size();
+			//Prüft, ob der Spieler schon eine Karte gespielt hat 
+			if(gespielt[3] == null) {
+				if(gespielt[i] != null) {
+					//Wenn der Spieler noch nicht gespielt hat, aber der Gegner
+					angezeigteKarten--;
+				}
 			} else {
-				gegenspielerKarten[i].update(this.model.gibSpielerKarten(ID).size() - 2);
+				if(gespielt[i] == null) {
+					//Wenn der Spieler schon gespielt hat, aber der Gegner noch nicht
+					angezeigteKarten++;
+				}
 			}
+			gegenspielerKarten[i].update(angezeigteKarten);
 		}
+		
+		this.repaint();
 	}
 	
-	/**
-	 * Setzt die ID des Spielers, damit die Daten aus dem Model ausgelesen werden können
-	 * @param ID
-	 */
 	public void setID(int ID) {
 		this.ID = ID;
 	}
 	
-	/**
-	 * Setzt die Namen der Spieler, ->nachdem<- eine ID vergeben wurde
-	 * @param namen
-	 */
 	public void setzeNamen(String[] namen) {
 		//speichert die Namen der Mitspieler, die angezeigt werden, sobald die ID verfügbar ist
 		this.namen = namen;
@@ -232,7 +237,7 @@ public class Graphik extends JFrame {
 	}
 	
 	/**
-	 * Setzt die Namen der Mitspieler
+	 * Zeigt die Namen der Mitspieler an
 	 */
 	private void mitspieler() {
 		//setzt alle Meldungen des Spielers zurück
@@ -253,7 +258,7 @@ public class Graphik extends JFrame {
 	}
 	
 	/**
-	 * Gibt eine Nachricht an einen Spieler aus
+	 * Gibt eine Nachricht an/bei einen Spieler aus
 	 * @param spielerID
 	 * @param text
 	 */
@@ -273,11 +278,7 @@ public class Graphik extends JFrame {
 			gegenspielerKarten[nr - 1].nachricht(text);
 		}
 	}
-	
-	/**
-	 * Spielzug des Spielers durchführen
-	 * @throws Exception 
-	 */
+
 	public Model spiel() throws Exception {
 		this.toFront();
 		//Nochmal Anzeige aktualisieren
@@ -292,6 +293,7 @@ public class Graphik extends JFrame {
 			} else {
 				model.undo(ID);
 				JOptionPane.showMessageDialog(this, "Diese Karte ist nicht erlaubt");
+				this.update();
 				gespielt = spielerKarten.spiel();
 			}
 		} while(!ok);
@@ -302,10 +304,6 @@ public class Graphik extends JFrame {
 		return model;
 	}
 	
-	/**
-	 * Ändert den Modus des Spiels und ändert die Controll
-	 * @param mod
-	 */
 	public void setzeModus(modus mod) {
 		control = new Regelwahl().wahl(mod, model, ID);
 		nachricht(ID, "Es wird ein " + mod.toString() + " gespielt");
@@ -315,11 +313,6 @@ public class Graphik extends JFrame {
 		nachricht(ID, "Bisher höchstes Spiel ist " + mod);
 	}
 	
-	/**
-	 * Fragt den Nutzer, ob er etwas spielen will und gibt den Spielmodus zurück
-	 * @param model
-	 * @return
-	 */
 	public modus spielstDu() {
 		boolean fertig = false;
 		this.toFront();
@@ -341,10 +334,6 @@ public class Graphik extends JFrame {
 		return modus.NICHTS;
 	}
 	
-	/**
-	 * Gibt zurück, ob der Spieler klopft
-	 * @return
-	 */
 	public String klopfstDu() {
 		if(javax.swing.JOptionPane.showConfirmDialog(this, "Willst du klopfen?") == 0) {
 			return "JA";
@@ -353,10 +342,6 @@ public class Graphik extends JFrame {
 		}
 	}
 	
-	/**
-	 * Gibt zurück, ob der Spieler klopft
-	 * @return
-	 */
 	public String kontra() {
 		if(!keinKontra) {
 			if(javax.swing.JOptionPane.showConfirmDialog(this, "Kontra?") == 0) {
@@ -369,14 +354,6 @@ public class Graphik extends JFrame {
 		}
 	}
 	
-	/**
-	 * Zeigt den/die Sieger eines Spiels an
-	 * Wenn s2 4 ist, so gibt es keinen zweiten Sieger,
-	 * ist s1/s2 zwischen 10 und 13 (11 - 10 = 1 -> der zweite Spieler hat verloren), 
-	 * so hat jemand sein Spiel verloren
-	 * @param s1
-	 * @param s2
-	 */
 	public void sieger(int s1, int s2) {
 		//Wenn die spielenden verloren haben
 		if(s1 > 9) {
@@ -397,10 +374,6 @@ public class Graphik extends JFrame {
 		}
 	}
 
-	/**
-	 * Gibt "JA" zurück, wenn der Spieler heiraten will
-	 * @return
-	 */
 	public String hochzeit() {
 		if(JOptionPane.showConfirmDialog(this, "Willst du heiraten?") == JOptionPane.OK_OPTION) {
 			return "JA";
@@ -408,22 +381,11 @@ public class Graphik extends JFrame {
 		return "NEIN";
 	}
 
-	/**
-	 * Gibt die Karte zurück, die der Spieler bei der Hochzeit tauschen will
-	 * Wird aufgerufen, wenn jmd. eine Hochzeit anbietet und wenn eine angenommen
-	 * wird
-	 * @return
-	 */
 	public Karte hochzeitKarte() {
 		JOptionPane.showMessageDialog(this, "Welche gibst du her?");
 		return spielerKarten.spiel();
 	}
 
-	/**
-	 * Empfängt, wer spielt. Wird keine Hochzeit gespielt ist mitspieler gleich 4
-	 * @param spielt
-	 * @param mitspieler 
-	 */
 	public void spielt(int spielt, int mitspieler) { 
 		nachricht(spielt, "Ich spiel");
 		if(mitspieler != 4) {
@@ -437,10 +399,6 @@ public class Graphik extends JFrame {
 		}
 	}
 
-	/**
-	 * Zeigt an, wer Kontra gegeben hat
-	 * @param kontra
-	 */
 	public void kontra(boolean[] kontra) {
 		for(int i = 0; i < 4; i++) {
 			if(kontra[i]) {
@@ -449,10 +407,6 @@ public class Graphik extends JFrame {
 		}
 	}
 
-	/**
-	 * Zeigt an, wer geklopft hat
-	 * @param geklopft
-	 */
 	public void geklopft(boolean[] geklopft) {
 		for(int i = 0; i < 4; i++) {
 			if(geklopft[i]) {

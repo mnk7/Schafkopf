@@ -7,6 +7,7 @@ import lib.Model;
 import lib.Model.modus;
 import graphik.Graphik;
 import graphik.MenuGUI;
+import graphik.View;
 
 public class Client{
 
@@ -20,7 +21,7 @@ public class Client{
 	private String IP;
 	
 	//erstellt eine GUI
-	private Graphik graphik;
+	private View graphik;
 	
 	private MenuGUI menu;
 	 
@@ -272,7 +273,6 @@ public class Client{
 	 */
 	private void graphikUpdate(Model m) {
 		graphik.setModel(m);
-		graphik.repaint();
 	}
 	
 	public void beenden() {

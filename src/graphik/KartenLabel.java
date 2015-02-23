@@ -91,6 +91,7 @@ public class KartenLabel extends JLabel {
 		}
 		
 		this.setIcon(new ImageIcon(getClass().getClassLoader().getResource(bild)));
+		//this.setIcon(new ImageIcon(bild));
 		this.setVisible(true);
 	}
 	

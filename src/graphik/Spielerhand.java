@@ -34,9 +34,9 @@ public class Spielerhand extends JPanel {
 	 */
 	public void setzeKarten(int angezeigt) {
 		reset();
-		for(int i = 5; i > angezeigt; i--) {
+		for(int i = 6; i > angezeigt; i--) {
 			//setzt gespielte Karten unsichtbar
-			karten.get(i).setVisible(false);
+			karten.get(i - 1).setVisible(false);
 		}
 	}
 	
