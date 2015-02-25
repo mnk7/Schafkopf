@@ -23,8 +23,8 @@ import javax.swing.JPanel;
 
 public class Graphik extends JFrame implements View{	
 	
-	private String logo = "Logo.gif";
-	private String hintergrundbild = "karten" + File.separator + "hintergrund1.jpg";
+	private String logo = "graphik/karten/Logo.gif";
+	private String hintergrundbild = "graphik/karten/hintergrund1.jpg";
 	
 	private Model model;
 	
@@ -67,7 +67,6 @@ public class Graphik extends JFrame implements View{
 		this.setTitle("Schafkopf-App");
 		//Icon der Anwendung setzen
 		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(logo));
-		//ImageIcon icon = new ImageIcon(logo);
 		this.setIconImage(icon.getImage()); 
 		
 		this.setSize(1290, 700);
@@ -298,7 +297,7 @@ public class Graphik extends JFrame implements View{
 			}
 		} while(!ok);
 		
-		//aktualisiert die Anzeige
+		//aktualisiert die Anzeige 
 		this.update();
 		
 		return model;

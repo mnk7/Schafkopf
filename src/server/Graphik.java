@@ -31,7 +31,7 @@ public class Graphik extends JFrame {
 	private Server server;
 	private Graphik g = this;
 	
-	private String logo = "./logo.gif";
+	private String logo = "graphik/karten/logo.gif";
 	
 	public Graphik(){
 		super();

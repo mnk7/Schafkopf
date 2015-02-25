@@ -43,10 +43,12 @@ public class MenuGUI extends JFrame {
 	private JTextField IPtf;
 	private JTextField NAMEtf;
 	
-	private String logo = "Logo.gif";
+	private String logo = "graphik/karten/Logo.gif";
 	
 	public MenuGUI() {
 		super();
+		
+		System.out.println(System.getProperty("java.class.path"));
 		
 		try {
 			initGUI();
@@ -87,7 +89,6 @@ public class MenuGUI extends JFrame {
 		
 		//Icon der Anwendung setzen
 		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(logo));
-		//ImageIcon icon = new ImageIcon(logo);
 		this.setIconImage(icon.getImage());
 		
 		this.setLayout(null);

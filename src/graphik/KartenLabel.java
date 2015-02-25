@@ -81,10 +81,10 @@ public class KartenLabel extends JLabel {
 	 */
 	public void setBild(Karte karte) {
 		if(karte == null) {
-			bild =  "karten" + File.separator + "rueckseite.jpg";
+			bild =  "graphik/karten/rueckseite.jpg";
 		} else {
 			//Zeigt das zur Karte gehörende Bild
-			bild =  "karten" + File.separator + 
+			bild =  "graphik/karten/" +
 					karte.gibFarbe().toString().toLowerCase() + 
 					karte.gibWert().toString().toLowerCase() + 
 					".jpg";
