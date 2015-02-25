@@ -323,10 +323,7 @@ public class Server extends Thread {
          */
         private void hoechstesSpiel(ArrayList<modus> spielfolge) throws Exception {
         	//ermittelt das höchstwertige Spiel
-        	mod = spielfolge.get(spielfolge.size() - 1);
-        	for(int i = spielfolge.size() - 2; i >= 0; i--) {
-        		mod = model.werSpielt(mod, spielfolge.get(i));
-        	}
+        	spielErmitteln(spielfolge);
         	
         	//Wenn eine Hochzeit nicht erlaubt ist, wird unter den restlichen Spielen ein höchstes ermittelt
         	if(mod.equals(modus.HOCHZEIT) && !hochzeit(spielt)) {
@@ -334,6 +331,13 @@ public class Server extends Thread {
         		hoechstesSpiel(spielfolge);
         	}
         }
+        	
+        	private void spielErmitteln(ArrayList<modus> spielfolge) {
+        		mod = spielfolge.get(spielfolge.size() - 1);
+            	for(int i = spielfolge.size() - 2; i >= 0; i--) {
+            		mod = model.werSpielt(mod, spielfolge.get(i));
+            	}
+        	}
         
         /**
          * Führt eine Hochzeit zwischen zwei Spielern durch

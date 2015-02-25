@@ -37,6 +37,9 @@ public class Meldungen extends JPanel{
 	 * @param text
 	 */
 	public void festeAnzeige(String text) {
+		//Verdoppelt die letzte Meldung
+		nachricht(meldung[festeAnzeigen].getText());
+		//Und startet die feste Anzeige
 		meldung[festeAnzeigen].setText(text);
 		Font schrift = meldung[festeAnzeigen].getFont();
 		meldung[festeAnzeigen].setFont(schrift.deriveFont(schrift.BOLD+ schrift.ITALIC));
@@ -53,8 +56,7 @@ public class Meldungen extends JPanel{
 			meldung[i].setText(meldung[i - 1].getText());
 		}
 		//Zeigt die neue Meldung an
-		meldung[1].setText(" > " + text);
-		repaint();
+		meldung[1].setText(text);
 	}
 	
 	/**

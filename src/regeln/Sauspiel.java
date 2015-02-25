@@ -147,6 +147,10 @@ public class Sauspiel implements Control {
 
 	public boolean erlaubt(Model m) {
 		Karte.wert angespielt;
+		//Es wurde noch nichts angespielt
+		if(m.gibTisch()[0] == null) {
+			return true;
+		} //Andernfalls...
 		angespielt = m.gibTisch()[0].gibWert();
 		Karte.farbe angespielt2;
 		angespielt2 = m.gibTisch()[0].gibFarbe();

@@ -1,12 +1,16 @@
 package graphik;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -48,7 +52,11 @@ public class Graphik extends JFrame implements View{
 	//Tisch
 	private Tisch tisch;
 	
+	//Dialog, der abfrägt, welches Spiel der Spieler spielen will
 	private SpielmodusDialog dialog;
+	
+	private JButton letzterStichButton;
+	private LetzterStich letzterStichAnzeige;
 	
 	//Hintergrund
 	private JLabel hintergrund;	
@@ -172,6 +180,23 @@ public class Graphik extends JFrame implements View{
 			dialog.setBounds(0, 0, 300, 300);
 			dialog.setVisible(false);
 			
+			letzterStichButton = new JButton();
+			hintergrund.add(letzterStichButton);
+			letzterStichButton.setText("Letzter Stich");
+			letzterStichButton.setBounds(this.getWidth() - 150, 10, 140, 30);
+			letzterStichButton.setVisible(true);
+			letzterStichButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent evt) {
+					letzterStichAnzeige.setzeModel(model, namen);
+					letzterStichAnzeige.setVisible(true);
+				}
+			});
+			
+			letzterStichAnzeige = new LetzterStich();
+			hintergrund.add(letzterStichAnzeige);
+			letzterStichAnzeige.setLocation(0, 0);
+			letzterStichAnzeige.setVisible(false);
+			
 			//-------------------------------------------------------------hintergrund
 		
 		} catch(Exception e) {
@@ -220,6 +245,8 @@ public class Graphik extends JFrame implements View{
 			}
 			gegenspielerKarten[i].update(angezeigteKarten);
 		}
+		//Aktualisiert den letzten Stich
+		letzterStichAnzeige.setzeModel(model, namen);
 		
 		this.repaint();
 	}
@@ -381,8 +408,14 @@ public class Graphik extends JFrame implements View{
 	}
 
 	public Karte hochzeitKarte() {
-		JOptionPane.showMessageDialog(this, "Welche gibst du her?");
-		return spielerKarten.spiel();
+		Hochzeit h = new Hochzeit();
+		ArrayList<Karte> spielerhand = model.gibSpielerKarten(ID);
+		for(int i = 0; i < spielerhand.size(); i++) {
+			if(h.istTrumpf(spielerhand.get(i).gibWert(), spielerhand.get(i).gibFarbe())) {
+				return spielerhand.get(i);
+			}
+		}
+		return null;
 	}
 
 	public void spielt(int spielt, int mitspieler) { 

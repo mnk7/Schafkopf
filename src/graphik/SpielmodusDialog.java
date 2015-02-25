@@ -28,6 +28,15 @@ public class SpielmodusDialog extends JPanel {
 		super();
 
 		this.setLayout(null);
+		this.setOpaque(true);
+		
+		Color background = this.getBackground();
+		//Farbe für den Hauptdialog
+		background = new Color(background.getRed(),     //Rot
+							   background.getGreen(),   //Grün
+							   background.getBlue(),    //Blau
+							   0);                      //Alpha-Wert
+		this.setBackground(background);            
 		
 		spiele = new JButton[7];
 		
@@ -57,6 +66,8 @@ public class SpielmodusDialog extends JPanel {
 		tout.setBounds(200, 0, 100, 30);
 		//Tout oder nicht Tout? Das ist hier die Frage!
 		tout.setText("Tout ?");
+		tout.setForeground(Color.white);
+		tout.setBackground(background);
 		tout.setVisible(true);
 		
 		farbwahl = new ButtonGroup();
@@ -66,8 +77,10 @@ public class SpielmodusDialog extends JPanel {
 			farben[i] = new JRadioButton();
 			this.add(farben[i]);
 			farbwahl.add(farben[i]);
-			farben[i].setVisible(true);
 			farben[i].setBounds(200, 50 * (i + 1), 100, 30);
+			farben[i].setForeground(Color.white);
+			farben[i].setBackground(background);
+			farben[i].setVisible(true);
 		}
 		
 		farben[0].setText("Eichel");

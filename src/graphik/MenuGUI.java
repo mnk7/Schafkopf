@@ -48,12 +48,10 @@ public class MenuGUI extends JFrame {
 	public MenuGUI() {
 		super();
 		
-		System.out.println(System.getProperty("java.class.path"));
-		
 		try {
 			initGUI();
 		} catch(Exception e) {
-			javax.swing.JOptionPane.showMessageDialog(null, "Fehler beim Programmstart");
+			javax.swing.JOptionPane.showMessageDialog(null, "Fehler während des Programmstarts");
 			e.printStackTrace();
 		}	
 	}
@@ -63,12 +61,20 @@ public class MenuGUI extends JFrame {
 	 */
 	public void verbinden() {
 		try {
-			client = new Client(IPtf.getText(), NAMEtf.getText(), this);
-			//unsichtbar machen
-			this.setVisible(false);
+			if(IPtf.getText().equals("")) {
+				javax.swing.JOptionPane.showMessageDialog(null, "Geben sie eine Serveradresse an!");
+			} else {
+				if(NAMEtf.getText().equals("")) {
+					javax.swing.JOptionPane.showMessageDialog(null, "Geben sie einen Namen an!");
+				} else {
+					client = new Client(IPtf.getText(), NAMEtf.getText(), this);
+					//unsichtbar machen
+					this.setVisible(false);
+				}
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
-			javax.swing.JOptionPane.showMessageDialog(null, "Fehler beim Verbindungsaufbau");
+			javax.swing.JOptionPane.showMessageDialog(null, "Fehler während des Verbindungsaufbaus");
 			//Fehlende Einträge markieren
 			if(IPtf.getText().equals("")) IPlabel.setForeground(Color.RED);
 			if(NAMEtf.getText().equals("")) NAMElabel.setForeground(Color.RED);
