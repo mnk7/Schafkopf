@@ -101,10 +101,8 @@ public class Wenz implements Control {
 		//Es wurde ein Unter angespielt
 		if(angespielt.gibWert().equals(Karte.wert.UNTER)){
 			if(tisch[ID].gibWert().equals(Karte.wert.UNTER)){
-				System.out.println(2);
 				return true;
 			} else if(keinTrumpf(m, ID)){
-				System.out.println(3);
 				return true;
 			}
 			return false;
@@ -113,11 +111,9 @@ public class Wenz implements Control {
 		if(tisch[ID].gibFarbe().equals(angespielt.gibFarbe()) 
 				&& !tisch[ID].gibWert().equals(Karte.wert.UNTER)){
 			//Es wurde die passende Farbe gespielt
-			System.out.println(tisch[ID].gibWert());
 			return true;
 		} else if(keineFarbe(angespielt.gibFarbe(), m, ID)){
 			//Der Spieler hat die Farbe nicht
-			System.out.println(5);
 			return true;
 		}
 		return false;

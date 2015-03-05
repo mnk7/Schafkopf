@@ -5,149 +5,158 @@ import lib.Karte;
 import lib.Model;
 
 public class Geier implements Control {
-	@Override
+	
 	public int sieger(Model m) {
-		boolean ober = false;
-		Karte[] gespielt = new Karte[4];
-		gespielt = m.gibTisch();
-		for(int i = 0; i < 4; i++){
-			if(gespielt[i].gibWert() == Karte.wert.OBER){ 
-				ober = true;
-			}
-		}
-		if(!ober) return keinOber(gespielt);
-		return schonOber(gespielt);
-	}
-	public int schonOber(Karte[] gespielt){
-		int spieler = 0;
-		Karte.farbe oberFarbe = null;
+		boolean unter = false;
+		Karte[] gespielt = m.gibTisch();
 		for(int i = 0; i < 4; i++){
 			if(gespielt[i].gibWert() == Karte.wert.OBER){
-				spieler = i;
-				switch(oberFarbe){
-				case HERZ: {
-				if(gespielt[i].gibFarbe() == Karte.farbe.SCHELLEN){}
-				else oberFarbe = gespielt[i].gibFarbe();
-				}break;
-				case GRAS:{
-					if(gespielt[i].gibFarbe() == Karte.farbe.EICHEL)oberFarbe = gespielt[i].gibFarbe();
-					else {}
-					}break;
-				case EICHEL:break;
-				default: oberFarbe = gespielt[i].gibFarbe();
-				}
-				}
+				unter = true;
 			}
-		return spieler;
+		}
+		if(!unter) {
+			return keinOber(gespielt);
+		}
+		return schonOber(gespielt);
 	}
-	public int keinOber(Karte[] gespielt){
-		int spieler = 0;
-		Karte.farbe farb = gespielt[0].gibFarbe();
-		Karte.wert farbwert = gespielt[0].gibWert();
-
+	
+	private int schonOber(Karte[] gespielt){
+		int spieler = -1;
 		for(int i = 0; i < 4; i++){
-			if(gespielt[i].gibFarbe() == farb){
-				spieler = i;
-				switch(farbwert){
-				case NEUN: farbwert = gespielt[i].gibWert();break;
-				case UNTER: {
-				if(gespielt[i].gibWert() == Karte.wert.NEUN){}
-				else farbwert = gespielt[i].gibWert();
-				}break;
-				case KONIG:{
-					if(gespielt[i].gibWert() == Karte.wert.NEUN || gespielt[i].gibWert() == Karte.wert.UNTER){}
-					else farbwert = gespielt[i].gibWert();
-					}break;
-				case ZEHN:{
-					if(gespielt[i].gibWert() == Karte.wert.SAU)farbwert = gespielt[i].gibWert();
-					else {}
-					}break;		
-				case SAU:break;
+			if(gespielt[i].gibWert() == Karte.wert.OBER){
+				
+				if(spieler == -1) {
+					spieler = i;
+				} else {
+					//siehe lib.Karte: 1 = EICHEL, 2 = GRAS, 3 = HERZ, 4 = SCHELLEN
+					if(gespielt[i].gibFarbe().ordinal() < gespielt[spieler].gibFarbe().ordinal()) {
+						spieler = i;
 					}
 				}
 			}
+		}
 		return spieler;
 	}
 	
-	@Override
+	private int keinOber(Karte[] gespielt){
+		int spieler = 0;
+
+		for(int i = 0; i < 4; i++){
+			if(gespielt[i].gibFarbe().equals(gespielt[spieler].gibFarbe())){
+				if(kartenRangliste(gespielt[i].gibWert()) 
+						> kartenRangliste(gespielt[spieler].gibWert())) {
+					spieler = i;
+				}
+			}
+		}
+		return spieler;
+	}
+	
+	/**
+	 * Gibt einen Wert zurück, der dem Stellenwert der Karte entspricht
+	 * @param wert
+	 * @return
+	 */
+	private int kartenRangliste(Karte.wert wert) {
+		switch(wert) {
+		case NEUN:
+			return 0;
+		case UNTER:
+			return 1;
+		case KONIG:
+			return 2; 
+		case ZEHN:
+			return 3;
+		case SAU:
+			return 4;
+		case OBER:
+			return 5;
+		}
+		
+		return -1;
+	}
+	
 	public boolean erlaubt(Model m, int ID) {
-		// TODO Auto-generated method stub
-		Karte.wert angespielt;
-		angespielt = m.gibTisch()[0].gibWert();
-		if(angespielt == null){
+		Karte[] tisch = m.gibTisch();
+		Karte angespielt;
+		
+		//Findet die Karte, die zuerst gespielt wurde
+		int zahlGespielteKarten = 0;
+		for(int i = 0; i < 4; i++) {
+			if(tisch[i] != null) {
+				zahlGespielteKarten++;
+			}
+		}
+		int spieler0 = ID + 1 - zahlGespielteKarten;
+		if(spieler0 < 0) {
+			spieler0 +=4;
+		}
+		angespielt = tisch[spieler0];
+		
+		//Es wurde nichts angespielt
+		if(angespielt == null || ID == spieler0){
 			return true;
 		}
-		if(angespielt.equals(Karte.wert.OBER)){
-		if(Karte.wert.OBER == getWert(m)){
+		//Es wurde ein Unter angespielt
+		if(angespielt.gibWert().equals(Karte.wert.OBER)){
+			if(tisch[ID].gibWert().equals(Karte.wert.OBER)){
+				return true;
+			} else if(keinTrumpf(m, ID)){
+				return true;
+			}
+			return false;
+		}
+		//Es wurde eine Farbe angespielt
+		if(tisch[ID].gibFarbe().equals(angespielt.gibFarbe()) 
+				&& !tisch[ID].gibWert().equals(Karte.wert.OBER)){
+			//Es wurde die passende Farbe gespielt
 			return true;
-		}
-		if(Karte.wert.OBER != getWert(m) && keinTrumpf(m)){
-			return true;
-		}
-		}
-		Karte.farbe angespielt2;
-		angespielt2 = m.gibTisch()[0].gibFarbe();
-		if(getFarbe(m).equals(angespielt2)){
-			return true;
-		}
-		if(!getFarbe(m).equals(angespielt2) && keineFarbe(angespielt2, m)){
+		} else if(keineFarbe(angespielt.gibFarbe(), m, ID)){
+			//Der Spieler hat die Farbe nicht
 			return true;
 		}
 		return false;
 	}
-	@Override
+
 	public int mitspieler(Model m) {
-		// TODO Auto-generated method stub
 		return 4;
 	}
-	public Karte.wert getWert(Model m){
-		Karte.wert x = null;
-		for(int i = 0; i < 4; i++){
-			if(m.gibTisch()[i] != null){
-				x = m.gibTisch()[i].gibWert();
-			}
-		}
-		return x;
-	}
-	public boolean keinTrumpf(Model m){
-		ArrayList<Karte> y;
-		int x = 0;
-		for(int i = 0; i < 4; i++){
-			if(m.gibTisch()[i] != null){
-				x = i;
-			}
-		}
-		y = m.gibSpielerKarten(x);
+	
+	/**
+	 * Untersucht, ob der Spieler einen Trumpf auf der Hand hat
+	 * @param m
+	 * @param ID
+	 * @return
+	 */
+	private boolean keinTrumpf(Model m, int ID){
+		ArrayList<Karte> y = (ArrayList<Karte>) m.gibSpielerKarten(ID).clone();
+		y.add(m.gibTisch()[ID]);
+		
 		for(int i = 0; i < y.size(); i++){
-			if(y.get(i).gibWert() == Karte.wert.OBER){
+			if(y.get(i).gibWert().equals(Karte.wert.OBER)){
 				return false;
 			}
-	}
-		return true;
-}
-	public Karte.farbe getFarbe(Model m){
-		Karte.farbe x = null;
-		for(int i = 0; i < 4; i++){
-			if(m.gibTisch()[i] != null && m.gibTisch()[i].gibWert() != Karte.wert.OBER){
-				x = m.gibTisch()[i].gibFarbe();
-			}
-		}		
-		return x;
-	}
-	public boolean keineFarbe(Karte.farbe z,Model m){
-		ArrayList<Karte> y;
-		int x = 0;
-		for(int i = 0; i < 4; i++){
-			if(m.gibTisch()[i] != null){
-				x = i;
-			}
 		}
-		y = m.gibSpielerKarten(x);
+		return true;
+	}
+	
+	/**
+	 * Untersucht, ob der Spieler die angespielte Farbe nicht auf der Hand hat
+	 * @param farbe
+	 * @param m
+	 * @param ID
+	 * @return
+	 */
+	private boolean keineFarbe(Karte.farbe farbe, Model m, int ID){
+		ArrayList<Karte> y = (ArrayList<Karte>) m.gibSpielerKarten(ID).clone();
+		y.add(m.gibTisch()[ID]);
+		
 		for(int i = 0; i < y.size(); i++){
-			if(y.get(i).gibFarbe() == z && m.gibTisch()[i].gibWert() != Karte.wert.OBER){
+			Karte karte = y.get(i);
+			if(karte.gibFarbe().equals(farbe) && !karte.gibWert().equals(Karte.wert.OBER)) {
 				return false;
 			}
-	}
+		}
 		return true;
-}
+	}
 }
