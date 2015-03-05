@@ -160,7 +160,7 @@ public class Graphik extends JFrame implements View{
 			gegenspielerKarten[2].nachricht("Spieler 3");
 			
 			//Anzeige der Karten der Spieler
-			spielerKarten = new Spieler();
+			spielerKarten = new Spieler(420, 100);
 			hintergrund.add(spielerKarten);
 			//Unterhalb der eigenen Meldungen platziert
 			spielerKarten.setBounds(breite, hoehe*2 + 80, breite, hoehe);
@@ -314,18 +314,15 @@ public class Graphik extends JFrame implements View{
 		
 		do {
 			spielerKarten.update(model.setTisch(ID, gespielt));
-			if(control.erlaubt(model)) {
+			if(control.erlaubt(model, ID)) {
 				ok = true;
 			} else {
 				model.undo(ID);
-				JOptionPane.showMessageDialog(this, "Diese Karte ist nicht erlaubt");
 				this.update();
+				JOptionPane.showMessageDialog(this, "Diese Karte ist nicht erlaubt");
 				gespielt = spielerKarten.spiel();
 			}
 		} while(!ok);
-		
-		//aktualisiert die Anzeige 
-		this.update();
 		
 		return model;
 	}
@@ -369,6 +366,7 @@ public class Graphik extends JFrame implements View{
 	}
 	
 	public String kontra() {
+		//Wenn der Spieler nicht spielt
 		if(!keinKontra) {
 			if(javax.swing.JOptionPane.showConfirmDialog(this, "Kontra?") == 0) {
 				return "JA";
@@ -381,23 +379,31 @@ public class Graphik extends JFrame implements View{
 	}
 	
 	public void sieger(int s1, int s2) {
+		String text = "";
 		//Wenn die spielenden verloren haben
 		if(s1 > 9) {
 			for(int i = 0; i < 4; i++) {
-				if(i == s1) {
-					nachricht(i, "Zefix!");
-				} else if(i == s2) {
-					nachricht(i, "Oh nöö!");
-				} else {		 
-					nachricht(i, "Na toll.");
+				if(i == s1 - 10) {
+					text += namen[i] + ": Verdammt! Verloren.\n";
+				} else if(i == s2 - 10) { //s2 kann 4 sein und wird damit nie i
+					text += namen[i] + ": Oh nööö! Verloren.\n";
+				} else {
+					text += namen[i] + ": Haha! Gewonnen.\n";
 				}
 			}
 		} else { //Ansonsten
-			nachricht(s1, "Jawooooohl!");
-			if(s2 != 4) {
-				nachricht(s2, "Ja geht doch!");
+			for(int i = 0; i < 4; i++) {
+				if(i == s1) {
+					text += namen[i] + ": Juhu! Gewonnen.\n";
+				} else if(i == s2) { //s2 kann 4 sein und damit nie gleich i werden
+					text += namen[i] + ": Na geht doch! Gewonnen.\n";
+				} else {
+					text += namen[i] + ": Na super. Verloren.\n";
+				}
 			}
 		}
+		
+		JOptionPane.showMessageDialog(this, text);
 	}
 
 	public String hochzeit() {

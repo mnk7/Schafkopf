@@ -171,7 +171,6 @@ public abstract class Netzwerk {
 			output = "§";
 		}
 		out.println(output);
-		System.out.println("[PRINT] " + output);
 	}
 	
 	/**
@@ -189,7 +188,6 @@ public abstract class Netzwerk {
 	 */
 	protected String einlesen() throws Exception {
 		String input = in.readLine();
-		System.out.println("[READ] " + input);
 		
 		//§ kommt nicht in der Ausgabe vor!!
 		if(input.equals("§")) {

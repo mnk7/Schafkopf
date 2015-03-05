@@ -16,12 +16,12 @@ public class Spieler extends JPanel {
 	//speichert die gespielte Karte
 	private Karte gespielt;
 	
-	public Spieler() {
+	public Spieler(int breite, int hoehe) {
 		super();
 		
 		this.setLayout(null);
 		this.setBackground(new Color(0,0,0,0));
-		this.setSize(420, 100);
+		this.setSize(breite, hoehe);
 		
 		karten = new ArrayList<KartenButton>();		
 		for(int i = 0; i < 6; i++) {

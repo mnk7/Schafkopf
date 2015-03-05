@@ -139,7 +139,7 @@ public class Solo implements Control {
 	}
 	
 	@Override
-	public boolean erlaubt(Model m) {
+	public boolean erlaubt(Model m, int ID) {
 		Karte.wert angespielt;
 		angespielt = m.gibTisch()[0].gibWert();
 		Karte.farbe angespielt2;

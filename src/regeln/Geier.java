@@ -70,7 +70,7 @@ public class Geier implements Control {
 	}
 	
 	@Override
-	public boolean erlaubt(Model m) {
+	public boolean erlaubt(Model m, int ID) {
 		// TODO Auto-generated method stub
 		Karte.wert angespielt;
 		angespielt = m.gibTisch()[0].gibWert();

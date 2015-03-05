@@ -14,9 +14,10 @@ public interface Control {
 	/**
 	 * Bestimmt, ob ein Spielzug erlaubt ist und gibt das Ergebnis zurück
 	 * @param model
+	 * @param ID
 	 * @return erlaubt
 	 */
-	public boolean erlaubt(Model m);
+	public boolean erlaubt(Model m, int ID);
 	
 	/**
 	 * Bestimmt einen eventuellen Mitspieler
