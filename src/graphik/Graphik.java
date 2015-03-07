@@ -339,6 +339,8 @@ public class Graphik extends JFrame implements View{
 	public modus spielstDu() {
 		boolean fertig = false;
 		this.toFront();
+		//Platz wird frei gemacht
+		letzterStichAnzeige.setVisible(false);
 		dialog.setVisible(true);
 		while(!fertig) {			
 			modus m = dialog.modusWahl();

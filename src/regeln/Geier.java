@@ -41,7 +41,7 @@ public class Geier implements Control {
 	private int keinOber(Karte[] gespielt){
 		int spieler = 0;
 
-		for(int i = 0; i < 4; i++){
+		for(int i = 1; i < 4; i++){
 			if(gespielt[i].gibFarbe().equals(gespielt[spieler].gibFarbe())){
 				if(kartenRangliste(gespielt[i].gibWert()) 
 						> kartenRangliste(gespielt[spieler].gibWert())) {
