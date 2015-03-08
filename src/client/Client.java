@@ -6,6 +6,7 @@ import lib.Karte;
 import lib.Model;
 import lib.Model.modus;
 import graphik.Graphik;
+import graphik.Menu;
 import graphik.MenuGUI;
 import graphik.View;
 
@@ -23,7 +24,7 @@ public class Client{
 	//erstellt eine GUI
 	private View graphik;
 	
-	private MenuGUI menu;
+	private Menu menu;
 	 
 	//Erstellt ein Model
 	private Model model;
@@ -39,7 +40,7 @@ public class Client{
 	private boolean beenden;
 	
 	
-	public Client(String IP, String name, MenuGUI menu) throws Exception{				
+	public Client(String IP, String name, Menu menu) throws Exception{				
 		this.IP = IP;
 		this.name = name;
 		ID = -1;
@@ -53,7 +54,7 @@ public class Client{
 		//Vorerst leeres Model erzeugen
 		model = new Model();
 				
-		graphik = new Graphik(model, this);
+		graphik = menu.gibGraphik();
 		
 		listener = new Thread() {
 			public void run() {
@@ -136,7 +137,7 @@ public class Client{
 	
 	private void bestesspiel(Object[] data) {
 		//zeigt dem Spieler an, welches Spiel das bisher höchste ist
-		graphik.bestesspiel(data[1].toString());
+		graphik.bestesspiel(modus.valueOf(data[1].toString()));
 	}
 
 	private synchronized void name(Object[] data) throws Exception {

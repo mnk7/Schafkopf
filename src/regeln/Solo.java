@@ -6,24 +6,24 @@ import lib.Karte;
 import lib.Model;
 
 public class Solo implements Control {
-	Karte.farbe farbe;
+	private Karte.farbe farbe;
 
 	public Solo(Karte.farbe farbe) {
 		this.farbe = farbe;
 	}
 
-	public int sieger(Model m) {
+	public int sieger(Model m, int erster) {
 		boolean trumpf = false;
 		Karte[] gespielt = m.gibTisch();
 		for(int i = 0; i < 4; i++){
 			if(gespielt[i] != null) {
-				if(istTrumpf(gespielt[i].gibWert(),gespielt [i].gibFarbe())){
+				if(istTrumpf(gespielt[i].gibWert(), gespielt[i].gibFarbe())) {
 					trumpf = true;
 				}
 			}
 		}
 		if(!trumpf) {
-			return keinTrumpf(gespielt);
+			return keinTrumpf(gespielt, erster);
 		}
 		return schonTrumpf(gespielt);
 	}
@@ -33,7 +33,7 @@ public class Solo implements Control {
 	 * @param gespielt
 	 * @return
 	 */
-	private int schonTrumpf(Karte[] tisch){
+	private int schonTrumpf(Karte[] tisch) {
 		int sieger = -1;
 		
 		for(int i = 0; i < 4; i++) {
@@ -69,18 +69,20 @@ public class Solo implements Control {
 	 * @param tisch
 	 * @return
 	 */
-	private int keinTrumpf(Karte[] tisch){		
-		int sieger = 0;
-		
-		for(int i = 1; i < 4; i++) {
-			if(tisch[i].gibFarbe().equals(tisch[0].gibFarbe())) {
-				if(kartenRangliste(tisch[i].gibWert()) > kartenRangliste(tisch[0].gibWert())) {
-					sieger = i;
+	private int keinTrumpf(Karte[] gespielt, int erster) {
+		//Derjenige, der ausgekartet hat wird zuerst abgerufen
+		int spieler = erster;
+
+		for(int i = 1; i < 4; i++){
+			
+			if(gespielt[(i + erster) % 4].gibFarbe().equals(gespielt[erster].gibFarbe())){
+				if(kartenRangliste(gespielt[(i + erster) % 4].gibWert()) 
+						> kartenRangliste(gespielt[spieler].gibWert())) {
+					spieler = i;
 				}
 			}
 		}
-
-		return sieger;
+		return spieler;
 	}
 	
 	/**
@@ -130,21 +132,25 @@ public class Solo implements Control {
 		}
 		//Es wurde Trumpf angespielt
 		if(istTrumpf(angespielt.gibWert(), angespielt.gibFarbe())) {
-			if(istTrumpf(tisch[ID].gibWert(), tisch[ID].gibFarbe())){
+			if(istTrumpf(tisch[ID].gibWert(), tisch[ID].gibFarbe())) {
 				return true;
-			} else if(keinTrumpf(m, ID)){
-				return true;
+			} else {
+				if(keinTrumpf(m, ID)) {
+					return true;
+				}
 			}
 			return false;
 		}
 		//Es wurde eine Farbe angespielt
 		if(tisch[ID].gibFarbe().equals(angespielt.gibFarbe()) 
-				&& !istTrumpf(tisch[ID].gibWert(), tisch[ID].gibFarbe())){
+				&& !istTrumpf(tisch[ID].gibWert(), tisch[ID].gibFarbe())) {
 			//Es wurde die passende Farbe gespielt
 			return true;
-		} else if(keineFarbe(angespielt.gibFarbe(), m, ID)){
-			//Der Spieler hat die Farbe nicht
-			return true;
+		} else { 
+			if(keineFarbe(angespielt.gibFarbe(), m, ID)) {
+				//Der Spieler hat die Farbe nicht
+				return true;
+			}
 		}
 		return false;
 	}
@@ -156,11 +162,11 @@ public class Solo implements Control {
 	 * @param ID
 	 * @return
 	 */
-	private boolean keineFarbe(Karte.farbe farbe, Model m, int ID){
+	private boolean keineFarbe(Karte.farbe farbe, Model m, int ID) {
 		ArrayList<Karte> y = (ArrayList<Karte>) m.gibSpielerKarten(ID).clone();
 		y.add(m.gibTisch()[ID]);
 		
-		for(int i = 0; i < y.size(); i++){
+		for(int i = 0; i < y.size(); i++) {
 			Karte karte = y.get(i);
 			if(karte.gibFarbe().equals(farbe) && !istTrumpf(karte.gibWert(), karte.gibFarbe())) {
 				return false;
@@ -175,12 +181,12 @@ public class Solo implements Control {
 	 * @param ID
 	 * @return
 	 */
-	private boolean keinTrumpf(Model m, int ID){
+	private boolean keinTrumpf(Model m, int ID) {
 		ArrayList<Karte> y = (ArrayList<Karte>) m.gibSpielerKarten(ID).clone();
 		y.add(m.gibTisch()[ID]);
 		
-		for(int i = 0; i < y.size(); i++){
-			if(istTrumpf(y.get(i).gibWert(), y.get(i).gibFarbe())){
+		for(int i = 0; i < y.size(); i++) {
+			if(istTrumpf(y.get(i).gibWert(), y.get(i).gibFarbe())) {
 				return false;
 			}
 		}

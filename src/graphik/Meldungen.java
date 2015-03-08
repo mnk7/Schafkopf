@@ -19,6 +19,7 @@ public class Meldungen extends JPanel{
 		super();
 		
 		this.setLayout(null);
+		this.setOpaque(true);
 		this.setBackground(new Color(0,0,0,0));
 		this.setSize(200, histLaenge*20);
 		
@@ -26,7 +27,7 @@ public class Meldungen extends JPanel{
 		for(int i = 0; i < meldung.length; i++) {
 			meldung[i] = new JLabel();
 			this.add(meldung[i]);
-			meldung[i].setBounds(0, i*20, 300, 20);
+			meldung[i].setBounds(0, i*20, 480, 20);
 			meldung[i].setBackground(new Color(0,0,0,0));
 			meldung[i].setForeground(Color.white);
 		}

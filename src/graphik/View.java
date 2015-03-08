@@ -40,7 +40,7 @@ public interface View {
 	 * Zeigt das bislang höchste Spiel an
 	 * @param mod
 	 */
-	public void bestesspiel(String mod);
+	public void bestesspiel(modus mod);
 	
 	/**
 	 * Fragt den Nutzer, ob er etwas spielen will und gibt den Spielmodus zurück

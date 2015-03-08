@@ -183,6 +183,53 @@ public class SpielmodusDialog extends JPanel {
 		return null;
 	}
 	
+	/**
+	 * Wandelt einen Modus in gesprochenes Wort um
+	 * @param m
+	 */
+	public String modusZuSprache(modus m) {
+		switch(m) {
+		case HOCHZEIT:
+			return "eine Hochzeit";
+		case SAUSPIELeichel:
+			return "ein Sauspiel auf die Eichel-SAU";
+		case SAUSPIELgras:
+			return "ein Sauspiel auf die Gras-Sau";
+		case SAUSPIELherz:
+			return "ein Sauspiel auf die Herz-Sau";
+		case SAUSPIELschellen:
+			return "ein Sauspiel auf die Schellen-Sau";
+		case GEIER:
+			return "ein Geier";
+		case GEIERdu:
+			return "ein Geier-Tout";
+		case WENZ:
+			return "ein Wenz";
+		case WENZdu:
+			return "ein Wenz-Tout";
+		case SOLOeichel:
+			return "ein Eichel-Solo";
+		case SOLOeichelDU:
+			return "ein Eichel-Solo-Tout";
+		case SOLOgras:
+			return "ein Gras-Solo";
+		case SOLOgrasDU:
+			return "ein Gras-Solo-Tout";
+		case SOLOherz:
+			return "ein Herz-Solo";
+		case SOLOherzDU:
+			return "ein Herz-Solo-Tout";
+		case SOLOschellen:
+			return "ein Schellen-Solo";
+		case SOLOschellenDU:
+			return "ein Schellen-Solo-Tout";
+		case SI:
+			return "ein Si";
+		}
+		
+		return "Nichts";
+	}
+	
 	public void reset() {
 		rueckgabe = null;
 	}

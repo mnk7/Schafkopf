@@ -4,11 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.File;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -166,7 +163,7 @@ public class Graphik extends JFrame implements View{
 			spielerKarten.setBounds(breite, hoehe*2 + 80, breite, hoehe);
 			spielerKarten.setVisible(true);
 			
-			//Meldungen des Spielers (10 Meldungen werden gebuffert)
+			//Meldungen des Spielers (4 Meldungen werden angezeigt)
 			spielerMeldungen = new Meldungen(4);
 			hintergrund.add(spielerMeldungen);
 			//Die Meldungen laufen im letzten Fünftel des Fensters
@@ -328,12 +325,12 @@ public class Graphik extends JFrame implements View{
 	}
 	
 	public void setzeModus(modus mod) {
-		control = new Regelwahl().wahl(mod, model, ID);
-		nachricht(ID, "Es wird ein " + mod.toString() + " gespielt");
+		control = new Regelwahl().wahl(mod, model);
+		nachricht(ID, "Es wird " + dialog.modusZuSprache(mod) + " gespielt");
 	}
 	
-	public void bestesspiel(String mod) {
-		nachricht(ID, "Bisher höchstes Spiel ist " + mod);
+	public void bestesspiel(modus mod) {
+		nachricht(ID, "Bisher höchstes Spiel ist " + dialog.modusZuSprache(mod));
 	}
 	
 	public modus spielstDu() {
@@ -416,14 +413,9 @@ public class Graphik extends JFrame implements View{
 	}
 
 	public Karte hochzeitKarte() {
-		Hochzeit h = new Hochzeit();
-		ArrayList<Karte> spielerhand = model.gibSpielerKarten(ID);
-		for(int i = 0; i < spielerhand.size(); i++) {
-			if(h.istTrumpf(spielerhand.get(i).gibWert(), spielerhand.get(i).gibFarbe())) {
-				return spielerhand.get(i);
-			}
-		}
-		return null;
+		this.toFront();
+		JOptionPane.showMessageDialog(this, "Welche gibst du her?");
+		return spielerKarten.spiel();
 	}
 
 	public void spielt(int spielt, int mitspieler) { 

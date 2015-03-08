@@ -7,245 +7,237 @@ import lib.Model;
 
 
 public class Sauspiel implements Control {
-	Karte.farbe rufsau;
-	Karte.farbe farbe = Karte.farbe.HERZ;
-	public Sauspiel(Karte.farbe saufarbe){
-		rufsau = saufarbe;
+	private Karte rufsau;
+	private int gerufener;
+	
+	public Sauspiel(Karte.farbe rufsauFarbe){
+		rufsau = new Karte(rufsauFarbe, Karte.wert.SAU);
+		gerufener = -1;
 	}
 
-	public int sieger(Model m) {
+	public int sieger(Model m, int erster) {
 		boolean trumpf = false;
-		Karte[] gespielt = new Karte[4];
-		gespielt = m.gibTisch();
+		Karte[] gespielt = m.gibTisch();
 		for(int i = 0; i < 4; i++){
-			if(istTrumpf(gespielt[i].gibWert(),gespielt [i].gibFarbe())){
+			if(istTrumpf(gespielt[i].gibWert(), gespielt [i].gibFarbe())){
 				trumpf = true;
 			}
 		}
-		if(trumpf) return koaTrumpf(gespielt);
+		if(!trumpf) {
+			return keinTrumpf(gespielt, erster);
+		}
 		return schonTrumpf(gespielt);
 	}
 	
-	public int schonTrumpf(Karte[] gespielt){
-		boolean ober = false;
-		for(int i = 0; i < 4; i++){
-			if(gespielt[i].gibWert() == Karte.wert.OBER){
-				ober = true;
-			}
-		}
-		if(ober) return schonOber(gespielt);
-		
-		boolean unter = false;
-		for(int i = 0; i < 4; i++){
-			if(gespielt[i].gibWert() == Karte.wert.UNTER){
-				unter = true;
-			}
-		}
-		if(unter) return schonUnter(gespielt);
-		int spieler = 0;
-		Karte.wert farbwert = gespielt[0].gibWert();
 
-		for(int i = 0; i < 4; i++){
-			if(gespielt[i].gibFarbe() == farbe){
-				spieler = i;
-				switch(farbwert){
-				case NEUN: farbwert = gespielt[i].gibWert();break;
-				case KONIG:{
-					if(gespielt[i].gibWert() == Karte.wert.NEUN){}
-					else farbwert = gespielt[i].gibWert();
-					}break;
-				case ZEHN:{
-					if(gespielt[i].gibWert() == Karte.wert.SAU)farbwert = gespielt[i].gibWert();
-					else {}
-					}break;		
-				case SAU:break;
+	/**
+	 * Ermittelt den Sieger eines Stichs, wenn ein Trumpf gespielt wurde
+	 * @param gespielt
+	 * @return
+	 */
+	private int schonTrumpf(Karte[] tisch) {
+		int sieger = -1;
+		
+		for(int i = 0; i < 4; i++) {
+			//Es muss ein Trumpf vorhanden sein
+			if(istTrumpf(tisch[i].gibWert(), tisch[i].gibFarbe())) {
+				if(sieger == -1) {
+					sieger = i;
+				} else {
+					int diff = kartenRangliste(tisch[i].gibWert()) - kartenRangliste(tisch[sieger].gibWert());
+					//Wenn der Wert der Karte höher als der der alten ist
+					if(diff > 0) {
+						sieger = i;
+					} else {
+						//Beide Karten haben den gleichen Wert 
+						if(diff == 0) {
+							//Wenn die Farbe der Karte höherwertig ist
+							//siehe lib.Karte: 1 = EICHEL, 2 = GRAS, 3 = HERZ, 4 = SCHELLEN
+							if(tisch[i].gibFarbe().ordinal() < tisch[sieger].gibFarbe().ordinal()) {
+								sieger = i;
+							}
+						}
+						//Ansonste sticht die Karte tisch[i] nicht
 					}
 				}
 			}
-		return spieler;
-
+		}
 		
-	}
-	
-	public int schonUnter(Karte[] gespielt){
-		int spieler = 0;
-		Karte.farbe unterFarbe = null;
-		for(int i = 0; i < 4; i++){
-			if(gespielt[i].gibWert() == Karte.wert.UNTER){
-				spieler = i;
-				switch(unterFarbe){
-				case HERZ: {
-				if(gespielt[i].gibFarbe() == Karte.farbe.SCHELLEN){}
-				else unterFarbe = gespielt[i].gibFarbe();
-				}break;
-				case GRAS:{
-					if(gespielt[i].gibFarbe() == Karte.farbe.EICHEL)unterFarbe = gespielt[i].gibFarbe();
-					else {}
-					}break;
-				case EICHEL:break;
-				default: unterFarbe = gespielt[i].gibFarbe();
-				}
-				}
-			}
-		return spieler;
-	}
-	
-	public int schonOber(Karte[] gespielt){
-		int spieler = 0;
-		Karte.farbe oberFarbe = null;
-		for(int i = 0; i < 4; i++){
-			if(gespielt[i].gibWert() == Karte.wert.OBER){
-				spieler = i;
-				switch(oberFarbe){
-				case HERZ: {
-				if(gespielt[i].gibFarbe() == Karte.farbe.SCHELLEN){}
-				else oberFarbe = gespielt[i].gibFarbe();
-				}break;
-				case GRAS:{
-					if(gespielt[i].gibFarbe() == Karte.farbe.EICHEL)oberFarbe = gespielt[i].gibFarbe();
-					else {}
-					}break;
-				case EICHEL:break;
-				default: oberFarbe = gespielt[i].gibFarbe();
-				}
-				}
-			}
-		return spieler;
+		return sieger;
 	}	
-	
-	public int koaTrumpf(Karte[] gespielt){
-		int spieler = 0;
-		Karte.farbe farb = gespielt[0].gibFarbe();
-		Karte.wert farbwert = gespielt[0].gibWert();
 
-		for(int i = 0; i < 4; i++){
-			if(gespielt[i].gibFarbe() == farb){
-				spieler = i;
-				switch(farbwert){
-				case NEUN: farbwert = gespielt[i].gibWert();break;
-				case KONIG:{
-					if(gespielt[i].gibWert() == Karte.wert.NEUN){}
-					else farbwert = gespielt[i].gibWert();
-					}break;
-				case ZEHN:{
-					if(gespielt[i].gibWert() == Karte.wert.SAU)farbwert = gespielt[i].gibWert();
-					else {}
-					}break;		
-				case SAU:break;
-					}
+	private int keinTrumpf(Karte[] gespielt, int erster) {
+		//Derjenige, der ausgekartet hat wird zuerst abgerufen
+		int spieler = erster;
+
+		for(int i = 1; i < 4; i++){
+			
+			if(gespielt[(i + erster) % 4].gibFarbe().equals(gespielt[erster].gibFarbe())){
+				if(kartenRangliste(gespielt[(i + erster) % 4].gibWert()) 
+						> kartenRangliste(gespielt[spieler].gibWert())) {
+					spieler = i;
 				}
 			}
+		}
 		return spieler;
 	}
 	
-	public boolean istTrumpf(Karte.wert angespielt, Karte.farbe angespielt2) {
-		if (angespielt.equals(Karte.wert.OBER) || angespielt.equals(Karte.wert.UNTER) || angespielt2.equals(farbe))return true;
-		return false;
+	/**
+	 * Gibt einen Wert zurück, der dem Stellenwert der Karte entspricht
+	 * @param wert
+	 * @return
+	 */
+	private int kartenRangliste(Karte.wert wert) {
+		switch(wert) {
+		case NEUN:
+			return 0;
+		case KONIG:
+			return 1; 
+		case ZEHN:
+			return 2;
+		case SAU:
+			return 3;
+		case UNTER:
+			return 4;
+		case OBER:
+			return 5;
+		}
+		
+		return -1;
 	}
-
 	
-
 	public boolean erlaubt(Model m, int ID) {
-		Karte.wert angespielt;
-		//Es wurde noch nichts angespielt
-		if(m.gibTisch()[0] == null) {
-			return true;
-		} //Andernfalls...
-		angespielt = m.gibTisch()[0].gibWert();
-		Karte.farbe angespielt2;
-		angespielt2 = m.gibTisch()[0].gibFarbe();
-		if (angespielt == null) {			
+		if(gerufener == -1) {
+			gerufener = mitspieler(m);
+		}
+		
+		Karte[] tisch = m.gibTisch();
+		Karte angespielt;
+		
+		//Findet die Karte, die zuerst gespielt wurde
+		int zahlGespielteKarten = 0;
+		for(int i = 0; i < 4; i++) {
+			if(tisch[i] != null) {
+				zahlGespielteKarten++;
+			}
+		}
+		int spieler0 = ID + 1 - zahlGespielteKarten;
+		if(spieler0 < 0) {
+			spieler0 +=4;
+		}
+		angespielt = tisch[spieler0];
+		
+		//Es wurde nichts angespielt
+		if(angespielt == null || ID == spieler0){
 			return true;
 		}
-		if (istTrumpf(angespielt, angespielt2)) {
-			if (istTrumpf(getWert(m), getFarbe(m))) {
+		//Es wurde Trumpf angespielt
+		if(istTrumpf(angespielt.gibWert(), angespielt.gibFarbe())) {
+			if(istTrumpf(tisch[ID].gibWert(), tisch[ID].gibFarbe())) {
 				return true;
-			}
-			if (keinTrumpf(m) && !sau(m)) {
-				return true;
+			} else {
+				if(keinTrumpf(m, ID)) {
+					return true;
+				}
 			}
 			return false;
 		}
-		if(getFarbe(m).equals(angespielt2) && sau(m)){
-			return true;
-		}
-		if(!getFarbe(m).equals(angespielt2) && keineFarbe(angespielt2, m) && !sau(m)){
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean keineFarbe(Karte.farbe z, Model m){
-		ArrayList<Karte> y;
-		int x = 0;
-		for(int i = 0; i < 4; i++){
-			if(m.gibTisch()[i] != null){
-				x = i;
-			}
-		}
-		y = m.gibSpielerKarten(x);
-		for(int i = 0; i < y.size(); i++){
-			if(y.get(i).gibFarbe() == z && !istTrumpf(y.get(i).gibWert(),y.get(i).gibFarbe())){
-				return false;
-			}
-	}
-		return true;
-}
-	
-	public Karte.wert getWert(Model m) {
-		Karte.wert x = null;
-		for (int i = 0; i < 4; i++) {
-			if (m.gibTisch()[i] != null) {
-				x = m.gibTisch()[i].gibWert();
-			}
-		}
-		return x;
-	}
-
-	public Karte.farbe getFarbe(Model m) {
-		Karte.farbe x = null;
-		for (int i = 0; i < 4; i++) {
-			if (m.gibTisch()[i] != null) {
-				x = m.gibTisch()[i].gibFarbe();
-			}
-		}
-		return x;
-	}
-
-	public boolean keinTrumpf(Model m) {
-		ArrayList<Karte> y;
-		int x = 0;
-		for (int i = 0; i < 4; i++) {
-			if (m.gibTisch()[i] != null) {
-				x = i;
-			}
-		}
-		y = m.gibSpielerKarten(x);
-		for (int i = 0; i < y.size(); i++) {
-			if (istTrumpf(y.get(i).gibWert(), y.get(i).gibFarbe())) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public boolean sau(Model m){
-		int spieler = -1;
-		for (int i = 0; i < 4; i++) {
-			if (m.gibTisch()[i] != null) {
-				spieler = i;
-			}
-		}
-		ArrayList<Karte> hand;
-		hand = m.gibSpielerKarten(spieler);
-		for(int i = 0; i < hand.size(); i++){
-			if (hand.get(i).gibWert().equals(Karte.wert.SAU) && hand.get(i).gibFarbe().equals(rufsau)){
+		//Es wurde eine Farbe angespielt
+		if(tisch[ID].gibFarbe().equals(angespielt.gibFarbe()) 
+				&& !istTrumpf(tisch[ID].gibWert(), tisch[ID].gibFarbe())) {
+			//Es wurde die passende Farbe gespielt
+			if(ID == gerufener) {
+				if(angespielt.gibFarbe().equals(rufsau.gibFarbe())) {
+					//Wenn die Farbe der Rufsau angespielt wurde, der Spieler sie jedoch nicht gespielt hat
+					if(!tisch[ID].vergleiche(rufsau) && hatRufSau(m, ID)) {
+						return false;
+					} else {
+						return true;
+					}
+				} else {
+					return true;
+				}
+ 			} else {
 				return true;
-			} 
+			}
+		} else { 
+			if(keineFarbe(angespielt.gibFarbe(), m, ID)) {
+				//Der Spieler hat die Farbe nicht
+				return true;
+			}
 		}
 		return false;
 	}
+	
+	/**
+	 * Sucht die Rufsau in den Karten eines Spielers
+	 * @param m
+	 * @param ID
+	 * @return
+	 */
+	private boolean hatRufSau(Model m, int ID) {
+		ArrayList<Karte> y = m.gibSpielerKarten(ID);
+		for(int i = 0; i < y.size(); i++) {
+			if(y.get(i).vergleiche(rufsau)) {
+				return true;
+			}
+		}
+		//Die Rufsau wurde nicht gefunden
+		return false;
+	}
 
+	/**
+	 * Untersucht, ob der Spieler die angespielte Farbe nicht auf der Hand hat
+	 * @param farbe
+	 * @param m
+	 * @param ID
+	 * @return
+	 */
+	private boolean keineFarbe(Karte.farbe farbe, Model m, int ID) {
+		ArrayList<Karte> y = (ArrayList<Karte>) m.gibSpielerKarten(ID).clone();
+		y.add(m.gibTisch()[ID]);
+		
+		for(int i = 0; i < y.size(); i++) {
+			Karte karte = y.get(i);
+			if(karte.gibFarbe().equals(farbe) && !istTrumpf(karte.gibWert(), karte.gibFarbe())) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Untersucht, ob der Spieler einen Trumpf auf der Hand hat
+	 * @param m
+	 * @param ID
+	 * @return
+	 */
+	private boolean keinTrumpf(Model m, int ID) {
+		ArrayList<Karte> y = (ArrayList<Karte>) m.gibSpielerKarten(ID).clone();
+		y.add(m.gibTisch()[ID]);
+		
+		for(int i = 0; i < y.size(); i++) {
+			if(istTrumpf(y.get(i).gibWert(), y.get(i).gibFarbe())) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Untersucht, ob die Übergebenen Werte für einen Trumpf stehen
+	 * @param wert
+	 * @param farbe
+	 * @return
+	 */
+	private boolean istTrumpf(Karte.wert wert, Karte.farbe farbe) {
+		if (wert.equals(Karte.wert.OBER) 
+				|| wert.equals(Karte.wert.UNTER) 
+				|| farbe.equals(Karte.farbe.HERZ)) {
+			return true;
+		}
+		return false;
+	}
 		
 
 	public int mitspieler(Model m) {
@@ -253,7 +245,7 @@ public class Sauspiel implements Control {
 		for(int i = 0; i < 4; i++){
 			hand = m.gibSpielerKarten(i);
 			for(int j = 0; j < hand.size(); j++){
-				if(hand.get(j).gibWert().equals(Karte.wert.SAU) && hand.get(j).gibFarbe().equals(rufsau)){
+				if(hand.get(j).vergleiche(rufsau)){
 					return i;
 				}
 			}

@@ -19,7 +19,7 @@ import javax.swing.UIManager;
 
 import client.Client;
 
-public class MenuGUI extends JFrame {
+public class MenuGUI extends JFrame implements Menu {
 
 	/**
 	 * Startet den Client und die Graphik
@@ -172,6 +172,10 @@ public class MenuGUI extends JFrame {
 		IPlabel.setForeground(Color.BLACK);
 		NAMElabel.setForeground(Color.BLACK);
 		verbinden();
+	}
+	
+	public View gibGraphik() {
+		return new Graphik(new lib.Model(), client);
 	}
 	
 	public void beenden() {

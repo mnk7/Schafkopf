@@ -12,11 +12,8 @@ import javax.swing.JOptionPane;
 
 public class Regelwahl {
 	
-	public Regelwahl() {
-		
-	}
 	
-	public Control wahl(modus mod, Model m, int position) {
+	public Control wahl(modus mod, Model m) {
 		switch (mod) {
 		case GEIERdu: 
 		case GEIER: 
@@ -58,29 +55,15 @@ public class Regelwahl {
 				|| m.equals(modus.SAUSPIELgras)
 				|| m.equals(modus.SAUSPIELherz)
 				|| m.equals(modus.SAUSPIELschellen)) {
-			if(sauspielMoeglich(f, model, ID)) {
-				return false;
-			}
-		} if(m.equals(modus.SI)) {
-			if(siMoeglich(model, ID)) {
-				return false;
-			}
+			return sauspielMoeglich(f, model, ID);
+		} 
+		if(m.equals(modus.SI)) {
+			return siMoeglich(model, ID);
 		} if(m.equals(modus.HOCHZEIT)) {
-			if(!new Hochzeit().hochzeitMoeglich(model.gibSpielerKarten(ID))) {
-				return false;
-			}
+			return new Hochzeit().hochzeitMoeglich(model.gibSpielerKarten(ID));
 		}
-		
+		//Wenz, Geier und Solo dürfen immer gespielt werden
 		return true;
-	}
-	
-	public boolean istTrumpf(Karte.wert angespielt, Karte.farbe angespielt2) {
-		if (angespielt.equals(Karte.wert.OBER) 
-				|| angespielt.equals(Karte.wert.UNTER) 
-				|| angespielt2.equals( Karte.farbe.HERZ))
-			return true;
-		
-		return false;
 	}
 
 	public boolean siMoeglich(Model gibModel, int ID) {
@@ -97,34 +80,48 @@ public class Regelwahl {
 		noetig.add(new Karte(farbe.EICHEL, wert.UNTER));
 		noetig.add(new Karte(farbe.GRAS, wert.UNTER));
 		
-		//:-(
+		boolean[] vorhanden = {false, false, false, false, false, false};
+		
+		
+		Karte k;
 		for(int i = 0; i < spielerhand.size(); i++) {
-			Karte k = spielerhand.get(i);
+			k = spielerhand.get(i);
 			for(int j = 0; j < noetig.size(); j++) {
 				if(k.vergleiche(noetig.get(j))) {
 					//Wenn die Karte enthalten ist, wird sie nicht mehr benötigt
-					noetig.remove(j);
+					vorhanden[j] = true;
+					break;
 				}
 			}
 		}
 		
 		//Wenn alle nötigen Karten da sind
-		if(noetig.size() == 0)
-			return true;
-		
-		return false;
-	}
-	
-	public boolean sauspielMoeglich(Karte.farbe farb, Model m, int position){
-		ArrayList<Karte> y;
-		y = m.gibSpielerKarten(position);
-		for(int i = 0; i < y.size(); i++){
-			if(y.get(i).gibFarbe().equals(farb) 
-					&& y.get(i).gibWert().equals(Karte.wert.SAU) 
-					&& !istTrumpf(y.get(i).gibWert(),y.get(i).gibFarbe())){
+		for(int i = 0; i < 6; i++) {
+			if(!vorhanden[i]) {
 				return false;
 			}
 		}
 		return true;
+	}
+	
+	public boolean sauspielMoeglich(Karte.farbe farbe, Model m, int position){
+		ArrayList<Karte> y = m.gibSpielerKarten(position);
+		Karte rufsau = new Karte(farbe, Karte.wert.SAU);
+		boolean hatFarbe = false;
+		boolean hatSau = false;
+		for(int i = 0; i < y.size(); i++){
+			if(y.get(i).vergleiche(rufsau)) {
+				//Der Spieler hat die Rufsau selbst
+				hatSau = true;
+			}
+			if(y.get(i).gibFarbe().equals(farbe)) {
+				hatFarbe = true;
+			}
+		}
+		if(!hatSau && hatFarbe) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

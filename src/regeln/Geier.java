@@ -6,7 +6,7 @@ import lib.Model;
 
 public class Geier implements Control {
 	
-	public int sieger(Model m) {
+	public int sieger(Model m, int erster) {
 		boolean unter = false;
 		Karte[] gespielt = m.gibTisch();
 		for(int i = 0; i < 4; i++){
@@ -15,12 +15,12 @@ public class Geier implements Control {
 			}
 		}
 		if(!unter) {
-			return keinOber(gespielt);
+			return keinTrumpf(gespielt, erster);
 		}
-		return schonOber(gespielt);
+		return schonTrumpf(gespielt);
 	}
 	
-	private int schonOber(Karte[] gespielt){
+	private int schonTrumpf(Karte[] gespielt){
 		int spieler = -1;
 		for(int i = 0; i < 4; i++){
 			if(gespielt[i].gibWert() == Karte.wert.OBER){
@@ -38,12 +38,14 @@ public class Geier implements Control {
 		return spieler;
 	}
 	
-	private int keinOber(Karte[] gespielt){
-		int spieler = 0;
+	private int keinTrumpf(Karte[] gespielt, int erster) {
+		//Derjenige, der ausgekartet hat wird zuerst abgerufen
+		int spieler = erster;
 
 		for(int i = 1; i < 4; i++){
-			if(gespielt[i].gibFarbe().equals(gespielt[spieler].gibFarbe())){
-				if(kartenRangliste(gespielt[i].gibWert()) 
+			
+			if(gespielt[(i + erster) % 4].gibFarbe().equals(gespielt[erster].gibFarbe())){
+				if(kartenRangliste(gespielt[(i + erster) % 4].gibWert()) 
 						> kartenRangliste(gespielt[spieler].gibWert())) {
 					spieler = i;
 				}

@@ -9,7 +9,7 @@ public interface Control {
 	 * @param model
 	 * @return SpielerID des Siegers
 	 */
-	public int sieger(Model m);
+	public int sieger(Model m, int erster);
 	
 	/**
 	 * Bestimmt, ob ein Spielzug erlaubt ist und gibt das Ergebnis zurück

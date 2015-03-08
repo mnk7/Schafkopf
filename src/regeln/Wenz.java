@@ -7,24 +7,27 @@ import lib.Model;
 //rttlbrmpf
 public class Wenz implements Control {
 	
-	public int sieger(Model m) {
+	/**
+	 * Methode wird erst nach erlaubt() aufgerufen -> erster ist schon belegt
+	 */
+	public int sieger(Model m, int erster) {
 		boolean unter = false;
 		Karte[] gespielt = m.gibTisch();
-		for(int i = 0; i < 4; i++){
-			if(gespielt[i].gibWert() == Karte.wert.UNTER){
+		for(int i = 0; i < 4; i++) {
+			if(gespielt[i].gibWert() == Karte.wert.UNTER) {
 				unter = true;
 			}
 		}
 		if(!unter) {
-			return keinUnter(gespielt);
+			return keinTrumpf(gespielt, erster);
 		}
-		return schonUnter(gespielt);
+		return schonTrumpf(gespielt);
 	}
 	
-	private int schonUnter(Karte[] gespielt){
+	private int schonTrumpf(Karte[] gespielt) {
 		int spieler = -1;
-		for(int i = 0; i < 4; i++){
-			if(gespielt[i].gibWert() == Karte.wert.UNTER){
+		for(int i = 0; i < 4; i++) {
+			if(gespielt[i].gibWert() == Karte.wert.UNTER) {
 				
 				if(spieler == -1) {
 					spieler = i;
@@ -39,12 +42,14 @@ public class Wenz implements Control {
 		return spieler;
 	}
 	
-	private int keinUnter(Karte[] gespielt){
-		int spieler = 0;
+	private int keinTrumpf(Karte[] gespielt, int erster) {
+		//Derjenige, der ausgekartet hat wird zuerst abgerufen
+		int spieler = erster;
 
 		for(int i = 1; i < 4; i++){
-			if(gespielt[i].gibFarbe().equals(gespielt[spieler].gibFarbe())){
-				if(kartenRangliste(gespielt[i].gibWert()) 
+			
+			if(gespielt[(i + erster) % 4].gibFarbe().equals(gespielt[erster].gibFarbe())){
+				if(kartenRangliste(gespielt[(i + erster) % 4].gibWert()) 
 						> kartenRangliste(gespielt[spieler].gibWert())) {
 					spieler = i;
 				}
@@ -95,26 +100,30 @@ public class Wenz implements Control {
 		angespielt = tisch[spieler0];
 		
 		//Es wurde nichts angespielt
-		if(angespielt == null || ID == spieler0){
+		if(angespielt == null || ID == spieler0) {
 			return true;
 		}
 		//Es wurde ein Unter angespielt
-		if(angespielt.gibWert().equals(Karte.wert.UNTER)){
-			if(tisch[ID].gibWert().equals(Karte.wert.UNTER)){
+		if(angespielt.gibWert().equals(Karte.wert.UNTER)) {
+			if(tisch[ID].gibWert().equals(Karte.wert.UNTER)) {
 				return true;
-			} else if(keinTrumpf(m, ID)){
-				return true;
+			} else {
+				if(keinTrumpf(m, ID)) {
+					return true;
+				}
 			}
 			return false;
 		}
 		//Es wurde eine Farbe angespielt
 		if(tisch[ID].gibFarbe().equals(angespielt.gibFarbe()) 
-				&& !tisch[ID].gibWert().equals(Karte.wert.UNTER)){
+				&& !tisch[ID].gibWert().equals(Karte.wert.UNTER)) {
 			//Es wurde die passende Farbe gespielt
 			return true;
-		} else if(keineFarbe(angespielt.gibFarbe(), m, ID)){
-			//Der Spieler hat die Farbe nicht
-			return true;
+		} else { 
+			if(keineFarbe(angespielt.gibFarbe(), m, ID)) {
+				//Der Spieler hat die Farbe nicht
+				return true;
+			}
 		}
 		return false;
 	}
@@ -129,12 +138,12 @@ public class Wenz implements Control {
 	 * @param ID
 	 * @return
 	 */
-	private boolean keinTrumpf(Model m, int ID){
+	private boolean keinTrumpf(Model m, int ID) {
 		ArrayList<Karte> y = (ArrayList<Karte>) m.gibSpielerKarten(ID).clone();
 		y.add(m.gibTisch()[ID]);
 		
-		for(int i = 0; i < y.size(); i++){
-			if(y.get(i).gibWert().equals(Karte.wert.UNTER)){
+		for(int i = 0; i < y.size(); i++) {
+			if(y.get(i).gibWert().equals(Karte.wert.UNTER)) {
 				return false;
 			}
 		}
@@ -148,11 +157,11 @@ public class Wenz implements Control {
 	 * @param ID
 	 * @return
 	 */
-	private boolean keineFarbe(Karte.farbe farbe, Model m, int ID){
+	private boolean keineFarbe(Karte.farbe farbe, Model m, int ID) {
 		ArrayList<Karte> y = (ArrayList<Karte>) m.gibSpielerKarten(ID).clone();
 		y.add(m.gibTisch()[ID]);
 		
-		for(int i = 0; i < y.size(); i++){
+		for(int i = 0; i < y.size(); i++) {
 			Karte karte = y.get(i);
 			if(karte.gibFarbe().equals(farbe) && !karte.gibWert().equals(Karte.wert.UNTER)) {
 				return false;

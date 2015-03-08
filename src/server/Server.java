@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -184,7 +185,7 @@ public class Server extends Thread {
 	        		continue;
 	        	}
 	        	//legt die Regeln fest
-	        	regeln = regelwahl.wahl(mod, model, spielt);
+	        	regeln = regelwahl.wahl(mod, model);
 	        	if(regeln == null) {
 	        		stock();
 	        		kontostand();
@@ -420,7 +421,7 @@ public class Server extends Thread {
         		}
         		
         		//einen Stich zuteilen
-        		int sieger = regeln.sieger(model);
+        		int sieger = regeln.sieger(model, start);
         		start = sieger;
         		model.Stich(sieger);
         	}
@@ -499,11 +500,19 @@ public class Server extends Thread {
         		if(i == spielt || i == mitspieler) {
         			//Vorläufig
         			konto.set(i, konto.get(i) + tarif);
+        		} else {
+        			if(i != spielt + 10 || i != mitspieler + 10) {
+	        			//Vorläufig, trifft zu, wenn der Spieler nicht gespielt hat
+	        			konto.set(i, konto.get(i) - tarif);
+        			}
         		}
-        		if(i == spielt + 10 || i == mitspieler + 10) {
-        			//Vorläufig
-        			konto.set(i, konto.get(i) - tarif);
-        		}
+	        	if(i == spielt + 10 || i == mitspieler + 10) {
+	        		//Vorläufig
+	        		konto.set(i, konto.get(i) - tarif);
+	        	} else {
+	        		//Vorläufig, trifft zu, wenn der Spieler nicht gespielt hat
+	        		konto.set(i,  konto.get(i) + tarif);
+	        	}
         	}
         }
         
@@ -573,6 +582,13 @@ public class Server extends Thread {
          */
         public synchronized void ViewTextSetzen() {
         	graphik.textSetzen(spieler);
+        }
+        
+        /**
+         * Liefert die IP des Servers
+         */
+        public synchronized String gibIP() {        	
+        	return server.getInetAddress().getHostAddress();
         }
         
         /**

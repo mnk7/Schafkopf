@@ -61,9 +61,9 @@ public class Karte {
 	 */
 	public boolean vergleiche(Karte k) {
 		if(k.gibFarbe().equals(f)
-			&& k.gibWert().equals(w))
+			&& k.gibWert().equals(w)) {
 			return true;
-			
+		}			
 		return false;
 	}
 

@@ -89,6 +89,7 @@ public class Graphik extends JFrame {
 					clear();
 					PlayerLabel[0].setText("Server gestartet");
 					start.setText("Läuft...");
+					g.setTitle("Schafkopf: " + server.gibIP());
 				}
 			}
 		});
