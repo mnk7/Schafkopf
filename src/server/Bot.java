@@ -1,134 +1,131 @@
 package server;
 
+import ki.Hochzeit;
+import ki.KI;
+import ki.Spielauswahl;
 import lib.Karte;
 import lib.Model;
 import lib.Model.modus;
 
 public class Bot implements Spieler {
-
-	@Override
-	public boolean erste3(Model model) {
-		return false;
-	} 
-
-	@Override
-	public void spielen(Model model) {
-	}
-
-	@Override
-	public modus spielstDu(Model model, modus m) {
-		return modus.NICHTS;
-	}
-
-	@Override
-	public boolean modus(lib.Model.modus m) {
-		return false;
-	} 
-
-	@Override
-	public void sieger(int s1, int s2) {
-		// TODO Auto-generated method stub
+	
+	private int ID;
+	private Model model;
+	private int kontostand;
+	//wird nur benutzt, wenn eine Hochzeit durchgeführt wird
+	private Karte karte;
+	
+	private int spielt;
+	private int mitspieler;
+	
+	private KI ki;
+	private Spielauswahl spielauswahl;
+	private Server server;
+	
+	public Bot(Server server) {
+		spielauswahl = new Spielauswahl();
+		this.server = server;
 		
+		spielt = -1;
+		mitspieler = -1;
 	}
 
-	@Override
+	public boolean erste3(Model model) {
+		return spielauswahl.klopfen(model);
+	} 
+
+	public void spielen(Model model) {
+		model = ki.spiel(model);
+	}
+	
+	public modus spielstDu(Model model, modus m) {
+		modus modus = spielauswahl.wasSpielen(model);
+		if(modus.equals(modus.HOCHZEIT)) {
+			karte = Hochzeit.hochzeitVorschlagen(model, ID);
+		}
+		return modus;
+	}
+
+	public boolean modus(lib.Model.modus m) {
+		ki = spielauswahl.gibKI(m, ID);
+		ki.spieler(spielt, mitspieler);
+		return ki.kontra(model);
+	} 
+
+	public void sieger(int s1, int s2) {
+		//Der Sieger wird festgestellt
+	}
+	
 	public String gibIP() {
-		// TODO Auto-generated method stub
 		return "local";
 	}
 
-	@Override
 	public String gibName() {
-		return null;
+		return "[BOT]";
 	}
 
-	@Override
 	public void setzeID(int ID) {
-		// TODO Auto-generated method stub
-		
+		this.ID = ID;
 	}
 
-	@Override
 	public Model gibModel() {
-		// TODO Auto-generated method stub
-		return null;
+		return model;
 	}
 
-	@Override
 	public Karte gibKarte() {
-		// TODO Auto-generated method stub
-		return null;
+		return karte;
 	}
 
-	@Override
 	public boolean hochzeit() {
-		return false;
+		karte = Hochzeit.hochzeitAnnehmen(model, ID);
+		if(karte == null) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
-	@Override
 	public void spieler(int spielt, int mitspieler) throws Exception {
-		// TODO Auto-generated method stub
-		
+		//Der Server sendet, wer spielt
+		this.spielt = spielt;
+		this.mitspieler = mitspieler;
 	}
 
-	@Override
 	public void geklopft(boolean[] geklopft) throws Exception {
-		// TODO Auto-generated method stub
-		
+		//Der Server gibt an, wer geklopft hat (CLIENT)
 	}
 
-	@Override
 	public void kontra(boolean[] kontra) throws Exception {
-		// TODO Auto-generated method stub
-		
+		//Der Server gibt an, wer Kontra gegeben hat (CLIENT)
 	}
 
-	@Override
 	public void setzeModel(Model model) {
-		// TODO Auto-generated method stub
-		
+		this.model = model;
 	}
 
-	@Override
 	public void name() {
-		// TODO Auto-generated method stub
-		
+		//Der Server weist den Spieler an einen Namen einzugeben (CLIENT)
 	}
 
-	@Override
 	public void beenden() {
-		// TODO Auto-generated method stub
-		
+		//Server beendet das Spiel
+		server.entferneSpieler(this);
 	}
 
-	@Override
 	public void abmelden() {
-		// TODO Auto-generated method stub
-		
+		//Server beendet das Spiel (CLIENT)
+		beenden();
 	}
 
-	@Override
-	public String gibAntwort(String flag) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void rundeZuende(int kontostand) {
-		// TODO Auto-generated method stub
-		
+		this.kontostand = kontostand;
 	}
 
-	@Override
 	public void konto(int kontostand) {
-		// TODO Auto-generated method stub
-		
+		this.kontostand = kontostand;
 	}
 
-	@Override
 	public void update(Model model) {
-		// TODO Auto-generated method stub
-		
+		setzeModel(model);
 	}
-
 }

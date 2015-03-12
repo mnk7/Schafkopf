@@ -298,8 +298,7 @@ public class Model {
 		Karte test;
 		for(int i = 0; i < 6; i++) {
 			test = spielerhand.get(spielt).get(i);
-			if(test.gibFarbe().equals(angebot.gibFarbe()) ||
-					test.gibWert().equals(angebot.gibWert())) {
+			if(test.vergleiche(angebot)) {
 				//Karte von der Hand des Spielers nehmen
 				spielerhand.get(spielt).remove(test);
 				spielerhand.get(mitspieler).add(test);
@@ -308,8 +307,7 @@ public class Model {
 		Karte gegenTest;
 		for(int i = 0; i < 6; i++) {
 			gegenTest = spielerhand.get(mitspieler).get(i);
-			if(gegenTest.gibFarbe().equals(angenommen.gibFarbe()) ||
-					gegenTest.gibWert().equals(angenommen.gibWert())) {
+			if(gegenTest.vergleiche(angenommen)) {
 				//Karte von der Hand des Spielers nehmen
 				spielerhand.get(mitspieler).remove(gegenTest);
 				spielerhand.get(spielt).add(gegenTest);

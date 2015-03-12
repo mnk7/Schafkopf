@@ -64,7 +64,7 @@ public class MenuGUI extends JFrame implements Menu {
 			if(IPtf.getText().equals("")) {
 				javax.swing.JOptionPane.showMessageDialog(null, "Geben sie eine Serveradresse an!");
 			} else {
-				if(NAMEtf.getText().equals("")) {
+				if(NAMEtf.getText().equals("") || NAMEtf.getText().equalsIgnoreCase("BOT")) {
 					javax.swing.JOptionPane.showMessageDialog(null, "Geben sie einen Namen an!");
 				} else {
 					client = new Client(IPtf.getText(), NAMEtf.getText(), this);

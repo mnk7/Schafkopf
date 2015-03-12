@@ -309,6 +309,8 @@ public class Graphik extends JFrame implements View{
 		Karte gespielt = spielerKarten.spiel();
 		boolean ok = false;
 		
+		JOptionPane.showMessageDialog(this, "Du bist dran.");
+		
 		do {
 			spielerKarten.update(model.setTisch(ID, gespielt));
 			if(control.erlaubt(model, ID)) {

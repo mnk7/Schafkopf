@@ -123,15 +123,7 @@ public class Server extends Thread {
 	        		
 	        		ViewTextSetzen();
 	        		
-	        		//Wenn die maximale Anzahl an Spielern erreicht ist und nicht gerade gespielt wird
-	        		if(spieler.size() == spielerzahl && nocheins) {
-	        			nocheins = false;
-	        			//Mit Bots auffüllen
-	        			for(int i = spielerzahl; i < 4; i++) {
-	        				spieler.add(new Bot());
-	        			}
-	        			neuesSpiel();
-	        		} 
+	        		starten();
         		}
         	} catch(Exception e) {
         		e.printStackTrace();
@@ -141,6 +133,22 @@ public class Server extends Thread {
         		}
         		beenden = true;
         	}
+        }
+        
+        /**
+         * Prüft, ob das Spiel gestartet werden kann und wenn ja, startet ein neues Spiel
+         * @throws Exception
+         */
+        private void starten() throws Exception {
+        	//Wenn die maximale Anzahl an Spielern erreicht ist und nicht gerade gespielt wird
+    		if(spieler.size() == spielerzahl && nocheins) {
+    			nocheins = false;
+    			//Mit Bots auffüllen
+    			for(int i = spielerzahl; i <= 4; i++) {
+    				spieler.add(new Bot(this));
+    			}
+    			neuesSpiel();
+    		} 
         }
         
         /** 
@@ -345,25 +353,12 @@ public class Server extends Thread {
          * @throws Exception 
          */
         private boolean hochzeit(int spielt) throws Exception {
-        	Hochzeit h = new Hochzeit();
-    		
     		Karte angebot = spieler.get(spielt).gibKarte();
     		
-    		if(h.hochzeitMoeglich(model, spielt, angebot)) {
+    		if(Hochzeit.hochzeitMoeglich(model, spielt, angebot)) {
         		for(int i = 0; i < 4; i++) {
-        			
         			if(i != spielt && spieler.get(i).hochzeit()) {
-        				//Wenn die Hochzeit angenommen wird
-        				Karte k = spieler.get(i).gibKarte();
-        				
-        				//Wenn die Karte kein Trumpf ist
-	        			if(!h.istTrumpf(k.gibWert(), k.gibFarbe())) {
-	        				model.hochzeit(spielt, i, angebot, k);
-	        				mitspieler = i;
-	        				return true;
-	        			} else {
-	        				return false;
-	        			}
+        				hochzeitAnfragen(i, angebot);
         			} else {
         				continue;
         			}
@@ -375,6 +370,20 @@ public class Server extends Thread {
     		//Diese Fall ist nicht möglich, da i != spielt irgendwann zutrifft
     		return false;
         }
+        
+        	private boolean hochzeitAnfragen(int mitspieler, Karte angebot) throws InterruptedException {
+        		//Wenn die Hochzeit angenommen wird
+				Karte k = spieler.get(mitspieler).gibKarte();
+				
+				//Wenn die Karte kein Trumpf ist
+    			if(Hochzeit.istTrumpf(k.gibWert(), k.gibFarbe())) {
+    				model.hochzeit(spielt, mitspieler, angebot, k);
+    				this.mitspieler = mitspieler;
+    				return true;
+    			} else {
+    				return false;
+    			}
+        	}
         
         private void kontra() throws Exception {
         	//Sendet den Modus an alle Spieler und empfängt, ob Kontra gegeben wurde
@@ -496,23 +505,116 @@ public class Server extends Thread {
         	}
         	
         	//Den Spielern Geld abziehen oder hinzufügen
+        	//Wenn die Spielenden verloren haben
+        	if(spielt > 9) {
+        		konto.set(spielt - 10, konto.get(spielt - 10) - abrechnung(true, pSpielt));
+        		if(mitspieler != 4) {
+        			konto.set(mitspieler - 10, konto.get(mitspieler - 10) - abrechnung(true, pSpielt));
+        		}
+        	} else {
+        		//Wenn die Spielenden gewonnen haben
+        		konto.set(spielt, konto.get(spielt) + abrechnung(true, 120 - pSpielt));
+        		if(mitspieler != 4) {
+        			konto.set(mitspieler, konto.get(mitspieler) + abrechnung(true, 120 - pSpielt));
+        		}
+        		
+        		//Wenn ein Sauspiel gewonnen wurde, wird der Stock aufgeteilt
+        		if(mod.equals(modus.SAUSPIELeichel) 
+                		|| mod.equals(modus.SAUSPIELgras)
+                		|| mod.equals(modus.SAUSPIELherz)
+                		|| mod.equals(modus.SAUSPIELschellen)) {
+        			konto.set(spielt,  konto.get(spielt) + stock / 2);
+        			konto.set(mitspieler, konto.get(mitspieler) + stock / 2);
+        			stock = 0;
+                }
+        	}
         	for(int i = 0; i < 4; i++) {
-        		if(i == spielt || i == mitspieler) {
-        			//Vorläufig
-        			konto.set(i, konto.get(i) + tarif);
-        		} else {
-        			if(i != spielt + 10 || i != mitspieler + 10) {
-	        			//Vorläufig, trifft zu, wenn der Spieler nicht gespielt hat
-	        			konto.set(i, konto.get(i) - tarif);
+        		if(i != spielt && i != spielt - 10 && i != mitspieler && i != mitspieler - 10) {
+        			if(spielt > 9) {
+        				//Die Spielenden haben verloren
+        				konto.set(i, konto.get(i) + abrechnung(false, pSpielt));
+        			} else {
+        				//Die Spielenden haben gewonnen
+        				konto.set(i, konto.get(i) - abrechnung(false, 120 - pSpielt));
         			}
         		}
-	        	if(i == spielt + 10 || i == mitspieler + 10) {
-	        		//Vorläufig
-	        		konto.set(i, konto.get(i) - tarif);
-	        	} else {
-	        		//Vorläufig, trifft zu, wenn der Spieler nicht gespielt hat
-	        		konto.set(i,  konto.get(i) + tarif);
-	        	}
+        	}
+        }
+        
+        /**
+         * Errechnet den gewonnenen/verlorenen Betrag
+         * @return
+         */
+        private int abrechnung(boolean spieler, int punkteVerlierer) {
+        	int diff = 0;
+        	
+        	//Abhängig von der Spielart
+        	switch(mod) {
+        	case SAUSPIELeichel:
+        	case SAUSPIELgras:
+        	case SAUSPIELherz:
+        	case SAUSPIELschellen:
+        		diff = tarif;
+        		break;
+        	case HOCHZEIT:
+        		
+        		break;
+        	case GEIER:
+        		
+        		break;
+        	case GEIERdu:
+        		
+        		break;
+        	case WENZ:
+        		
+        		break;
+        	case WENZdu:
+        		
+        		break;
+        	case SOLOeichel:
+        	case SOLOgras:
+        	case SOLOherz:
+        	case SOLOschellen:
+        		
+        		break;
+        	case SOLOeichelDU:
+        	case SOLOgrasDU:
+        	case SOLOherzDU:
+        	case SOLOschellenDU:
+        		
+        		break;
+        	case SI:
+        		
+        		break;
+        	}
+        	
+        	//geklopft und Kontra mit einbeziehen
+        	for(int i = 0; i < 4; i++) {
+        		if(geklopft[i]) {
+        			diff *= 2;
+        		}
+        		if(kontra[i]) {
+        			diff *= 2;
+        		}
+        	}
+        	
+        	if(punkteVerlierer == 0) {
+        		diff *= 3;
+        	} else {
+        		if(punkteVerlierer < 30) {
+        			diff *= 2;
+        		}
+        	}
+        	
+        	if(spieler) {
+        		if(mitspieler == 4) {
+        			return diff;
+        		} else {
+        			//Wenn der Spieler alleine war muss er alle bezahlen / bekommt er den ganzen Gewinn
+        			return diff * 3;
+        		}
+        	} else {
+        		return diff;
         	}
         }
         
@@ -564,9 +666,16 @@ public class Server extends Thread {
         /**
          * Setzt die Spielerzahl (menschliche Spieler)
          * @param spielerzahl
+         * @throws Exception 
          */
         public void setzeSpielerzahl(int spielerzahl) {
         	this.spielerzahl = spielerzahl;
+        	//Versucht ein Spiel zu starten
+        	try {
+				starten();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
         }
         
         /**
@@ -587,7 +696,7 @@ public class Server extends Thread {
         /**
          * Liefert die IP des Servers
          */
-        public synchronized String gibIP() {        	
+        public String gibIP() {        	
         	return server.getInetAddress().getHostAddress();
         }
         
@@ -600,9 +709,8 @@ public class Server extends Thread {
         		beenden = true;
 				server.close();
 				//Spieler werden entfernt
-				ArrayList<Spieler> s = (ArrayList<Spieler>) spieler.clone();
-				for(int i = 0; i < s.size(); i++) {
-					s.get(i).abmelden();
+				for(int i = 0; i < spieler.size(); i++) {
+					spieler.get(i).abmelden();
 				}
 				
 				this.suspend();

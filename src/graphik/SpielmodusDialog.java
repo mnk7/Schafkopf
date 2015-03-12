@@ -156,7 +156,7 @@ public class SpielmodusDialog extends JPanel {
 			}
 			JOptionPane.showMessageDialog(this, "Bitte wählen sie eine Farbe");
 			return null;
-		case "SI":
+		case "Si":
 			return modus.SI;
 		case "Nichts":
 			return modus.NICHTS;

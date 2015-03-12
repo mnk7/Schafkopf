@@ -33,6 +33,8 @@ public class Graphik extends JFrame {
 	
 	private String logo = "graphik/karten/logo.gif";
 	
+	private int spielerzahl;
+	
 	public Graphik(){
 		super();
 		
@@ -42,6 +44,8 @@ public class Graphik extends JFrame {
 		this.setIconImage(icon.getImage());
 				
 		PlayerLabel = new JLabel [4];
+		
+		spielerzahl = 0;
 		
 		try {
 			initGUI();
@@ -88,8 +92,11 @@ public class Graphik extends JFrame {
 					
 					clear();
 					PlayerLabel[0].setText("Server gestartet");
-					start.setText("Läuft...");
+					startAktualisieren();
 					g.setTitle("Schafkopf: " + server.gibIP());
+				} else {
+					//Startet den Server mit den Spielern, die anwesend sind und füllt den Rest mit Bots auf
+					server.setzeSpielerzahl(spielerzahl);
 				}
 			}
 		});
@@ -108,6 +115,7 @@ public class Graphik extends JFrame {
 					clear();
 					PlayerLabel[0].setText("Server beendet");
 					start.setText("Server starten");
+					spielerzahl = 0;
 				}
 			}
 		});
@@ -126,10 +134,27 @@ public class Graphik extends JFrame {
 				aufschrift = spieler.get(i).gibName();
 				aufschrift += " - ";
 				aufschrift += spieler.get(i).gibIP();
+				//Ein Spieler wurde hinzugefügt
+				spielerzahl = i + 1;
 			} catch(Exception e) {
 				aufschrift = "";
+				//Kein neuer Spieler
 			}
 			PlayerLabel[i].setText(aufschrift);
+		}
+		
+		startAktualisieren();
+	}
+	
+	private void startAktualisieren() {
+		if(4 - spielerzahl == 0) {
+			start.setText("Spiel läuft...");
+		}
+		if(4 - spielerzahl == 1) {
+			start.setText("1 Bot");
+		}
+		if(4 - spielerzahl > 1) {
+			start.setText(4 - spielerzahl + " Bots");
 		}
 	}
 	

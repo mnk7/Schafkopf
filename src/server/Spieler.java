@@ -12,11 +12,6 @@ import lib.Model.modus;
 public interface Spieler{
 	
 	/**
-	 * gibt die Antwort
-	 */
-	public String gibAntwort(String flag);
-	
-	/**
 	 * gibt das empfangene Model
 	 */
 	public Model gibModel();
