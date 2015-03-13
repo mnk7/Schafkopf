@@ -10,6 +10,7 @@ import lib.Model.modus;
 public class Bot implements Spieler {
 	
 	private int ID;
+	private String name;
 	private Model model;
 	private int kontostand;
 	//wird nur benutzt, wenn eine Hochzeit durchgeführt wird
@@ -17,17 +18,22 @@ public class Bot implements Spieler {
 	
 	private int spielt;
 	private int mitspieler;
+	private boolean modelupdate;
 	
 	private KI ki;
 	private Spielauswahl spielauswahl;
 	private Server server;
 	
-	public Bot(Server server) {
+	public Bot(Server server, int botnr) {
+		name = "[BOT]-" + botnr;
+		
 		spielauswahl = new Spielauswahl();
 		this.server = server;
 		
 		spielt = -1;
 		mitspieler = -1;
+		
+		modelupdate = false;
 	}
 
 	public boolean erste3(Model model) {
@@ -36,14 +42,14 @@ public class Bot implements Spieler {
 	} 
 
 	public synchronized void spielen(Model model) {
-		setzeModel(model);
-		model = ki.spiel(model);
+		setzeModel(ki.spiel(model));
 		try {
 			//Warten, damit das Spiel ein wenig verzögerti wird
-			Thread.sleep(1000);
+			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		modelupdate = true;
 	}
 	
 	public synchronized modus spielstDu(Model model, modus m) {
@@ -70,7 +76,7 @@ public class Bot implements Spieler {
 	}
 
 	public String gibName() {
-		return "[BOT]";
+		return name;
 	}
 
 	public synchronized void setzeID(int ID) {
@@ -83,6 +89,15 @@ public class Bot implements Spieler {
 	}
 
 	public synchronized Model gibModel() {
+		while(!modelupdate) {
+			try {
+				//Warten auf das aktualisierte Model
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		modelupdate = false;
 		return model;
 	}
 

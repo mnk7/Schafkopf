@@ -145,8 +145,10 @@ public class Server extends Thread {
     			nocheins = false;
     			//Mit Bots auffüllen
     			for(int i = 4; i > spielerzahl; i--) {
-    				spieler.add(new Bot(this));
+    				spieler.add(new Bot(this, 4 - i));
     			}
+    			ViewTextSetzen();
+    			
     			neuesSpiel();
     		} 
         }
@@ -714,11 +716,12 @@ public class Server extends Thread {
         @SuppressWarnings("deprecation")
 		public synchronized void beenden() {
         	try {
+        		ArrayList<Spieler> s = (ArrayList<Spieler>) spieler.clone();
         		beenden = true;
 				server.close();
 				//Spieler werden entfernt
-				for(int i = 0; i < spieler.size(); i++) {
-					spieler.get(i).abmelden();
+				for(int i = 0; i < s.size(); i++) {
+					s.get(i).abmelden();
 				}
 				
 				this.suspend();

@@ -11,7 +11,7 @@ public class Sauspiel extends KI {
 		super(ID);
 	}
 	
-	public void farbeSetzen(Karte.farbe farbe) {
+	public void setzeFarbe(Karte.farbe farbe) {
 		this.farbe = farbe;
 		regeln = new regeln.Sauspiel(farbe);
 	}
