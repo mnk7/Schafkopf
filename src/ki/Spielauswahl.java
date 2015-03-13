@@ -20,6 +20,9 @@ public class Spielauswahl {
 		KI ki = null;
 		
 		switch(m) {
+		case HOCHZEIT:
+			ki = new Hochzeit(ID);
+			break;
 		case SAUSPIELeichel:
 			ki = new Sauspiel(ID);
 			ki.setzeFarbe(lib.Karte.farbe.EICHEL);

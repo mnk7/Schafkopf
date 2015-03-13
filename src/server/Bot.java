@@ -31,14 +31,23 @@ public class Bot implements Spieler {
 	}
 
 	public boolean erste3(Model model) {
+		setzeModel(model);
 		return spielauswahl.klopfen(model);
 	} 
 
-	public void spielen(Model model) {
+	public synchronized void spielen(Model model) {
+		setzeModel(model);
 		model = ki.spiel(model);
+		try {
+			//Warten, damit das Spiel ein wenig verzögerti wird
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public modus spielstDu(Model model, modus m) {
+	public synchronized modus spielstDu(Model model, modus m) {
+		setzeModel(model);
 		modus modus = spielauswahl.wasSpielen(model);
 		if(modus.equals(modus.HOCHZEIT)) {
 			karte = Hochzeit.hochzeitVorschlagen(model, ID);
@@ -46,7 +55,7 @@ public class Bot implements Spieler {
 		return modus;
 	}
 
-	public boolean modus(lib.Model.modus m) {
+	public synchronized boolean modus(lib.Model.modus m) {
 		ki = spielauswahl.gibKI(m, ID);
 		ki.spieler(spielt, mitspieler);
 		return ki.kontra(model);
@@ -64,19 +73,24 @@ public class Bot implements Spieler {
 		return "[BOT]";
 	}
 
-	public void setzeID(int ID) {
+	public synchronized void setzeID(int ID) {
 		this.ID = ID;
+		try {
+			ki.setzeID(ID);
+		} catch(NullPointerException npe) {
+			//ki noch nicht initialisiert
+		}
 	}
 
-	public Model gibModel() {
+	public synchronized Model gibModel() {
 		return model;
 	}
 
-	public Karte gibKarte() {
+	public synchronized Karte gibKarte() {
 		return karte;
 	}
 
-	public boolean hochzeit() {
+	public synchronized boolean hochzeit() {
 		karte = Hochzeit.hochzeitAnnehmen(model, ID);
 		if(karte == null) {
 			return false;
@@ -99,7 +113,7 @@ public class Bot implements Spieler {
 		//Der Server gibt an, wer Kontra gegeben hat (CLIENT)
 	}
 
-	public void setzeModel(Model model) {
+	public synchronized void setzeModel(Model model) {
 		this.model = model;
 	}
 

@@ -144,7 +144,7 @@ public class Server extends Thread {
     		if(spieler.size() == spielerzahl && nocheins) {
     			nocheins = false;
     			//Mit Bots auffüllen
-    			for(int i = spielerzahl; i <= 4; i++) {
+    			for(int i = 4; i > spielerzahl; i--) {
     				spieler.add(new Bot(this));
     			}
     			neuesSpiel();
@@ -684,6 +684,14 @@ public class Server extends Thread {
          */
         public int gibSpielerzahl() {
         	return spielerzahl;
+        }
+        
+        /**
+         * Ändert den Tarif des Spiels
+         * @param tarif
+         */
+        public void setzeTarif(int tarif) {
+        	this.tarif = tarif;
         }
         
         /**

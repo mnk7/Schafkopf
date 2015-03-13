@@ -42,6 +42,14 @@ public abstract class KI {
 		this.spielt = spielt;
 		this.mitspieler = mitspieler;
 	}
+	
+	/**
+	 * Setzt die ID des Bots
+	 * @param ID
+	 */
+	public void setzeID(int ID) {
+		this.ID = ID;
+	}
 
 	/**
 	 * Spielt eine Karte
@@ -49,38 +57,29 @@ public abstract class KI {
 	 * @return
 	 */
 	public Model spiel(Model model) {
+		
+		Model m = model;
 		//Arbeitet nach dem DAB-Prinzip (Dümmster anzunehmender Bot) und spielt zufällig eine Karte
-		ArrayList<Karte> spielerkarten = model.gibSpielerKarten(ID);
-		//Speichert die erlaubten Karten
-		ArrayList<Integer> erlaubt = new ArrayList<Integer>();
+		ArrayList<Karte> spielerkarten = m.gibSpielerKarten(ID);
 		
 		try {
 			for(int i = 0; i < spielerkarten.size(); i++) {
 				//Legt eine Karte auf den Tisch
-					model.setTisch(ID, spielerkarten.get(i));
+				m.setTisch(ID, spielerkarten.get(i));
 				
-				if(regeln.erlaubt(model, ID)) {
-					//Prüft, ob der Zug legal ist und wenn ja, speichert die Karte
-					erlaubt.add(i);
+				if(regeln.erlaubt(m, ID)) {
+					//Prüft, ob der Zug legal ist
+					break;
+					//Karte gefunden
+				} else {
+					m.undo(ID);
 				}
-				
-				model.undo(ID);
-			}
-			
-			if(erlaubt.size() > 2) {
-				java.util.Random zufall = new java.util.Random();
-				model.setTisch(ID, spielerkarten.get(
-						erlaubt.get(
-							zufall.nextInt(
-								erlaubt.size()))));
-			} else {
-				model.setTisch(ID, spielerkarten.get(erlaubt.get(0)));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
-		return model;
+		return m;
 	}
 
 }
