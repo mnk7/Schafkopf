@@ -19,11 +19,13 @@ public class Bot implements Spieler {
 	private int spielt;
 	private int mitspieler;
 	
+	private int wartezeit;
+	
 	private KI ki;
 	private Spielauswahl spielauswahl;
 	private Server server;
 	
-	public Bot(Server server, int botnr) {
+	public Bot(Server server, int botnr, int wartezeit) {
 		name = "[BOT]-" + botnr;
 		
 		spielauswahl = new Spielauswahl();
@@ -31,6 +33,8 @@ public class Bot implements Spieler {
 		
 		spielt = -1;
 		mitspieler = -1;
+		
+		this.wartezeit = wartezeit;
 	}
 
 	public boolean erste3(Model model) {
@@ -81,7 +85,7 @@ public class Bot implements Spieler {
 	public synchronized Model gibModel() {
 		try {
 			//Warten, damit das Spiel ein wenig verzögert wird
-			Thread.sleep(2000);
+			Thread.sleep(wartezeit);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

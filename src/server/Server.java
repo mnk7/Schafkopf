@@ -41,6 +41,8 @@ public class Server extends Thread {
         //Geld der einzelnen Spieler
         private ArrayList<Integer> konto;
         
+        private int wartezeit;
+        
         //speichert den Spielmodus
         private modus mod;
         
@@ -80,6 +82,8 @@ public class Server extends Thread {
               
         	spieler = new ArrayList<Spieler>();
         	spielerzahl = 4;
+        	
+        	wartezeit = 2000;
         	
         	geklopft = new boolean[4];
         	
@@ -145,7 +149,7 @@ public class Server extends Thread {
     			nocheins = false;
     			//Mit Bots auffüllen
     			for(int i = 4; i > spielerzahl; i--) {
-    				spieler.add(new Bot(this, 4 - i));
+    				spieler.add(new Bot(this, 4 - i, wartezeit));
     			}
     			ViewTextSetzen();
     			
@@ -435,7 +439,7 @@ public class Server extends Thread {
         		for(int k = 0; k < 4; k++) {
         			spieler.get(k).update(model);
         		}
-        		Thread.sleep(2000);
+        		Thread.sleep(wartezeit);
         		
         		//einen Stich zuteilen
         		int sieger = regeln.sieger(model, start);
@@ -483,8 +487,9 @@ public class Server extends Thread {
         	//Die Punkte des Spielers
         	pSpielt = punkte.get(spielt);
         	//und vielleicht des Mitspielers
-        	if(mitspieler != 4)
+        	if(mitspieler != 4) {
         		pSpielt += punkte.get(mitspieler);
+        	}
         	
         	//Wenn ein Du gespielt wurde
         	String modString = mod.toString();
@@ -492,16 +497,18 @@ public class Server extends Thread {
         	if(modString.substring(modString.length() - 3, modString.length() - 1)
         			.toLowerCase()
         			.equals("du")) {
-        		if(pSpielt != 120)
+        		if(pSpielt != 120) {
         			//Wenn der Du verloren wurde
         			spielt += 10;
+        		}
         	} else 
         	//Ansonsten wird normal verrechnet
         	if(pSpielt <= 60) {
         		//Anzeigen, dass er verloren hat
         		spielt += 10;
-        		if(mitspieler != 4)
+        		if(mitspieler != 4) {
         			mitspieler += 10;
+        		}
         	}
         	
         	for(int i = 0; i < 4; i++) {
@@ -565,34 +572,35 @@ public class Server extends Thread {
         		diff = tarif;
         		break;
         	case HOCHZEIT:
-        		
+        		diff = tarif;
         		break;
         	case GEIER:
-        		
+        		diff = (int) (tarif * 2.5);
         		break;
         	case GEIERdu:
-        		
+        		diff = tarif * 5;
         		break;
         	case WENZ:
-        		
+        		diff = (int) (tarif * 2.5);
         		break;
         	case WENZdu:
-        		
+        		diff = tarif * 5;
         		break;
         	case SOLOeichel:
         	case SOLOgras:
         	case SOLOherz:
         	case SOLOschellen:
-        		
+        		diff = (int) (tarif * 2.5); 
         		break;
         	case SOLOeichelDU:
         	case SOLOgrasDU:
         	case SOLOherzDU:
         	case SOLOschellenDU:
-        		
+        		diff = tarif * 5;
         		break;
         	case SI:
-        		
+        		//Solo-Tout mit 6*tarif für die Laufenden
+        		diff = 11 * tarif;
         		break;
         	}
         	
@@ -662,10 +670,6 @@ public class Server extends Thread {
          */
         public synchronized void entferneSpieler(Spieler s) {
         	spieler.remove(s);
-        	try {
-				javax.swing.JOptionPane.showMessageDialog(graphik, "Spieler " + s.gibName() +" wurde entfernt");
-			} catch (Exception e) {
-			}
         	
         	ViewTextSetzen();
         	nocheins = true;
@@ -687,6 +691,14 @@ public class Server extends Thread {
 					}
         		}
         	}.start();
+        }
+        
+        /**
+         * Ändert die Zeit, mit der das Spiel verzögert wird
+         * @param wartezeit
+         */
+        public void setzeWartezeit(int wartezeit) {
+        	this.wartezeit = wartezeit;
         }
         
         /**
@@ -734,6 +746,8 @@ public class Server extends Thread {
 				}
 				
 				this.suspend();
+				
+				graphik.beenden();
 			} catch (IOException e) {
 				e.printStackTrace();
 				//Programm beenden

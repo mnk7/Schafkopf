@@ -57,7 +57,7 @@ public class SpielmodusDialog extends JPanel {
 		spiele[2].setText("Geier");
 		spiele[3].setText("Wenz");
 		spiele[4].setText("Solo");
-		spiele[5].setText("Si");
+		spiele[5].setText("Sie");
 		
 		spiele[6].setText("Nichts");
 		
@@ -156,7 +156,7 @@ public class SpielmodusDialog extends JPanel {
 			}
 			JOptionPane.showMessageDialog(this, "Bitte wählen sie eine Farbe");
 			return null;
-		case "Si":
+		case "Sie":
 			return modus.SI;
 		case "Nichts":
 			return modus.NICHTS;
@@ -224,7 +224,7 @@ public class SpielmodusDialog extends JPanel {
 		case SOLOschellenDU:
 			return "ein Schellen-Solo-Tout";
 		case SI:
-			return "ein Si";
+			return "ein Sie";
 		}
 		
 		return "Nichts";

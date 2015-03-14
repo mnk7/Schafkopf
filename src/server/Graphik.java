@@ -8,6 +8,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -27,6 +30,10 @@ public class Graphik extends JFrame {
 	private JButton start;
 	private JButton end;
 	private JLabel [] PlayerLabel;
+	private JLabel wartezeitLabel;
+	private JSlider wartezeit;
+	private JLabel tarifLabel;
+	private JTextField tarif;
 	
 	private Server server;
 	private Graphik g = this;
@@ -56,7 +63,7 @@ public class Graphik extends JFrame {
 	}
 	
 	public void initGUI() {
-		this.setSize(330, 240);
+		this.setSize(330, 350);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("SCHAFKOPF-SERVER");
 		this.setResizable(false);
@@ -72,7 +79,7 @@ public class Graphik extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		
-		for(int i = 0;i < 4;i++){
+		for(int i = 0; i < 4; i++){
 			PlayerLabel [i] = new JLabel();
 			getContentPane().add(PlayerLabel [i]);
 			PlayerLabel [i].setText("");
@@ -88,6 +95,17 @@ public class Graphik extends JFrame {
 			public void actionPerformed(ActionEvent evt) {
 				if(server == null) {
 					server = new Server(g);
+					server.setzeWartezeit(wartezeit.getValue());
+					
+					int tarifWert;
+					try {
+						tarifWert = Integer.parseInt(tarif.getText());
+					} catch(Exception e) {
+						tarifWert = 10;
+						JOptionPane.showMessageDialog(g, "Falsche Tarifangabe. Der Tarif ist jetzt 10");
+					}
+					server.setzeTarif(tarifWert);
+					
 					server.start();
 					
 					clear();
@@ -112,16 +130,34 @@ public class Graphik extends JFrame {
 					server.beenden();
 					server = null;
 					
-					clear();
-					PlayerLabel[0].setText("Server beendet");
-					start.setText("Server starten");
-					spielerzahl = 0;
+					beenden();
 				}
 			}
 		});
 		end.setVisible(true);
 		
-		repaint();
+		tarifLabel = new JLabel();
+		getContentPane().add(tarifLabel);
+		tarifLabel.setBounds(10, this.getHeight() - 130, (int) (this.getWidth() - 20) / 2, 30);
+		tarifLabel.setText("Tarif des Spiels:");
+		tarifLabel.setVisible(true);
+		
+		tarif = new JTextField();
+		getContentPane().add(tarif);
+		tarif.setBounds(this.getWidth() - 80, this.getHeight() - 130, 70, 30);
+		tarif.setVisible(true);
+		
+		wartezeitLabel = new JLabel();
+		getContentPane().add(wartezeitLabel);
+		wartezeitLabel.setBounds(10, this.getHeight() - 90, this.getWidth() - 20, 30);
+		wartezeitLabel.setText("Geschwindigkeit des Spiels:");
+		wartezeitLabel.setVisible(true);
+		
+		wartezeit = new JSlider(100, 5000);
+		getContentPane().add(wartezeit);
+		wartezeit.setBounds(10, this.getHeight() - 60, this.getWidth() - 20, 40);
+		wartezeit.setValue(2000);
+		wartezeit.setVisible(true);
 	}
 	
 	public synchronized void textSetzen(ArrayList<Spieler> s) { 
@@ -162,6 +198,13 @@ public class Graphik extends JFrame {
 		for(int i = 0; i < 4; i++) {
 			PlayerLabel[i].setText("");
 		}
+	}
+	
+	public void beenden() {
+		clear();
+		PlayerLabel[0].setText("Server beendet");
+		start.setText("Server starten");
+		spielerzahl = 0;
 	}
 }
 

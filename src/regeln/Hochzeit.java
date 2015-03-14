@@ -72,7 +72,7 @@ public class Hochzeit implements Control {
 			if(gespielt[(i + erster) % 4].gibFarbe().equals(gespielt[erster].gibFarbe())){
 				if(kartenRangliste(gespielt[(i + erster) % 4].gibWert()) 
 						> kartenRangliste(gespielt[spieler].gibWert())) {
-					spieler = i;
+					spieler = i + erster % 4;
 				}
 			}
 		}
