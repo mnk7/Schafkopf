@@ -73,6 +73,9 @@ public abstract class KI {
 					//Karte gefunden
 				} else {
 					m.undo(ID);
+					//Die zurückgelegte Karte wird nach ganz hinten gerückt, der Rest rückt auf
+					spielerkarten = m.gibSpielerKarten(ID);
+					i--;
 				}
 			}
 		} catch(Exception e) {

@@ -18,7 +18,6 @@ public class Bot implements Spieler {
 	
 	private int spielt;
 	private int mitspieler;
-	private boolean modelupdate;
 	
 	private KI ki;
 	private Spielauswahl spielauswahl;
@@ -32,8 +31,6 @@ public class Bot implements Spieler {
 		
 		spielt = -1;
 		mitspieler = -1;
-		
-		modelupdate = false;
 	}
 
 	public boolean erste3(Model model) {
@@ -42,14 +39,7 @@ public class Bot implements Spieler {
 	} 
 
 	public synchronized void spielen(Model model) {
-		setzeModel(ki.spiel(model));
-		try {
-			//Warten, damit das Spiel ein wenig verzögerti wird
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		modelupdate = true;
+		setzeModel(model);
 	}
 	
 	public synchronized modus spielstDu(Model model, modus m) {
@@ -89,16 +79,13 @@ public class Bot implements Spieler {
 	}
 
 	public synchronized Model gibModel() {
-		while(!modelupdate) {
-			try {
-				//Warten auf das aktualisierte Model
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		try {
+			//Warten, damit das Spiel ein wenig verzögert wird
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-		modelupdate = false;
-		return model;
+		return ki.spiel(model);
 	}
 
 	public synchronized Karte gibKarte() {

@@ -431,6 +431,12 @@ public class Server extends Thread {
         			spielModelEmpfangen(spielerID);
         		}
         		
+        		//Allen alle Karten noch einmal zeigen
+        		for(int k = 0; k < 4; k++) {
+        			spieler.get(k).update(model);
+        		}
+        		Thread.sleep(2000);
+        		
         		//einen Stich zuteilen
         		int sieger = regeln.sieger(model, start);
         		start = sieger;
@@ -673,11 +679,14 @@ public class Server extends Thread {
         public void setzeSpielerzahl(int spielerzahl) {
         	this.spielerzahl = spielerzahl;
         	//Versucht ein Spiel zu starten
-        	try {
-				starten();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+        	new Thread() {
+        		public void run() {
+        			try {
+						starten();
+					} catch (Exception e) {
+					}
+        		}
+        	}.start();
         }
         
         /**
