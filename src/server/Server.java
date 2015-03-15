@@ -471,6 +471,10 @@ public class Server extends Thread {
         	Spieler s = spieler.get(0);
         	spieler.remove(s);
         	spieler.add(s);
+        	
+        	int k = konto.get(0);
+        	konto.remove(k);
+        	konto.add(k);
         }
         
         /**
