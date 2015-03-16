@@ -228,7 +228,7 @@ public class Server extends Thread {
 	        	kontostand();
 	        	rundeBeenden();
 	        	
-	        	//neu Runde
+	        	//neue Runde
 	        	naechster();
         	}
         	}//synchronized spieler
@@ -473,7 +473,7 @@ public class Server extends Thread {
         	spieler.add(s);
         	
         	int k = konto.get(0);
-        	konto.remove(k);
+        	konto.remove(0);
         	konto.add(k);
         }
         
@@ -692,6 +692,7 @@ public class Server extends Thread {
         			try {
 						starten();
 					} catch (Exception e) {
+						e.printStackTrace();
 					}
         		}
         	}.start();
