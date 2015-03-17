@@ -422,6 +422,8 @@ public class Server extends Thread {
         	}
         
         private void spiel() throws Exception {
+        	try {
+        		
         	//Spielen
         	//Speichert, wer zuerst auskartet
         	int start = 0;
@@ -445,6 +447,10 @@ public class Server extends Thread {
         		int sieger = regeln.sieger(model, start);
         		start = sieger;
         		model.Stich(sieger);
+        	} 
+        	
+        	} catch(Exception e) {
+        		e.printStackTrace();
         	}
         }
         

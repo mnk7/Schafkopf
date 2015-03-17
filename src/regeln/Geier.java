@@ -47,7 +47,7 @@ public class Geier implements Control {
 			if(gespielt[(i + erster) % 4].gibFarbe().equals(gespielt[erster].gibFarbe())){
 				if(kartenRangliste(gespielt[(i + erster) % 4].gibWert()) 
 						> kartenRangliste(gespielt[spieler].gibWert())) {
-					spieler = i + erster % 4;
+					spieler = (i + erster) % 4;
 				}
 			}
 		}
