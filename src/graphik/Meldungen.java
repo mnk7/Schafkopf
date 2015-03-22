@@ -66,7 +66,7 @@ public class Meldungen extends JPanel{
 	public void dran(boolean ein) {
 		if(ein) {
 			//Spieler einfärben
-			meldung[0].setForeground(Color.black);
+			meldung[0].setForeground(Color.darkGray);
 		} else {
 			//Spieler wieder auf normal
 			meldung[0].setForeground(Color.white);

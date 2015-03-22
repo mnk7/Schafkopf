@@ -133,17 +133,6 @@ public class Mensch implements Spieler {
 		modelupdate = false;
 		return model; 
 	}
-
-	
-	public Karte gibKarte() throws InterruptedException {	
-		while(karte == null) {
-			Thread.sleep(1000);
-		}
-		Karte k = karte;
-		//löscht die eingelesene Karte, um nicht zweimal die gleiche zurückzugeben
-		karte = null;
-		return k;
-	}
 	
 	public synchronized void setzeModel(Model m) {
 		this.model = m;
@@ -236,6 +225,16 @@ public class Mensch implements Spieler {
 		
 		//Sendet die Namen der Mitspieler
 		mitspielerNamen();
+	}
+
+	public Karte gibKarte() throws InterruptedException {	
+		while(karte == null) {
+			Thread.sleep(300);
+		}
+		Karte k = karte;
+		//löscht die eingelesene Karte, um nicht zweimal die gleiche zurückzugeben
+		karte = null;
+		return k;
 	}
 
 	public boolean hochzeit() throws Exception {
