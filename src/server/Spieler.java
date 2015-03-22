@@ -148,4 +148,10 @@ public interface Spieler{
 	 */
 	public void update(Model model);
 
+	/**
+	 * Zeigt an, wer dran ist
+	 * @param iD
+	 */
+	public void weristdran(int iD);
+
 }

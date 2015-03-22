@@ -13,6 +13,11 @@ public interface View {
 	public void setModel(Model model);
 	
 	/**
+	 * Zeigt an, wer am Zug ist
+	 */
+	public void weristdran(int ID);
+	
+	/**
 	 * Setzt die ID des Spielers, damit die Daten aus dem Model ausgelesen werden können
 	 * @param ID
 	 */

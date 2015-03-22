@@ -248,6 +248,29 @@ public class Graphik extends JFrame implements View{
 		this.repaint();
 	}
 	
+	public void weristdran(int ID) {
+		if(ID == this.ID){
+			spielerMeldungen.dran(true);
+		} else {
+			spielerMeldungen.dran(false);
+		}
+		
+		int dran = ID - this.ID;
+		if(dran < 0) {
+			//Eine Runde rundum
+			dran += 4;
+		}
+		dran -= 1;
+			
+		for(int i = 0; i < 3; i++) {
+			if(i == dran) {
+				gegenspielerKarten[i].dran(true);
+			} else {
+				gegenspielerKarten[i].dran(false);
+			}
+		}
+	}
+	
 	public void setID(int ID) {
 		this.ID = ID;
 	}

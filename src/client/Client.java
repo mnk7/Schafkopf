@@ -116,6 +116,9 @@ public class Client{
 				case "!UPDATE":
 					graphikUpdate((Model) data[1]);
 					continue;
+				case "!DRAN":
+					weristdran(Integer.parseInt(data[1].toString()));
+					continue;
 				case "!ENDE":
 					abschliessen(Integer.parseInt(data[1].toString()));
 					continue;
@@ -274,6 +277,14 @@ public class Client{
 	 */
 	private void graphikUpdate(Model m) {
 		graphik.setModel(m);
+	}
+	
+	/**
+	 * Zeigt an, wer dran ist
+	 * @param ID
+	 */
+	private void weristdran(int ID) {
+		graphik.weristdran(ID);
 	}
 	
 	public void beenden() {

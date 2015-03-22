@@ -71,4 +71,11 @@ public class Gegenspieler extends JPanel {
 		meldungen.reset();
 		meldungen.festeAnzeige(text);
 	}
+	
+	/**
+	 * Zeigt an, dass dieser Spieler dran ist.
+	 */
+	public void dran(boolean an) {
+		meldungen.dran(an);
+	}
 }

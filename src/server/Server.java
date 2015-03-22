@@ -95,7 +95,7 @@ public class Server extends Thread {
         	tarif = 10;
         	konto = new ArrayList<Integer>();
         	for(int i = 0; i < 4; i++) {
-        		konto.add(10*tarif);
+        		konto.add(50*tarif);
         	}
         	
         	nocheins = true;
@@ -236,6 +236,15 @@ public class Server extends Thread {
         }
         
         /**
+         * Zeigt an, wer gerade am Zug ist
+         */
+        private void weristdran(int ID) {
+        	for(int i = 0; i < 4; i++) {
+        		spieler.get(i).weristdran(ID);
+        	}
+        }
+        
+        /**
          * Sendet die Spielernamen an alle und weist jedem Spieler seine ID zu
          * @throws Exception
          */
@@ -267,16 +276,17 @@ public class Server extends Thread {
          */
         private void klopfen() throws Exception {
         	erste3();
-        	klopfenAbfragen();
+        	klopfenAngeben();
         }
         	private void erste3() throws Exception {
         		for(int i = 0; i < 4; i++) {
+        			weristdran(i);
     	        	//Speichert, ob ein Spieler geklopft hat etc.
     	        	geklopft[i] = spieler.get(i).erste3(model);
             	}
         	}
         	
-        	private void klopfenAbfragen() throws Exception {
+        	private void klopfenAngeben() throws Exception {
         		//Spieler benachrichtigen, wer geklopft hat
             	for(int i = 0; i < 4; i++) {
             		spieler.get(i).geklopft(geklopft);
@@ -292,6 +302,7 @@ public class Server extends Thread {
         	ArrayList<modus> spielfolge = new ArrayList<modus>();
         	
         	for(int i = 0; i < 4; i++) {
+        		weristdran(i);
         		try {
         			spielfolge.add(spieler.get(i).spielstDu(model, bestesSpielFinden(spielfolge)));
         		} catch(Exception e) {
@@ -363,6 +374,7 @@ public class Server extends Thread {
     		
     		if(Hochzeit.hochzeitMoeglich(model, spielt, angebot)) {
         		for(int i = 0; i < 4; i++) {
+        			weristdran(i);
         			if(i != spielt && spieler.get(i).hochzeit()) {
         				hochzeitAnfragen(i, angebot);
         			} else {
@@ -400,6 +412,7 @@ public class Server extends Thread {
         
         	private void kontraAbfragen() throws Exception {
         		for(int i = 0; i < 4; i++) {
+        			weristdran(i);
         			kontra[i] = spieler.get(i).modus(mod);
         		}
         	}
@@ -455,6 +468,7 @@ public class Server extends Thread {
         }
         
         	private void spielModelSenden(int spielerID) throws Exception {
+        		weristdran(spielerID);
         		//Übergibt dem Spieler das aktuelle Model und...
     			spieler.get(spielerID).spielen(model);
     			for(int i = 0; i < 4; i++) {

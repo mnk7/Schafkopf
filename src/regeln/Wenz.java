@@ -95,7 +95,7 @@ public class Wenz implements Control {
 		}
 		int spieler0 = ID + 1 - zahlGespielteKarten;
 		if(spieler0 < 0) {
-			spieler0 +=4;
+			spieler0 += 4;
 		}
 		angespielt = tisch[spieler0];
 		

@@ -148,4 +148,8 @@ public class Bot implements Spieler {
 	public void update(Model model) {
 		setzeModel(model);
 	}
+	
+	public void weristdran(int ID) {
+		//Server sendet, wer dran ist (CLIENT)
+	}
 }

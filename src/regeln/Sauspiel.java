@@ -123,7 +123,8 @@ public class Sauspiel implements Control {
 		}
 		int spieler0 = ID + 1 - zahlGespielteKarten;
 		if(spieler0 < 0) {
-			spieler0 +=4;
+			//Einmal um den Tisch rum
+			spieler0 += 4;
 		}
 		angespielt = tisch[spieler0];
 		
@@ -163,7 +164,12 @@ public class Sauspiel implements Control {
 		} else { 
 			if(keineFarbe(angespielt.gibFarbe(), m, ID)) {
 				//Der Spieler hat die Farbe nicht
-				return true;
+				//Die Rufsau darf nicht geschmiert werden
+				if(tisch[ID].vergleiche(rufsau)) {
+					return false;
+				} else {
+					return true;
+				}
 			}
 		}
 		return false;

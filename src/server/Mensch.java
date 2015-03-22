@@ -112,7 +112,7 @@ public class Mensch implements Spieler {
 					a = "";
 				}
 				
-				Thread.sleep(300);
+				Thread.sleep(1000);
 			} catch (Exception e) {
 				a = "";
 				continue;
@@ -126,7 +126,7 @@ public class Mensch implements Spieler {
 	public Model gibModel() {
 		while(!modelupdate) {
 			try {
-				Thread.sleep(300);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 			}
 		}
@@ -274,6 +274,14 @@ public class Mensch implements Spieler {
 		try {
 			netzwerk.printModel("!UPDATE", model);
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void weristdran(int ID) {
+		try {
+			netzwerk.print("!DRAN", String.valueOf(ID));
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}

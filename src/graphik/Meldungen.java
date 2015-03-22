@@ -61,6 +61,19 @@ public class Meldungen extends JPanel{
 	}
 	
 	/**
+	 * Zeigt an, dass der Spieler an der Reihe ist
+	 */
+	public void dran(boolean ein) {
+		if(ein) {
+			//Spieler einfärben
+			meldung[0].setForeground(Color.black);
+		} else {
+			//Spieler wieder auf normal
+			meldung[0].setForeground(Color.white);
+		}
+	}
+	
+	/**
 	 * Setzt alle Meldungen zurück
 	 */
 	public void reset() {
