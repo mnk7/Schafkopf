@@ -12,7 +12,6 @@ public class Bot implements Spieler {
 	private int ID;
 	private String name;
 	private Model model;
-	private int kontostand;
 	//wird nur benutzt, wenn eine Hochzeit durchgeführt wird
 	private Karte karte;
 	
@@ -138,11 +137,9 @@ public class Bot implements Spieler {
 	}
 
 	public void rundeZuende(int kontostand) {
-		this.kontostand = kontostand;
 	}
 
 	public void konto(int kontostand) {
-		this.kontostand = kontostand;
 	}
 
 	public void update(Model model) {

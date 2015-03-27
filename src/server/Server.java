@@ -312,19 +312,7 @@ public class Server extends Thread {
         		}
         	}
         	
-        	modus[] werspieltwas = new modus[4];
-        	for(int i = 0; i < 4; i++) {
-        		werspieltwas[i] = spielfolge.get(i);
-        	}
-        	
         	hoechstesSpiel(spielfolge);
-        	
-        	//Wenn zwei Spieler das Gleiche spielen, spielt der, der zuerst spielt
-        	for(int i = werspieltwas.length - 1; i >= 0; i--) {
-        		if(werspieltwas[i].equals(mod)) {
-        			spielt = i;
-        		}
-        	}
         }
         
         private modus bestesSpielFinden(ArrayList<modus> spielfolge) {
@@ -351,6 +339,13 @@ public class Server extends Thread {
         	//ermittelt das höchstwertige Spiel
         	spielErmitteln(spielfolge);
         	
+        	//Wenn zwei Spieler das Gleiche spielen, spielt der, der zuerst spielt
+        	for(int i = spielfolge.size() - 1; i >= 0; i--) {
+        		if(spielfolge.get(i).equals(mod)) {
+        			spielt = i;
+        		}
+        	}
+        	
         	//Wenn eine Hochzeit nicht erlaubt ist, wird unter den restlichen Spielen ein höchstes ermittelt
         	if(mod.equals(modus.HOCHZEIT) && !hochzeit(spielt)) {
         		spielfolge.remove(spielt);
@@ -376,7 +371,9 @@ public class Server extends Thread {
         		for(int i = 0; i < 4; i++) {
         			weristdran(i);
         			if(i != spielt && spieler.get(i).hochzeit()) {
-        				hochzeitAnfragen(i, angebot);
+        				if(hochzeitAnnehmen(i, angebot)) {
+        					return true;
+        				}
         			} else {
         				continue;
         			}
@@ -384,17 +381,16 @@ public class Server extends Thread {
     		} else {
     			return false;
     		}
-    		
-    		//Diese Fall ist nicht möglich, da i != spielt irgendwann zutrifft
+
     		return false;
         }
         
-        	private boolean hochzeitAnfragen(int mitspieler, Karte angebot) throws InterruptedException {
+        	private boolean hochzeitAnnehmen(int mitspieler, Karte angebot) throws InterruptedException {
         		//Wenn die Hochzeit angenommen wird
 				Karte k = spieler.get(mitspieler).gibKarte();
 				
 				//Wenn die Karte kein Trumpf ist
-    			if(Hochzeit.istTrumpf(k.gibWert(), k.gibFarbe())) {
+    			if(!Hochzeit.istTrumpf(k.gibWert(), k.gibFarbe())) {
     				model.hochzeit(spielt, mitspieler, angebot, k);
     				this.mitspieler = mitspieler;
     				return true;
@@ -759,21 +755,22 @@ public class Server extends Thread {
         /**
          * Beendet den Server
          */
-        @SuppressWarnings("deprecation")
-		public synchronized void beenden() {
+		public void beenden() {
         	try {
         		ArrayList<Spieler> s = (ArrayList<Spieler>) spieler.clone();
+        		
         		beenden = true;
 				server.close();
-				//Spieler werden entfernt
-				for(int i = 0; i < s.size(); i++) {
+				
+				for(int i = 0; i < 4; i++) {
 					s.get(i).abmelden();
 				}
 				
-				this.suspend();
+				this.interrupt();
+				this.finalize();
 				
 				graphik.beenden();
-			} catch (IOException e) {
+			} catch (Throwable e) {
 				e.printStackTrace();
 				//Programm beenden
 				System.exit(0);

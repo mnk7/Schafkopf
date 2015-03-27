@@ -23,6 +23,8 @@ public class Mensch implements Spieler {
 	
 	private String name;
 	
+	private final int wartezeit = 800;
+	
 	//speichert neueste antworten
 	private HashMap<String, Object> antwort;
 	private Model model;
@@ -31,6 +33,8 @@ public class Mensch implements Spieler {
 	private boolean modelupdate = false;
 	
 	private boolean beenden;
+	
+	private Thread spieler;
 	
 	public Mensch(Socket client, Server server) throws Exception {
 		
@@ -43,11 +47,12 @@ public class Mensch implements Spieler {
 		//Errichtet neue Verbindung
 		netzwerk = new Netzwerk(client);
 		
-		new Thread() {
-			public void run() {
-				listen();
-			}
-		}.start();
+		spieler = new Thread() {
+			  		  public void run() {
+						  listen();
+					  }
+				  };
+		spieler.start();
 	}
 	
 	/**
@@ -112,7 +117,7 @@ public class Mensch implements Spieler {
 					a = "";
 				}
 				
-				Thread.sleep(1000);
+				Thread.sleep(wartezeit);
 			} catch (Exception e) {
 				a = "";
 				continue;
@@ -126,7 +131,7 @@ public class Mensch implements Spieler {
 	public Model gibModel() {
 		while(!modelupdate) {
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(wartezeit);
 			} catch (InterruptedException e) {
 			}
 		}
@@ -137,7 +142,7 @@ public class Mensch implements Spieler {
 	
 	public Karte gibKarte() throws InterruptedException {	
 		while(karte == null) {
-			Thread.sleep(1000);
+			Thread.sleep(wartezeit);
 		}
 		Karte k = karte;
 		//löscht die eingelesene Karte, um nicht zweimal die gleiche zurückzugeben
@@ -307,6 +312,7 @@ public class Mensch implements Spieler {
 	public void beenden() {
 		beenden = true;
 		netzwerk.beenden();
+		spieler.interrupt();
 		server.entferneSpieler(this);
 	}
 	

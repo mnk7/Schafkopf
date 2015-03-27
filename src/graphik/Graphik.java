@@ -444,7 +444,7 @@ public class Graphik extends JFrame implements View{
 	public void spielt(int spielt, int mitspieler) { 
 		nachricht(spielt, "Ich spiel");
 		if(mitspieler != 4) {
-			nachricht(mitspieler, "Und ich hab geheiratet");
+			nachricht(mitspieler, "Und ich hab die Hochzeit angenommen");
 		}
 		
 		if(ID == spielt || ID == mitspieler) {

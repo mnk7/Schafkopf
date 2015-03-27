@@ -302,6 +302,7 @@ public class Model {
 				//Karte von der Hand des Spielers nehmen
 				spielerhand.get(spielt).remove(test);
 				spielerhand.get(mitspieler).add(test);
+				break;
 			}
 		}
 		Karte gegenTest;
@@ -311,6 +312,7 @@ public class Model {
 				//Karte von der Hand des Spielers nehmen
 				spielerhand.get(mitspieler).remove(gegenTest);
 				spielerhand.get(spielt).add(gegenTest);
+				break;
 			}
 		}
 	}

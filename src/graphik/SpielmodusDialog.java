@@ -192,7 +192,7 @@ public class SpielmodusDialog extends JPanel {
 		case HOCHZEIT:
 			return "eine Hochzeit";
 		case SAUSPIELeichel:
-			return "ein Sauspiel auf die Eichel-SAU";
+			return "ein Sauspiel auf die Eichel-Sau";
 		case SAUSPIELgras:
 			return "ein Sauspiel auf die Gras-Sau";
 		case SAUSPIELherz:
@@ -227,7 +227,7 @@ public class SpielmodusDialog extends JPanel {
 			return "ein Sie";
 		}
 		
-		return "Nichts";
+		return "nichts";
 	}
 	
 	public void reset() {

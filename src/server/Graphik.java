@@ -57,7 +57,7 @@ public class Graphik extends JFrame {
 		try {
 			initGUI();
 		} catch(Exception e) {
-			javax.swing.JOptionPane.showMessageDialog(null, "Fehler beim Programmstart");
+			javax.swing.JOptionPane.showMessageDialog(null, "Fehler während des Programmstarts");
 			e.printStackTrace();
 		}	
 	}
@@ -102,7 +102,7 @@ public class Graphik extends JFrame {
 						tarifWert = Integer.parseInt(tarif.getText());
 					} catch(Exception e) {
 						tarifWert = 10;
-						JOptionPane.showMessageDialog(g, "Falsche Tarifangabe. Der Tarif ist jetzt 10");
+						JOptionPane.showMessageDialog(g, "Keine Tarifangabe. Der Tarif ist jetzt 10");
 					}
 					server.setzeTarif(tarifWert);
 					
@@ -130,7 +130,7 @@ public class Graphik extends JFrame {
 					server.beenden();
 					server = null;
 					
-					beenden();
+					start.setText("Server starten");
 				}
 			}
 		});
@@ -202,9 +202,8 @@ public class Graphik extends JFrame {
 	
 	public void beenden() {
 		clear();
-		PlayerLabel[0].setText("Server beendet");
-		start.setText("Server starten");
 		spielerzahl = 0;
+		PlayerLabel[0].setText("Server beendet");
 	}
 }
 
