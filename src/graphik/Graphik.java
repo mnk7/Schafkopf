@@ -470,8 +470,9 @@ public class Graphik extends JFrame implements View{
 		}
 	}
 	
-	public void konto(int kontostand) {
+	public void konto(int kontostand, int stock) {
 		nachricht(ID, "Kontostand: " + String.valueOf(kontostand));
+		nachricht(ID, "Stock: " + String.valueOf(stock));
 	}
 	
 	public void beenden() {

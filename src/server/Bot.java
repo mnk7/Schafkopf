@@ -136,10 +136,10 @@ public class Bot implements Spieler {
 		beenden();
 	}
 
-	public void rundeZuende(int kontostand) {
+	public void rundeZuende(int kontostand, int stock) {
 	}
 
-	public void konto(int kontostand) {
+	public void konto(int kontostand, int stock) {
 	}
 
 	public void update(Model model) {

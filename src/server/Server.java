@@ -666,13 +666,13 @@ public class Server extends Thread {
         
         private void kontoAusgeben() {
         	for(int i = 0; i < 4; i++) {
-        		spieler.get(i).konto(konto.get(i));
+        		spieler.get(i).konto(konto.get(i), stock);
         	}
         }
         
         private void kontostand() {
         	for(int i = 0; i < 4; i++) {
-        		spieler.get(i).rundeZuende(konto.get(i));
+        		spieler.get(i).rundeZuende(konto.get(i), stock);
         	}
         }
         
@@ -736,6 +736,9 @@ public class Server extends Thread {
          */
         public void setzeTarif(int tarif) {
         	this.tarif = tarif;
+        	for(int i = 0; i < 4; i++) {
+        		konto.add(50*tarif);
+        	}
         }
         
         /**

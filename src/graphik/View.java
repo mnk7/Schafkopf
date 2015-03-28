@@ -112,8 +112,9 @@ public interface View {
 	/**
 	 * Zeigt den Kontostand des Spielers an
 	 * @param kontostand
+	 * @param stock
 	 */
-	public void konto(int kontostand);
+	public void konto(int kontostand, int stock);
 	
 	/**
 	 * Beendet das Spiel

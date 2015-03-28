@@ -1,7 +1,7 @@
 ===============================================================================
-| Schafkopf-Protokoll						   22.03.2015 |
-| Version 1.0						                      |
-| GPLv2									      |
+| Schafkopf-Protokoll					                    	   22.03.2015 |
+| Version 1.0						                                          |
+| GPLv2									                                      |
 ===============================================================================
 
 EBNF:
@@ -31,6 +31,7 @@ Daten = "!NAME" String
       | "!HOCHZEIT"
       | "!DRAN" Integer
       | "!KONTO" Konto
+      | "!STOCK" Konto
       | "!ENDE" Konto
       | "!BEENDEN";
 

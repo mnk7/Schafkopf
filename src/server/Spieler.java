@@ -134,13 +134,14 @@ public interface Spieler{
 	/**
 	 * schließt die Runde für die Spieler ab und sendet den Kontostand
 	 */
-	public void rundeZuende(int kontostand);
+	public void rundeZuende(int kontostand, int stock);
 
 	/**
 	 * Gibt den Kontostand aus
+	 * @param stock 
 	 * @param integer
 	 */
-	public void konto(int kontostand);
+	public void konto(int kontostand, int stock);
 
 	/**
 	 * Aktualisiert das Model des Spielers

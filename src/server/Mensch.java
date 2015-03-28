@@ -292,17 +292,25 @@ public class Mensch implements Spieler {
 		}
 	}
 	
-	public void konto(int kontostand) {
+	public void konto(int kontostand, int stock) {
+		String[] data = new String[] {
+				String.valueOf(kontostand),
+				String.valueOf(stock)
+		};
 		try {
-			netzwerk.print("!KONTO", String.valueOf(kontostand));
+			netzwerk.print("!KONTO", data);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	 
-	public void rundeZuende(int kontostand) {
+	public void rundeZuende(int kontostand, int stock) {
+		String[] data = new String[] {
+				String.valueOf(kontostand),
+				String.valueOf(stock)
+		};
 		try {
-			netzwerk.print("!ENDE", String.valueOf(kontostand));
+			netzwerk.print("!ENDE", data);
 			antwort.clear();
 		} catch (Exception e) {
 			e.printStackTrace();

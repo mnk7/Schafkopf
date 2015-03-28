@@ -120,10 +120,10 @@ public class Client{
 					weristdran(Integer.parseInt(data[1].toString()));
 					continue;
 				case "!ENDE":
-					abschliessen(Integer.parseInt(data[1].toString()));
+					abschliessen(Integer.parseInt(data[1].toString()), Integer.parseInt(data[2].toString()));
 					continue;
 				case "!KONTO":
-					konto(Integer.parseInt(data[1].toString()));
+					konto(Integer.parseInt(data[1].toString()), Integer.parseInt(data[2].toString()));
 					continue;
 				case "!BEENDEN":
 					beenden();
@@ -261,14 +261,14 @@ public class Client{
 		graphik.geklopft(geklopft);
 	}
 	
-	private synchronized void abschliessen(int konto) {
-		graphik.konto(konto);
+	private synchronized void abschliessen(int konto, int stock) {
+		graphik.konto(konto, stock);
 		model = new Model();
 		graphik.setModel(model);
 	}
 	
-	private synchronized void konto(int konto) {
-		graphik.konto(konto);
+	private synchronized void konto(int konto, int stock) {
+		graphik.konto(konto, stock);
 	}
 	
 	/**
