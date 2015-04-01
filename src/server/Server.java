@@ -121,17 +121,19 @@ public class Server extends Thread {
         public void run() {
         	try {
         		while(!beenden) {
-        			//Akzeptiert die Verbindung
-	        		Socket client = server.accept();
-	        		
-	        		Mensch neuerSpieler = new Mensch(client, this);
-	        		spieler.add(neuerSpieler);
-	        		
-	        		neuerSpieler.name();
-	        		
-	        		ViewTextSetzen();
-	        		
-	        		starten();
+        			if(spieler.size() < 4) {
+	        			//Akzeptiert die Verbindung
+		        		Socket client = server.accept();
+		        		
+		        		Mensch neuerSpieler = new Mensch(client, this);
+		        		spieler.add(neuerSpieler);
+		        		
+		        		neuerSpieler.name();
+		        		
+		        		ViewTextSetzen();
+		        		
+		        		starten();
+        			}
         		}
         	} catch(Exception e) {
         		e.printStackTrace();
@@ -167,9 +169,6 @@ public class Server extends Thread {
          * @throws Exception 
          */
         private void neuesSpiel() throws Exception {
-        	
-        	synchronized (model) {
-        	synchronized (spieler) {
         	
         	//Spiel wurde gestartet
         	while(!nocheins) {
@@ -235,8 +234,6 @@ public class Server extends Thread {
 	        	//neue Runde
 	        	naechster();
         	}
-        	}//synchronized spieler
-        	}//synchronized model
         }
         
         /**
@@ -544,17 +541,21 @@ public class Server extends Thread {
         	}
         	
         	//Den Spielern Geld abziehen oder hinzufügen
+        	ArrayList<Integer> neuesKonto = new ArrayList<Integer>(4);
+        	for(int i = 0; i < 4; i++) {
+        		neuesKonto.add(0);
+        	}
         	//Wenn die Spielenden verloren haben
         	if(spielt > 9) {
-        		konto.set(spielt - 10, konto.get(spielt - 10) - abrechnung(true, pSpielt));
+        		neuesKonto.set(spielt - 10, konto.get(spielt - 10) - abrechnung(true, pSpielt));
         		if(mitspieler != 4) {
-        			konto.set(mitspieler - 10, konto.get(mitspieler - 10) - abrechnung(true, pSpielt));
+        			neuesKonto.set(mitspieler - 10, konto.get(mitspieler - 10) - abrechnung(true, pSpielt));
         		}
         	} else {
         		//Wenn die Spielenden gewonnen haben
-        		konto.set(spielt, konto.get(spielt) + abrechnung(true, 120 - pSpielt));
+        		neuesKonto.set(spielt, konto.get(spielt) + abrechnung(true, 120 - pSpielt));
         		if(mitspieler != 4) {
-        			konto.set(mitspieler, konto.get(mitspieler) + abrechnung(true, 120 - pSpielt));
+        			neuesKonto.set(mitspieler, konto.get(mitspieler) + abrechnung(true, 120 - pSpielt));
         		}
         		
         		//Wenn ein Sauspiel gewonnen wurde, wird der Stock aufgeteilt
@@ -562,8 +563,12 @@ public class Server extends Thread {
                 		|| mod.equals(modus.SAUSPIELgras)
                 		|| mod.equals(modus.SAUSPIELherz)
                 		|| mod.equals(modus.SAUSPIELschellen)) {
-        			konto.set(spielt,  konto.get(spielt) + stock / 2);
-        			konto.set(mitspieler, konto.get(mitspieler) + stock / 2);
+        			//Konto aktualiesieren
+        			konto.set(spielt, neuesKonto.get(spielt));
+        			konto.set(mitspieler, neuesKonto.get(mitspieler));
+        			//und Stock addieren
+        			neuesKonto.set(spielt,  konto.get(spielt) + stock / 2);
+        			neuesKonto.set(mitspieler, konto.get(mitspieler) + stock / 2);
         			stock = 0;
                 }
         	}
@@ -571,13 +576,15 @@ public class Server extends Thread {
         		if(i != spielt && i != spielt - 10 && i != mitspieler && i != mitspieler - 10) {
         			if(spielt > 9) {
         				//Die Spielenden haben verloren
-        				konto.set(i, konto.get(i) + abrechnung(false, pSpielt));
+        				neuesKonto.set(i, konto.get(i) + abrechnung(false, pSpielt));
         			} else {
         				//Die Spielenden haben gewonnen
-        				konto.set(i, konto.get(i) - abrechnung(false, 120 - pSpielt));
+        				neuesKonto.set(i, konto.get(i) - abrechnung(false, 120 - pSpielt));
         			}
         		}
         	}
+        	
+        	konto = neuesKonto;
         }
         
         /**
@@ -661,10 +668,11 @@ public class Server extends Thread {
         /**
          * Füllt den Stock auf
          */
-        private void stock() {
+        private void stock() { 
         	stock += (tarif * 4);
         	for(int i = 0; i < 4; i++) {
-        		konto.set(i, konto.get(i) - tarif);
+        		int k = konto.get(i);
+        		konto.set(i, k - tarif);
         	}
         }
         

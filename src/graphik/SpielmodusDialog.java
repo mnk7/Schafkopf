@@ -219,7 +219,7 @@ public class SpielmodusDialog extends JPanel {
 			return "ein Sie";
 		}
 		
-		return "nichts";
+		return "Nichts";
 	}
 	
 	public void reset() {

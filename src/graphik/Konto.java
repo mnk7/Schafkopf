@@ -18,23 +18,23 @@ public class Konto extends JLabel {
 		this.setLayout(null);
 		
 		kontostand = new JLabel();
-		this.add(kontostand);
-		kontostand.setBounds(50, 65, 100, 30);
+		this.add(kontostand);  
+		kontostand.setBounds(35, 60, 130, 30);
 		kontostand.setText("Konto: ");
-		kontostand.setOpaque(false);
+		kontostand.setOpaque(false); 
 		kontostand.setForeground(Color.white);
-		
+		 
 		Font schrift = kontostand.getFont();
-		schrift = schrift.deriveFont(schrift.BOLD);
+		schrift = schrift.deriveFont(schrift.BOLD, 20);
 		kontostand.setFont(schrift);
 		
 		stock = new JLabel();
 		this.add(stock);
-		stock.setBounds(50, 105, 100, 30);
+		stock.setBounds(35, 110, 130, 30);
 		stock.setText("Stock: ");
 		stock.setOpaque(false);
 		stock.setForeground(Color.white);
-		
+		 
 		stock.setFont(schrift);		
 	}
 	

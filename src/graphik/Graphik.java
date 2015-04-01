@@ -83,9 +83,8 @@ public class Graphik extends JFrame implements View{
 		this.setLayout(null);
 		this.setLocationRelativeTo(null);
 		this.initGUI(); 
-		this.setVisible(true);
-		this.pack();
 		this.setSize(1130, 740);
+		this.setVisible(true);
 		
 		this.addWindowListener(new WindowListener() {
 
@@ -151,7 +150,7 @@ public class Graphik extends JFrame implements View{
 			gegenspielerKarten[0].nachricht("Spieler 1");
 			
 			hintergrund.add(gegenspielerKarten[1]);
-			gegenspielerKarten[1].setBounds(breite, 0, breite, hoehe);
+			gegenspielerKarten[1].setBounds(breite, 10, breite, hoehe);
 			
 			gegenspielerKarten[1].nachricht("Spieler 2");
 			
@@ -164,11 +163,11 @@ public class Graphik extends JFrame implements View{
 			spielerKarten = new Spieler(440, 120);
 			hintergrund.add(spielerKarten);
 			//Unterhalb der eigenen Meldungen platziert
-			spielerKarten.setLocation(this.getWidth() / 2 - 220, hoehe*2 + 100);
+			spielerKarten.setLocation(this.getWidth() / 2 - 220, hoehe*2 + 90);
 			spielerKarten.setVisible(true);
 			
 			//Meldungen des Spielers (4 Meldungen werden angezeigt)
-			spielerMeldungen = new Meldungen(5);
+			spielerMeldungen = new Meldungen(4);
 			hintergrund.add(spielerMeldungen);
 			//Die Meldungen laufen im letzten Fünftel des Fensters
 			spielerMeldungen.setBounds(breite, hoehe*2, breite, hoehe);
@@ -206,7 +205,7 @@ public class Graphik extends JFrame implements View{
 			
 			konto = new Konto();
 			hintergrund.add(konto);
-			konto.setLocation(10, this.getHeight() - 210);
+			konto.setLocation(10, this.getHeight() - 230);
 			konto.setVisible(true);
 			
 			//-------------------------------------------------------------hintergrund
