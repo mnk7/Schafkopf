@@ -76,14 +76,14 @@ public class Graphik extends JFrame implements View{
 		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(logo));
 		this.setIconImage(icon.getImage()); 
 		
-		this.setSize(1130, 740);
+		this.setSize(1130, 720);
 		//arrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrg
 		this.setResizable(false);
 		//Äußeres Layout nicht vorhanden
 		this.setLayout(null);
 		this.setLocationRelativeTo(null);
 		this.initGUI(); 
-		this.setSize(1130, 740);
+		this.setSize(1130, 720);
 		this.setVisible(true);
 		
 		this.addWindowListener(new WindowListener() {

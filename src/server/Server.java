@@ -21,7 +21,7 @@ import lib.Model.modus;
 
 public class Server extends Thread {
 	
-		private static int PORT = 35555;
+	    private static int PORT = 35555;
 	
 		//Server, der die Verbindungen verwaltet
 		private ServerSocket server;
@@ -577,6 +577,17 @@ public class Server extends Thread {
         			if(spielt > 9) {
         				//Die Spielenden haben verloren
         				neuesKonto.set(i, konto.get(i) + abrechnung(false, pSpielt));
+                		//Wenn ein Sauspiel gewonnen wurde, wird der Stock aufgeteilt
+                		if(mod.equals(modus.SAUSPIELeichel) 
+                        		|| mod.equals(modus.SAUSPIELgras)
+                        		|| mod.equals(modus.SAUSPIELherz)
+                        		|| mod.equals(modus.SAUSPIELschellen)) {
+                			//Konto aktualiesieren
+                			konto.set(i, neuesKonto.get(i));
+                			//und Stock addieren
+                			neuesKonto.set(i,  konto.get(i) + stock / 2);
+                			stock = 0;
+                        }
         			} else {
         				//Die Spielenden haben gewonnen
         				neuesKonto.set(i, konto.get(i) - abrechnung(false, 120 - pSpielt));
@@ -783,13 +794,15 @@ public class Server extends Thread {
 	        	    while (ee.hasMoreElements()) {
 	        	        InetAddress i = (InetAddress) ee.nextElement();
 	        	        //Filtert nach IPv4 Addressen
-	        	        if(i.getHostAddress().length() < 15) {
-	        	        	addresses.add(i.getHostAddress());
+	        	        if(!i.isLoopbackAddress() || !i.isLinkLocalAddress() || !i.isAnyLocalAddress()) {
+	        	        	if(i.getHostAddress().length() < 15) {
+	        	        		addresses.add(i.getHostAddress());
+	        	        	}
 	        	        }
 	        	    }
 	        	}
 	        	
-	        	return addresses.get(0);
+	        	return addresses.get(2);
         	} catch(Exception e) {
         		e.printStackTrace();
         		return server.getLocalSocketAddress().toString();
