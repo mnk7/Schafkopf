@@ -103,6 +103,9 @@ public class Wenz implements Control {
 		if(angespielt == null || ID == spieler0) {
 			return true;
 		}
+		if(m.gibSpielerKarten(ID).size() == 1) {
+			return true;
+		}
 		//Es wurde ein Unter angespielt
 		if(angespielt.gibWert().equals(Karte.wert.UNTER)) {
 			if(tisch[ID].gibWert().equals(Karte.wert.UNTER)) {

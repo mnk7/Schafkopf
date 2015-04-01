@@ -55,6 +55,8 @@ public class Graphik extends JFrame implements View{
 	private JButton letzterStichButton;
 	private LetzterStich letzterStichAnzeige;
 	
+	private Konto konto;
+	
 	//Hintergrund
 	private JLabel hintergrund;	
 	
@@ -74,7 +76,7 @@ public class Graphik extends JFrame implements View{
 		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(logo));
 		this.setIconImage(icon.getImage()); 
 		
-		this.setSize(1290, 700);
+		this.setSize(1130, 740);
 		//arrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrg
 		this.setResizable(false);
 		//Äußeres Layout nicht vorhanden
@@ -82,6 +84,8 @@ public class Graphik extends JFrame implements View{
 		this.setLocationRelativeTo(null);
 		this.initGUI(); 
 		this.setVisible(true);
+		this.pack();
+		this.setSize(1130, 740);
 		
 		this.addWindowListener(new WindowListener() {
 
@@ -157,14 +161,14 @@ public class Graphik extends JFrame implements View{
 			gegenspielerKarten[2].nachricht("Spieler 3");
 			
 			//Anzeige der Karten der Spieler
-			spielerKarten = new Spieler(420, 100);
+			spielerKarten = new Spieler(440, 120);
 			hintergrund.add(spielerKarten);
 			//Unterhalb der eigenen Meldungen platziert
-			spielerKarten.setBounds(breite, hoehe*2 + 80, breite, hoehe);
+			spielerKarten.setLocation(this.getWidth() / 2 - 220, hoehe*2 + 100);
 			spielerKarten.setVisible(true);
 			
 			//Meldungen des Spielers (4 Meldungen werden angezeigt)
-			spielerMeldungen = new Meldungen(4);
+			spielerMeldungen = new Meldungen(5);
 			hintergrund.add(spielerMeldungen);
 			//Die Meldungen laufen im letzten Fünftel des Fensters
 			spielerMeldungen.setBounds(breite, hoehe*2, breite, hoehe);
@@ -174,7 +178,7 @@ public class Graphik extends JFrame implements View{
 			
 			dialog = new SpielmodusDialog();
 			hintergrund.add(dialog);
-			dialog.setBounds(0, 0, 300, 300);
+			dialog.setBounds(10, 10, 300, 300);
 			dialog.setVisible(false);
 			
 			letzterStichButton = new JButton();
@@ -184,15 +188,26 @@ public class Graphik extends JFrame implements View{
 			letzterStichButton.setVisible(true);
 			letzterStichButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent evt) {
-					letzterStichAnzeige.setzeModel(model, namen);
-					letzterStichAnzeige.setVisible(true);
+					if(letzterStichAnzeige.isVisible()) {
+						letzterStichAnzeige.setVisible(false);
+						letzterStichButton.setText("Letzter Stich");
+					} else {
+						letzterStichAnzeige.setzeModel(model, namen);
+						letzterStichAnzeige.setVisible(true);
+						letzterStichButton.setText("Ausblenden");
+					}
 				}
 			});
 			
 			letzterStichAnzeige = new LetzterStich();
 			hintergrund.add(letzterStichAnzeige);
-			letzterStichAnzeige.setLocation(0, 0);
+			letzterStichAnzeige.setLocation(this.getWidth() - 350, 40);
 			letzterStichAnzeige.setVisible(false);
+			
+			konto = new Konto();
+			hintergrund.add(konto);
+			konto.setLocation(10, this.getHeight() - 210);
+			konto.setVisible(true);
 			
 			//-------------------------------------------------------------hintergrund
 		
@@ -359,8 +374,6 @@ public class Graphik extends JFrame implements View{
 	public modus spielstDu() {
 		boolean fertig = false;
 		this.toFront();
-		//Platz wird frei gemacht
-		letzterStichAnzeige.setVisible(false);
 		dialog.setVisible(true);
 		while(!fertig) {			
 			modus m = dialog.modusWahl();
@@ -471,8 +484,8 @@ public class Graphik extends JFrame implements View{
 	}
 	
 	public void konto(int kontostand, int stock) {
-		nachricht(ID, "Kontostand: " + String.valueOf(kontostand));
-		nachricht(ID, "Stock: " + String.valueOf(stock));
+		konto.setzeKontostand(kontostand);
+		konto.setzetStock(stock);
 	}
 	
 	public void beenden() {

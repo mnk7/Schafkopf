@@ -23,10 +23,10 @@ public class Gegenspieler extends JPanel {
 	 * Erstellt einen Gegenspieler
 	 */
 	public Gegenspieler() {
-		super();
+		super(true);
 		
 		this.setLayout(null);
-		this.setBackground(new Color(0,0,0,0));
+		this.setOpaque(false);
 		 
 		kartenzahl = 6;
 		

@@ -17,10 +17,10 @@ public class Spieler extends JPanel {
 	private Karte gespielt;
 	
 	public Spieler(int breite, int hoehe) {
-		super();
+		super(true);
 		
 		this.setLayout(null);
-		this.setBackground(new Color(0,0,0,0));
+		this.setOpaque(false);
 		this.setSize(breite, hoehe);
 		
 		karten = new ArrayList<KartenButton>();		
@@ -51,9 +51,16 @@ public class Spieler extends JPanel {
 			model = new ArrayList<Karte>();
 		}
 		
+		reset();
+		
+		//Errechnet, um wie viele Pixel die Karten verschoben werden
+		int diff = 6 - spielerkarten.size();
+		diff *= 70/2;
+		
 		for(int i = 0; i < spielerkarten.size(); i++) {
 			//neues Bild zuteilen
 			karten.get(i).setzeKarte(spielerkarten.get(i));
+			karten.get(i).setLocation(70 * i + diff, 0);
 		}
 		
 		//schon gespielte Karten werden abgeschaltet
@@ -91,4 +98,10 @@ public class Spieler extends JPanel {
 			karten.get(i).setEnabled(an);
 		}
 	}	
+	
+	private void reset() {
+		for(int i = 0; i < karten.size(); i++) {
+			karten.get(i).setVisible(false);
+		}
+	}
 }

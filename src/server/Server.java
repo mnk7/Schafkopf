@@ -1,10 +1,14 @@
 package server;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -691,8 +695,17 @@ public class Server extends Thread {
         public synchronized void entferneSpieler(Spieler s) {
         	spieler.remove(s);
         	
+        	//Entfernt alle Bots, um Raum für neue Spieler zu schaffen
+        	for(int i = spieler.size() - 1; i >= 0; i--) {
+        		if(spieler.get(i) instanceof Bot) {
+        			spieler.remove(spieler.get(i));
+        		}
+        	}
+        	spielerzahl = 4;
+        	
         	ViewTextSetzen();
         	nocheins = true;
+        	interrupt();
         }
         
         /**
@@ -751,8 +764,28 @@ public class Server extends Thread {
         /**
          * Liefert die IP des Servers
          */
-        public String gibIP() {        	
-        	return server.getInetAddress().getHostAddress();
+        public String gibIP(){        	
+        	ArrayList<String> addresses = new ArrayList<String>();
+        	
+        	try {
+	        	Enumeration e = NetworkInterface.getNetworkInterfaces();
+	        	while(e.hasMoreElements()) {
+	        	    NetworkInterface n = (NetworkInterface) e.nextElement();
+	        	    Enumeration ee = n.getInetAddresses();
+	        	    while (ee.hasMoreElements()) {
+	        	        InetAddress i = (InetAddress) ee.nextElement();
+	        	        //Filtert nach IPv4 Addressen
+	        	        if(i.getHostAddress().length() < 15) {
+	        	        	addresses.add(i.getHostAddress());
+	        	        }
+	        	    }
+	        	}
+	        	
+	        	return addresses.get(0);
+        	} catch(Exception e) {
+        		e.printStackTrace();
+        		return server.getLocalSocketAddress().toString();
+        	}
         }
         
         /**
@@ -765,7 +798,7 @@ public class Server extends Thread {
         		beenden = true;
 				server.close();
 				
-				for(int i = 0; i < 4; i++) {
+				for(int i = 0; i < s.size(); i++) {
 					s.get(i).abmelden();
 				}
 				
@@ -775,8 +808,6 @@ public class Server extends Thread {
 				graphik.beenden();
 			} catch (Throwable e) {
 				e.printStackTrace();
-				//Programm beenden
-				System.exit(0);
 			}
         }
 }

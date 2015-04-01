@@ -16,11 +16,10 @@ public class Meldungen extends JPanel{
 	private int festeAnzeigen = 0;
 	
 	public Meldungen(int histLaenge) {
-		super();
+		super(true);
 		
 		this.setLayout(null);
-		this.setOpaque(true);
-		this.setBackground(new Color(0,0,0,0));
+		this.setOpaque(false);
 		this.setSize(200, histLaenge*20);
 		
 		meldung = new JLabel[histLaenge];
@@ -28,7 +27,8 @@ public class Meldungen extends JPanel{
 			meldung[i] = new JLabel();
 			this.add(meldung[i]);
 			meldung[i].setBounds(0, i*20, 480, 20);
-			meldung[i].setBackground(new Color(0,0,0,0));
+			meldung[i].setBackground(Color.white);
+			meldung[i].setOpaque(false);
 			meldung[i].setForeground(Color.white);
 		}
 	}
@@ -66,9 +66,11 @@ public class Meldungen extends JPanel{
 	public void dran(boolean ein) {
 		if(ein) {
 			//Spieler einfärben
+			meldung[0].setOpaque(true);
 			meldung[0].setForeground(Color.black);
 		} else {
 			//Spieler wieder auf normal
+			meldung[0].setOpaque(false);
 			meldung[0].setForeground(Color.white);
 		}
 	}

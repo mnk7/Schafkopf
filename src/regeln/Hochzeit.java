@@ -125,6 +125,9 @@ public class Hochzeit implements Control {
 		if(angespielt == null || ID == spieler0){
 			return true;
 		}
+		if(m.gibSpielerKarten(ID).size() == 1) {
+			return true;
+		}
 		//Es wurde Trumpf angespielt
 		if(istTrumpf(angespielt.gibWert(), angespielt.gibFarbe())) {
 			if(istTrumpf(tisch[ID].gibWert(), tisch[ID].gibFarbe())) {

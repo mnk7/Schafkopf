@@ -14,7 +14,6 @@ public class LetzterStich extends JPanel {
 	
 	private KartenLabel[] karten;
 	private JLabel[] namen;
-	private JButton OK;
 	
 	private Model model;
 	
@@ -23,7 +22,7 @@ public class LetzterStich extends JPanel {
 		
 		this.setLayout(null);
 		this.setSize(4*80 + 20, 180);
-		this.setBackground(new Color(0, 0, 0, 0));
+		this.setOpaque(false);
 		
 		karten = new KartenLabel[4];
 		namen = new JLabel[4];
@@ -40,18 +39,6 @@ public class LetzterStich extends JPanel {
 			namen[i].setVisible(true);
 		}
 		
-		
-		OK = new JButton();
-		this.add(OK);
-		OK.setBounds(10 + 3*80, 160, 80, 20);
-		OK.setText("OK");
-		OK.setVisible(true);
-		OK.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				unsichtbar();
-			}
-		});
-		
 		model = new Model();
 	}
 	
@@ -67,9 +54,4 @@ public class LetzterStich extends JPanel {
 			karten[i].setBild(model.gibLetztenStich()[i]);
 		}
 	}
-	
-	private void unsichtbar() {
-		this.setVisible(false);
-	}
-
 }

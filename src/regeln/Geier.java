@@ -99,6 +99,9 @@ public class Geier implements Control {
 		if(angespielt == null || ID == spieler0){
 			return true;
 		}
+		if(m.gibSpielerKarten(ID).size() == 1) {
+			return true;
+		}
 		//Es wurde ein Unter angespielt
 		if(angespielt.gibWert().equals(Karte.wert.OBER)){
 			if(tisch[ID].gibWert().equals(Karte.wert.OBER)){

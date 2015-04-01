@@ -56,6 +56,8 @@ public class Graphik extends JFrame {
 		
 		try {
 			initGUI();
+			this.pack();
+			this.setSize(330, 350);
 		} catch(Exception e) {
 			javax.swing.JOptionPane.showMessageDialog(null, "Fehler während des Programmstarts");
 			e.printStackTrace();
@@ -127,10 +129,9 @@ public class Graphik extends JFrame {
 		end.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				if(server != null) {
+					start.setText("Server starten");
 					server.beenden();
 					server = null;
-					
-					start.setText("Server starten");
 				}
 			}
 		});
@@ -162,7 +163,8 @@ public class Graphik extends JFrame {
 	
 	public synchronized void textSetzen(ArrayList<Spieler> s) { 
 		clear();
-		ArrayList <Spieler> spieler = s;		
+		ArrayList <Spieler> spieler = s;	
+		spielerzahl = 0;
 		
 		for(int i = 0; i < 4; i++){
 			String aufschrift;
@@ -190,7 +192,11 @@ public class Graphik extends JFrame {
 			start.setText("1 Bot");
 		}
 		if(4 - spielerzahl > 1) {
-			start.setText(4 - spielerzahl + " Bots");
+			if(server != null) {
+				start.setText(4 - spielerzahl + " Bots");
+			} else {
+				start.setText("Spiel starten");
+			}
 		}
 	}
 	
@@ -204,6 +210,7 @@ public class Graphik extends JFrame {
 		clear();
 		spielerzahl = 0;
 		PlayerLabel[0].setText("Server beendet");
+		start.setText("Server starten");
 	}
 }
 
