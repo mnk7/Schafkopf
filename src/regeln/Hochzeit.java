@@ -197,7 +197,7 @@ public class Hochzeit implements Control {
 	 * @param farbe
 	 * @return
 	 */
-	public static boolean istTrumpf(Karte.wert wert, Karte.farbe farbe) {
+	public boolean istTrumpf(Karte.wert wert, Karte.farbe farbe) {
 		if (wert.equals(Karte.wert.OBER) 
 				|| wert.equals(Karte.wert.UNTER) 
 				|| farbe.equals(Karte.farbe.HERZ)) {
@@ -225,7 +225,7 @@ public class Hochzeit implements Control {
 		return false;
 	}
 
-	public static boolean hochzeitMoeglich(Model m, int position, Karte angebot){
+	public boolean hochzeitMoeglich(Model m, int position, Karte angebot){
 		if(!istTrumpf(angebot.gibWert(), angebot.gibFarbe())) {
 			return false;
 		}

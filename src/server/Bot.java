@@ -19,12 +19,13 @@ public class Bot implements Spieler {
 	private int mitspieler;
 	
 	private int wartezeit;
+	private int handicap;
 	
 	private KI ki;
 	private Spielauswahl spielauswahl;
 	private Server server;
 	
-	public Bot(Server server, int botnr, int wartezeit) {
+	public Bot(Server server, int botnr, int wartezeit, int handicap) {
 		name = "[BOT]-" + botnr;
 		
 		spielauswahl = new Spielauswahl();
@@ -34,11 +35,12 @@ public class Bot implements Spieler {
 		mitspieler = -1;
 		
 		this.wartezeit = wartezeit;
+		this.handicap = handicap;
 	}
 
 	public boolean erste3(Model model) {
 		setzeModel(model);
-		return spielauswahl.klopfen(model);
+		return spielauswahl.klopfen(model, ID);
 	} 
 
 	public synchronized void spielen(Model model) {
@@ -55,7 +57,7 @@ public class Bot implements Spieler {
 	}
 
 	public synchronized boolean modus(lib.Model.modus m) {
-		ki = spielauswahl.gibKI(m, ID);
+		ki = spielauswahl.gibKI(m, ID, handicap);
 		ki.spieler(spielt, mitspieler);
 		return ki.kontra(model);
 	} 
@@ -96,7 +98,8 @@ public class Bot implements Spieler {
 	}
 
 	public synchronized boolean hochzeit() {
-		karte = Hochzeit.hochzeitAnnehmen(model, ID);
+		Hochzeit hochzeit = new Hochzeit(ID, 0);
+		karte = hochzeit.hochzeitAnnehmen(model, ID);
 		if(karte == null) {
 			return false;
 		} else {

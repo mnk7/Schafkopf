@@ -244,7 +244,7 @@ public class Sauspiel implements Control {
 	 * @param farbe
 	 * @return
 	 */
-	private boolean istTrumpf(Karte.wert wert, Karte.farbe farbe) {
+	public boolean istTrumpf(Karte.wert wert, Karte.farbe farbe) {
 		if (wert.equals(Karte.wert.OBER) 
 				|| wert.equals(Karte.wert.UNTER) 
 				|| farbe.equals(Karte.farbe.HERZ)) {

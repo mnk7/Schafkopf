@@ -164,4 +164,11 @@ public class Geier implements Control {
 		}
 		return true;
 	}
+	
+	public boolean istTrumpf(Karte.wert wert, Karte.farbe farbe) {
+		if(wert.equals(Karte.wert.OBER)) {
+			return true;
+		}
+		return false;
+	}
 }

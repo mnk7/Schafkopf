@@ -177,7 +177,7 @@ public class Graphik extends JFrame implements View{
 			//erste Ausgabe
 			spielerMeldungen.nachricht("Mit Server verbunden");
 			
-			dialog = new SpielmodusDialog();
+			dialog = new SpielmodusDialog(); 
 			hintergrund.add(dialog);
 			dialog.setBounds(10, 10, 300, 300);
 			dialog.setVisible(false);

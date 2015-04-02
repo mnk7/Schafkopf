@@ -1,6 +1,7 @@
 package ki;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import regeln.Control;
 import lib.Karte;
@@ -12,6 +13,20 @@ public abstract class KI {
 	protected int spielt;
 	protected int mitspieler;
 	protected Control regeln;
+	
+	//Gibt an, welches Risiko der Spieler bereit ist einzugehen
+	//Je niedriger der Wert, desto mehr Risiko wird eingegangen, wobei gilt:
+	//Ein hoher Trumpf (Wenz beim Wenz, Ober beim Sauspiel) = 3
+	//Ein niedriger Trumpf (As beim Wenz, Unter beim Sauspiel) = 2
+	//Sonstiges (z.B. Zehner beim Wenz, Farbtrumpf beim Sauspiel) = 1
+	protected int risiko;
+	
+	//Gibt an, welches Handicap ein Bot hat, je größer das Handicap, desto mehr Fehler
+	protected int handicap;
+	//Speichert die Zahl der Trümpfe
+	protected int trumpfzahl;
+	//Speichert die Qualität der Trümpfe
+	protected int trumpfsumme;
 	
 	public KI(int ID) {
 		this.ID = ID;
@@ -31,8 +46,21 @@ public abstract class KI {
 	 * @param model
 	 * @return
 	 */
-	public abstract boolean kontra(Model model);
-
+	public boolean kontra(Model model) {
+		untersuche(model.gibSpielerKarten(ID));
+		if(trumpfsumme > risiko) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Ermittelt Trumpfzahl und Trumpfsumme
+	 * @param karten
+	 */
+	protected abstract void untersuche(ArrayList<Karte> karten);
+	
 	/**
 	 * Übernimmt, wer spielt
 	 * @param spielt
@@ -61,23 +89,25 @@ public abstract class KI {
 		Model m = model;
 		//Arbeitet nach dem DAB-Prinzip (Dümmster anzunehmender Bot) und spielt zufällig eine Karte
 		ArrayList<Karte> spielerkarten = m.gibSpielerKarten(ID);
+		//Speichert alle erlaubten Karten
+		ArrayList<Integer> erlaubt = new ArrayList<Integer>();
 		
 		try {
-			for(int i = 0; i < spielerkarten.size(); i++) {
+			for(int i = spielerkarten.size() - 1; i >= 0; i--) {
 				//Legt eine Karte auf den Tisch
 				m.setTisch(ID, spielerkarten.get(i));
 				
 				if(regeln.erlaubt(m, ID)) {
 					//Prüft, ob der Zug legal ist
-					break;
+					erlaubt.add(i);
 					//Karte gefunden
-				} else {
-					m.undo(ID);
-					//Die zurückgelegte Karte wird nach ganz hinten gerückt, der Rest rückt auf
-					spielerkarten = m.gibSpielerKarten(ID);
-					i--;
 				}
+				m.undo(ID);
+				//Die zurückgelegte Karte wird nach ganz hinten gerückt, der Rest rückt auf
+				spielerkarten = m.gibSpielerKarten(ID);
 			}
+			//Vorerst einfach die erste erlaubte spielen
+			m.setTisch(ID, spielerkarten.get(erlaubt.get(0)));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

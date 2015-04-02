@@ -1,5 +1,6 @@
 package regeln;
 
+import lib.Karte;
 import lib.Model;
 
 public interface Control {
@@ -25,5 +26,13 @@ public interface Control {
 	 * @return mitspieler oder null
 	 */
 	public int mitspieler(Model m);
+	
+	/**
+	 * Bestimmt, ob eine Karte Trumpf ist
+	 * @param wert
+	 * @param farbe
+	 * @return
+	 */
+	public boolean istTrumpf(Karte.wert wert, Karte.farbe farbe);
 
 }

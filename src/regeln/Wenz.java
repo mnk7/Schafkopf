@@ -173,4 +173,11 @@ public class Wenz implements Control {
 		}
 		return true;
 	}
+	
+	public boolean istTrumpf(Karte.wert wert, Karte.farbe farbe) {
+		if(wert.equals(Karte.wert.UNTER)) {
+			return true;
+		}
+		return false;
+	}
 }

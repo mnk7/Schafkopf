@@ -47,6 +47,9 @@ public class Server extends Thread {
         
         private int wartezeit;
         
+        //Schwierigkeitsstufe
+        private int handicap;
+        
         //speichert den Spielmodus
         private modus mod;
         
@@ -88,6 +91,8 @@ public class Server extends Thread {
         	spielerzahl = 4;
         	
         	wartezeit = 2000;
+        	
+        	handicap = 3;
         	
         	geklopft = new boolean[4];
         	
@@ -155,7 +160,7 @@ public class Server extends Thread {
     			nocheins = false;
     			//Mit Bots auffüllen
     			for(int i = 4; i > spielerzahl; i--) {
-    				spieler.add(new Bot(this, 4 - i, wartezeit));
+    				spieler.add(new Bot(this, 4 - i, wartezeit, handicap));
     			}
     			ViewTextSetzen();
     			
@@ -370,7 +375,8 @@ public class Server extends Thread {
         private boolean hochzeit(int spielt) throws Exception {
     		Karte angebot = spieler.get(spielt).gibKarte();
     		
-    		if(Hochzeit.hochzeitMoeglich(model, spielt, angebot)) {
+    		Hochzeit hochzeit = new Hochzeit();
+    		if(hochzeit.hochzeitMoeglich(model, spielt, angebot)) {
         		for(int i = 0; i < 4; i++) {
         			weristdran(i);
         			if(i != spielt && spieler.get(i).hochzeit()) {
@@ -392,8 +398,10 @@ public class Server extends Thread {
         		//Wenn die Hochzeit angenommen wird
 				Karte k = spieler.get(mitspieler).gibKarte();
 				
+				Hochzeit hochzeit = new Hochzeit();
+				
 				//Wenn die Karte kein Trumpf ist
-    			if(!Hochzeit.istTrumpf(k.gibWert(), k.gibFarbe())) {
+    			if(!hochzeit.istTrumpf(k.gibWert(), k.gibFarbe())) {
     				model.hochzeit(spielt, mitspieler, angebot, k);
     				this.mitspieler = mitspieler;
     				return true;
@@ -774,6 +782,14 @@ public class Server extends Thread {
         	for(int i = 0; i < 4; i++) {
         		konto.add(50*tarif);
         	}
+        }
+        
+        /**
+         * Legt die Schwierigkeitsstufe des Spiels fest
+         * @param handicap
+         */
+        public void setzeHandicap(int handicap) {
+        	this.handicap = handicap;
         }
         
         /**
