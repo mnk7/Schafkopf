@@ -130,6 +130,11 @@ public class Sauspiel implements Control {
 		
 		//Es wurde nichts angespielt
 		if(angespielt == null || ID == spieler0){
+			if(!rufsau.gibFarbe().equals(tisch[ID].gibFarbe()) 
+					&& hatRufSau(m, ID) 
+					&& !tisch[ID].vergleiche(rufsau)) {
+				return false;
+			}
 			return true;
 		}
 		if(m.gibSpielerKarten(ID).size() == 0) {

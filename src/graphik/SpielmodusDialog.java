@@ -184,13 +184,13 @@ public class SpielmodusDialog extends JPanel {
 		case HOCHZEIT:
 			return "eine Hochzeit";
 		case SAUSPIELeichel:
-			return "ein Sauspiel auf die Eichel-Sau";
+			return "ein Sauspiel auf die Eichel";
 		case SAUSPIELgras:
-			return "ein Sauspiel auf die Gras-Sau";
+			return "ein Sauspiel auf die Gras";
 		case SAUSPIELherz:
-			return "ein Sauspiel auf die Herz-Sau";
+			return "ein Sauspiel auf die Herz";
 		case SAUSPIELschellen:
-			return "ein Sauspiel auf die Schellen-Sau";
+			return "ein Sauspiel auf die Schellen";
 		case GEIER:
 			return "ein Geier";
 		case GEIERdu:

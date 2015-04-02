@@ -3,6 +3,7 @@ package graphik;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -44,34 +45,8 @@ public class KartenLabel extends JLabel {
 		
 		KartenLabel.class.getResource(this.bild);
 		
-		//[DEBUG]
-		//this.setBorder(BorderFactory.createLineBorder(Color.black));
-		
 		//Setzt das Bild der Karte
 		setBild(bild);
-		
-		//Für skalierbare Karten
-		/**try {
-			//Liest das Bild ein
-			icon = ImageIO.read(new File(this.bild));
-			
-		} catch (IOException e) {
-			System.out.println("Bild wurde nicht gefunden");
-			e.printStackTrace();
-		}
-		
-		//Division durch null vermeiden
-		float quotient = width / (height + 1);
-		if(quotient < 0.6) {
-			this.width = width;
-			this.height = this.width * 6/10;
-		} else {
-			this.height = height;
-			this.width = this.height * 6/10;
-		}
-		
-		this.setSize(this.width, this.height);
-		**/
 	}
 	
 	/**
@@ -95,37 +70,14 @@ public class KartenLabel extends JLabel {
 		this.setVisible(true);
 	}
 	
-	//Für skalierbare Karten
 	/**
 	 * Passt die Größe des Bildes auf eine veränderte Fenstergröße an
 	 * @param width
 	 * @param height
 	 */	
 	/**public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		
-		//immer die kleinstmögliche Anzeige wird gewählt
-		Dimension windowSize = this.getSize();
-		//Divison durch null vermeiden
-		float quotient = width / (height + 1);
-		if(quotient < 0.6) {
-			this.width = (int) windowSize.getWidth();
-			this.height = this.width * 6/10;
-		} else {
-			this.height = (int) windowSize.getHeight();
-			this.width = this.height * 6/10;
-		}
-		
-		this.width = (int) windowSize.getWidth();
-		this.height = (int) windowSize.getHeight();
-		
-		Image img = icon.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING);
-		
-		//this.setIcon(new ImageIcon(bild));
-		g.drawImage(img, 0, this.getInsets().top, this);
-		
-		this.setSize(60, 100);
-		
-		this.setIcon(new ImageIcon(bild));
+		Graphics2D g2 = (Graphics2D) g;
+		g2.scale(2, 2);
+		super.paintComponent(g2);
 	}**/
 }

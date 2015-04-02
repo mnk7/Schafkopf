@@ -667,7 +667,7 @@ public class Server extends Thread {
         	}
         	
         	if(spieler) {
-        		if(mitspieler == 4) {
+        		if(mitspieler != 4) {
         			return diff;
         		} else {
         			//Wenn der Spieler alleine war muss er alle bezahlen / bekommt er den ganzen Gewinn
