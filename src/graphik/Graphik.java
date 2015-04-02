@@ -1,5 +1,7 @@
 package graphik;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -76,8 +78,8 @@ public class Graphik extends JFrame implements View{
 		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(logo));
 		this.setIconImage(icon.getImage()); 
 		
-		this.setSize(1130, 720);
-		//arrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrg
+		//this.setSize(1130, 720);
+		this.setMinimumSize(new Dimension(1130, 720));
 		this.setResizable(false);
 		//Äußeres Layout nicht vorhanden
 		this.setLayout(null);

@@ -169,6 +169,8 @@ public class Server extends Thread {
          * @throws Exception 
          */
         private void neuesSpiel() throws Exception {
+        	//Konten aktualisieren
+        	setzeTarif(tarif);
         	
         	//Spiel wurde gestartet
         	while(!nocheins) {
@@ -766,8 +768,9 @@ public class Server extends Thread {
          * Ändert den Tarif des Spiels
          * @param tarif
          */
-        public void setzeTarif(int tarif) {
+        public synchronized void setzeTarif(int tarif) {
         	this.tarif = tarif;
+        	konto = new ArrayList<Integer>();
         	for(int i = 0; i < 4; i++) {
         		konto.add(50*tarif);
         	}

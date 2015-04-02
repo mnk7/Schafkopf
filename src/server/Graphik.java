@@ -99,14 +99,7 @@ public class Graphik extends JFrame {
 					server = new Server(g);
 					server.setzeWartezeit(wartezeit.getValue());
 					
-					int tarifWert;
-					try {
-						tarifWert = Integer.parseInt(tarif.getText());
-					} catch(Exception e) {
-						tarifWert = 10;
-						JOptionPane.showMessageDialog(g, "Keine Tarifangabe. Der Tarif ist jetzt 10");
-					}
-					server.setzeTarif(tarifWert);
+					setzeTarif();
 					
 					server.start();
 					
@@ -116,6 +109,7 @@ public class Graphik extends JFrame {
 					g.setTitle("Schafkopf: " + server.gibIP());
 				} else {
 					//Startet den Server mit den Spielern, die anwesend sind und füllt den Rest mit Bots auf
+					setzeTarif();
 					server.setzeSpielerzahl(spielerzahl);
 				}
 			}
@@ -204,6 +198,17 @@ public class Graphik extends JFrame {
 		for(int i = 0; i < 4; i++) {
 			PlayerLabel[i].setText("");
 		}
+	}
+	
+	public synchronized void setzeTarif() {
+		int tarifWert;
+		try {
+			tarifWert = Integer.parseInt(tarif.getText());
+		} catch(Exception e) {
+			tarifWert = 10;
+			JOptionPane.showMessageDialog(g, "Keine Tarifangabe. Der Tarif ist jetzt 10");
+		}
+		server.setzeTarif(tarifWert);
 	}
 	
 	public void beenden() {

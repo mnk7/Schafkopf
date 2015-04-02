@@ -132,7 +132,7 @@ public class Sauspiel implements Control {
 		if(angespielt == null || ID == spieler0){
 			return true;
 		}
-		if(m.gibSpielerKarten(ID).size() == 1) {
+		if(m.gibSpielerKarten(ID).size() == 0) {
 			return true;
 		}
 		//Es wurde Trumpf angespielt
