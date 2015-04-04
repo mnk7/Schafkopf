@@ -171,4 +171,35 @@ public class Geier implements Control {
 		}
 		return false;
 	}
+	
+	public int laufende(int spieler, int mitspieler, Model model) {
+		ArrayList<Karte> spielerkarten = model.gibSpielerKarten(spieler);
+		
+		//Für jeden enthaltenen Trumpf gibt es ein Feld
+		boolean[] enthalten = new boolean[4];
+		for(int i = 0; i < 4; i++) {
+			enthalten[i] = false;
+		}
+		
+		for(int i = 0; i < spielerkarten.size(); i++) {
+			Karte k = spielerkarten.get(i);
+			int stelle;
+			
+			if(k.gibWert().equals(Karte.wert.OBER)) {
+				stelle = k.gibFarbe().ordinal();
+				enthalten[stelle] = true;
+			}
+		}
+		
+		int laufende = 0;
+		for(int i = 0; i < 4; i++) {
+			if(enthalten[i]) {
+				laufende++;
+			} else {
+				break;
+			}
+		}
+		
+		return laufende;
+	}
 }

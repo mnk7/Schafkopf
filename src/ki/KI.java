@@ -32,6 +32,7 @@ public abstract class KI {
 		this.ID = ID;
 		spielt = -1;
 		mitspieler = -1;
+		risiko = 0;
 	}
 	
 	/**
@@ -90,7 +91,7 @@ public abstract class KI {
 		//Arbeitet nach dem DAB-Prinzip (Dümmster anzunehmender Bot) und spielt zufällig eine Karte
 		ArrayList<Karte> spielerkarten = m.gibSpielerKarten(ID);
 		//Speichert alle erlaubten Karten
-		ArrayList<Integer> erlaubt = new ArrayList<Integer>();
+		ArrayList<Karte> erlaubt = new ArrayList<Karte>();
 		
 		try {
 			for(int i = spielerkarten.size() - 1; i >= 0; i--) {
@@ -99,7 +100,7 @@ public abstract class KI {
 				
 				if(regeln.erlaubt(m, ID)) {
 					//Prüft, ob der Zug legal ist
-					erlaubt.add(i);
+					erlaubt.add(m.gibTisch()[ID]);
 					//Karte gefunden
 				}
 				m.undo(ID);
@@ -107,7 +108,7 @@ public abstract class KI {
 				spielerkarten = m.gibSpielerKarten(ID);
 			}
 			//Vorerst einfach die erste erlaubte spielen
-			m.setTisch(ID, spielerkarten.get(erlaubt.get(0)));
+			m.setTisch(ID, erlaubt.get(0));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

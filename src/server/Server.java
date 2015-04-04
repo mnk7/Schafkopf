@@ -209,7 +209,7 @@ public class Server extends Thread {
 	        		continue;
 	        	}
 	        	//legt die Regeln fest
-	        	regeln = regelwahl.wahl(mod, model);
+	        	regeln = regelwahl.wahl(mod);
 	        	if(regeln == null) {
 	        		stock();
 	        		kontostand();
@@ -232,6 +232,9 @@ public class Server extends Thread {
 	        		naechster();
 	        		continue;
 	        	}
+	        	
+	        	//Errechnet, wie viele Laufende die Spieler haben
+	        	model.errechneLaufende(spielt, mitspieler, mod);
 	        	
 	        	spiel();
 
@@ -673,6 +676,9 @@ public class Server extends Thread {
         			diff *= 2;
         		}
         	}
+        	
+        	//Bezieht die Laufenden mit ein
+        	diff += model.gibLaufende() * tarif;
         	
         	if(spieler) {
         		if(mitspieler != 4) {

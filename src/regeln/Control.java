@@ -35,4 +35,13 @@ public interface Control {
 	 */
 	public boolean istTrumpf(Karte.wert wert, Karte.farbe farbe);
 
+	/**
+	 * Errechnet die Laufenden der Spieler.
+	 * @param spieler
+	 * @param mitspieler
+	 * @param model
+	 * @return
+	 */
+	public int laufende(int spieler, int mitspieler, Model model);
+
 }

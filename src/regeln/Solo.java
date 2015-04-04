@@ -214,5 +214,44 @@ public class Solo implements Control {
 	public int mitspieler(Model m) {
 		return 4;
 	}
+	
+	public int laufende(int spieler, int mitspieler, Model model) {
+		ArrayList<Karte> spielerkarten = model.gibSpielerKarten(spieler);
+		
+		//Für jeden enthaltenen Trumpf gibt es ein Feld
+		boolean[] enthalten = new boolean[12];
+		for(int i = 0; i < 12; i++) {
+			enthalten[i] = false;
+		}
+		
+		for(int i = 0; i < spielerkarten.size(); i++) {
+			Karte k = spielerkarten.get(i);
+			int stelle;
+			
+			if(k.gibWert().equals(Karte.wert.OBER)) {
+				stelle = k.gibFarbe().ordinal();
+				enthalten[stelle] = true;
+			} else if(k.gibWert().equals(Karte.wert.UNTER)) {
+				stelle = 4 + k.gibFarbe().ordinal();
+				enthalten[stelle] = true;
+			} else if(istTrumpf(k.gibWert(), k.gibFarbe())) {
+				//Farbtrumpf
+				//Enum für Wert ist umgedreht aufgestellt -> siehe lib.Karte
+				stelle = 8 + (3 - k.gibWert().ordinal());
+				enthalten[stelle] = true;
+			}
+		}
+		
+		int laufende = 0;
+		for(int i = 0; i < 12; i++) {
+			if(enthalten[i]) {
+				laufende++;
+			} else {
+				break;
+			}
+		}
+		
+		return laufende;
+	}
 
 }

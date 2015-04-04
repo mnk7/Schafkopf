@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 public class Regelwahl {
 	
 	
-	public Control wahl(modus mod, Model m) {
+	public Control wahl(modus mod) {
 		switch (mod) {
 		case GEIERdu: 
 		case GEIER: 

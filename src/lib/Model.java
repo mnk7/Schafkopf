@@ -9,6 +9,9 @@ package lib;
 import java.util.ArrayList;
 import java.util.Random;
 
+import regeln.Control;
+import regeln.Regelwahl;
+
 public class Model {
 	
 	//Die verschiedenen Spielmodi
@@ -41,6 +44,8 @@ public class Model {
 	
 	private ArrayList<Integer> punkte;
 	
+	private int laufende;
+	
 	
 	/**
 	 * Initialisiert alle Listen und befüllt das Kartendeck
@@ -66,6 +71,8 @@ public class Model {
 		for(int i = 0; i < 4; i++) {
 			punkte.add(0);
 		}
+		
+		laufende = 0;
 		
 		initKarten();
 	}
@@ -354,6 +361,24 @@ public class Model {
 	 */
 	public void setPunkte(ArrayList<Integer> punkte) {
 		this.punkte = punkte;
+	}
+	
+	/**
+	 * Errechnet die Anzahl der Laufenden. Bei weniger als 3 Laufenden wird 0 gesetzt
+	 * @param spieler
+	 * @param mitspieler
+	 * @param modus
+	 */
+	public void errechneLaufende(int spieler, int mitspieler, modus modus) {
+		Control regeln = new Regelwahl().wahl(modus);
+		laufende = regeln.laufende(spieler, mitspieler, this);
+		if(laufende < 3) {
+			laufende = 0;
+		}
+	}
+	
+	public int gibLaufende() {
+		return laufende;
 	}
 	
 }

@@ -79,7 +79,7 @@ public class Graphik extends JFrame implements View{
 		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(logo));
 		this.setIconImage(icon.getImage()); 
 
-		this.setMinimumSize(new Dimension(1130, 720));
+		this.setSize(new Dimension(1130, 720));
 		this.setResizable(false);
 		//Äußeres Layout nicht vorhanden
 		this.setLayout(null);
@@ -364,7 +364,7 @@ public class Graphik extends JFrame implements View{
 	}
 	
 	public void setzeModus(modus mod) {
-		control = new Regelwahl().wahl(mod, model);
+		control = new Regelwahl().wahl(mod);
 		nachricht(ID, "Es wird " + dialog.modusZuSprache(mod) + " gespielt");
 	}
 	

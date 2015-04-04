@@ -32,7 +32,7 @@ public class Hochzeit extends KI {
 		trumpfzahl = 0;
 		trumpfsumme = 0;
 		for(int i = 0; i < karten.size(); i++) {
-			Karte k = karten.get(i);
+			Karte k = karten.get(i); 
 			if(regeln.istTrumpf(k.gibWert(), k.gibFarbe())) {
 				trumpfzahl++;
 				if(k.gibWert().equals(Karte.wert.OBER)) {

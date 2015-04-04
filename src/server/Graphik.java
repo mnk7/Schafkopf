@@ -56,8 +56,6 @@ public class Graphik extends JFrame {
 		
 		try {
 			initGUI();
-			this.pack();
-			this.setSize(330, 350);
 		} catch(Exception e) {
 			javax.swing.JOptionPane.showMessageDialog(null, "Fehler während des Programmstarts");
 			e.printStackTrace();
