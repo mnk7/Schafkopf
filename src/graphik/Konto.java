@@ -14,7 +14,7 @@ public class Konto extends JLabel {
 	public Konto() {
 		super();
 		this.setSize(200, 200);
-		this.setIcon(new ImageIcon(getClass().getClassLoader().getResource("graphik/karten/holzschale.png")));
+		this.setIcon(new ImageIcon(getClass().getClassLoader().getResource("graphik/karten/Schale.png")));
 		this.setLayout(null);
 		
 		kontostand = new JLabel();

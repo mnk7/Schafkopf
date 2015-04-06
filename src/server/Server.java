@@ -104,7 +104,7 @@ public class Server extends Thread {
         	tarif = 10;
         	konto = new ArrayList<Integer>();
         	for(int i = 0; i < 4; i++) {
-        		konto.add(50*tarif);
+        		konto.add(100*tarif);
         	}
         	
         	nocheins = true;
@@ -786,7 +786,7 @@ public class Server extends Thread {
         	this.tarif = tarif;
         	konto = new ArrayList<Integer>();
         	for(int i = 0; i < 4; i++) {
-        		konto.add(50*tarif);
+        		konto.add(100*tarif);
         	}
         }
         

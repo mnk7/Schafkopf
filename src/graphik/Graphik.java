@@ -207,7 +207,7 @@ public class Graphik extends JFrame implements View{
 			
 			konto = new Konto();
 			hintergrund.add(konto);
-			konto.setLocation(10, this.getHeight() - 230);
+			konto.setLocation(30, this.getHeight() - 250);
 			konto.setVisible(true);
 			
 			//-------------------------------------------------------------hintergrund
