@@ -528,7 +528,7 @@ public class Server extends Thread {
         	//Wenn ein Du gespielt wurde
         	String modString = mod.toString();
         	//Die letzten zwei Buchstaben werden verglichen
-        	if(modString.substring(modString.length() - 3, modString.length() - 1)
+        	if(modString.substring(modString.length() - 2, modString.length())
         			.toLowerCase()
         			.equals("du")) {
         		if(pSpielt != 120) {

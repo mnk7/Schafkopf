@@ -10,7 +10,7 @@ package lib;
 
 public class Karte {
 	
-	//Das Enum legt für jeden Wert einen Integer-Wert fest, d.h. : EICHEL = 1
+	//Das Enum legt für jeden Wert einen Integer-Wert fest, d.h. : EICHEL = 0
 	public enum farbe {EICHEL, GRAS, HERZ, SCHELLEN};
 	public enum wert {NEUN, ZEHN, KONIG, SAU, UNTER, OBER};
 	
@@ -66,5 +66,4 @@ public class Karte {
 		}			
 		return false;
 	}
-
 }

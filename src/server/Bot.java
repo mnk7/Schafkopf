@@ -50,10 +50,15 @@ public class Bot implements Spieler {
 	public synchronized modus spielstDu(Model model, modus m) {
 		setzeModel(model);
 		modus modus = spielauswahl.wasSpielen(model, ID);
-		if(modus.equals(modus.HOCHZEIT)) {
-			karte = Hochzeit.hochzeitVorschlagen(model, ID);
+		//Darf das gespielt werden?
+		if(new regeln.Regelwahl().darfGespieltWerden(modus, model, ID, spielauswahl.gibFarbe())) {
+			if(modus.equals(modus.HOCHZEIT)) {
+				karte = Hochzeit.hochzeitVorschlagen(model, ID);
+			}
+			return modus;
+		} else {
+			return modus.NICHTS;
 		}
-		return modus;
 	}
 
 	public synchronized boolean modus(lib.Model.modus m) {
