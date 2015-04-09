@@ -307,7 +307,7 @@ public class Model {
 			test = spielerhand.get(spielt).get(i);
 			if(test.vergleiche(angebot)) {
 				//Karte von der Hand des Spielers nehmen
-				spielerhand.get(spielt).remove(test);
+				spielerhand.get(spielt).remove(i);
 				spielerhand.get(mitspieler).add(test);
 				break;
 			}
@@ -317,7 +317,7 @@ public class Model {
 			gegenTest = spielerhand.get(mitspieler).get(i);
 			if(gegenTest.vergleiche(angenommen)) {
 				//Karte von der Hand des Spielers nehmen
-				spielerhand.get(mitspieler).remove(gegenTest);
+				spielerhand.get(mitspieler).remove(i);
 				spielerhand.get(spielt).add(gegenTest);
 				break;
 			}

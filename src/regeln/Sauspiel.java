@@ -57,7 +57,7 @@ public class Sauspiel implements Control {
 								sieger = i;
 							}
 						}
-						//Ansonste sticht die Karte tisch[i] nicht
+						//Ansonsten sticht die Karte tisch[i] nicht
 					}
 				}
 			}

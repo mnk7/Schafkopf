@@ -72,7 +72,8 @@ public class Spielauswahl {
 		
 		//eine Hochzeit?
 		mod = spielHOCHZEIT(aufteilung, karten);
-		if(mod != null) {
+		//Ist die Hochzeit erlaubt
+		if(new regeln.Hochzeit().hochzeitMoeglich(spielerkarten)) {
 			return mod;
 		}
 		
@@ -81,10 +82,73 @@ public class Spielauswahl {
 	}
 	
 	private modus spielHOCHZEIT(int[] aufteilung, boolean[][] karten) {
-		return null;
+		return modus.HOCHZEIT;
 	}
 
 	private modus spielSAUSPIEL(int[] aufteilung, boolean[][] karten) {
+		int wert = 0;
+		for(int i = 0; i < 4; i++) {
+			if(karten[0][i]) {
+				wert += 12 + 4 - i;
+			}
+			if(karten[1][i]) {
+				wert += 8 + 4 - i;
+			}
+			//Farbe (As = 2 bis Neun = 5)
+			//Herz ist Trumpf
+			if(karten[1 + i][2]) {
+				wert += (4 + 4 - i);
+			}
+			//Sonstige Sau
+			if(karten[2][i]) {
+				wert += 4;
+				//Passende Zehner
+				if(karten[3][i]) {
+					wert += 4;
+				}
+			} else if(karten[3][i]) {
+				//Sonstige Zehner
+				wert += 2;
+			}
+		}
+		
+		//1 Ober (13), 2 Unter (11 + 10), 1 Farbe (6) => 40, mind. 3 Trumpf 
+		int trumpfzahl = aufteilung[0] + aufteilung[1];
+		for(int i = 2; i < 6; i++) {
+			if(karten[i][2]) {
+				trumpfzahl++;
+			}
+		}
+		if(trumpfzahl >= 3 && wert >= 40) {
+			String farbe;
+			int f = -1;
+			//Richtige Farbe heraussuchen
+			int farbzahl = 0;
+			int farbzahl_alt = 0;
+			for(int i = 0; i < 4; i++) {
+				//Kein Herz
+				if(i == 2) break;
+				//Sauf darf der Spieler nicht selbst haben
+				if(karten[2][i]) break;
+				for(int j = 3; j < 6; j++) {
+					if(karten[j][i]) {
+						farbzahl++;
+					}
+				}
+				if(farbzahl > farbzahl_alt) {
+					f = i;
+				}
+				farbzahl = 0;
+			}
+			//Keine Farbe gefunden
+			if(f == -1) {
+				return null;
+			}
+			farbe = farbe(f);
+			this.farbe = Karte.farbe.valueOf(farbe(f).toUpperCase());
+			modus m = modus.valueOf("SAUSPIEL" + farbe);
+			return m;
+		}
 		return null;
 	}
 
@@ -229,16 +293,16 @@ public class Spielauswahl {
 		}
 		
 		String mod;
-		//Solo-Du: 2 höchste Ober (16 + 15), 2 Wenz (12 + 10), 2 Sau/pass. Zehner (4x2) => 61
-		if(karten[0][0] && karten[0][1] && aufteilung[4] == 0 && aufteilung[5] == 0 && wert >= 61) {
+		//Solo-Du: 2 höchste Ober (16 + 15), 2 Wenz (12 + 10), 1 Farbe (5), 2 Sau/pass. Zehner (4x2) => 66
+		if(karten[0][0] && karten[0][1] && aufteilung[4] == 0 && aufteilung[5] == 0 && wert >= 66) {
 			mod = "SOLO" + farbe(farbe) + "DU";
 			this.farbe = Karte.farbe.valueOf(farbe(farbe).toUpperCase());
 			return modus.valueOf(mod);
 		} else {
-			//Solo: minimal 2 Ober (14 + 13), 2 Wenz (10 + 9), 1 Sau/pass. Zehner (4) => 50
-			//oder: 1 Ober (13), 3 Wenz (12 + 11 + 10), 2 Sau/pass. Zehner (4x2) => 54
-			if((aufteilung[0] > 1 && aufteilung[1] > 1 && wert >= 50) ||
-					(aufteilung[0] == 1 && aufteilung[1] > 2 && wert >= 53)) {
+			//Solo: minimal 2 Ober (15 + 14), 2 Wenz (11 + 10), 1 Farbe (5), 1 Sau/pass. Zehner (4) => 57
+			//oder: 1 Ober (16), 3 Wenz (12 + 11 + 10), 2 Farbe (6 + 5) 1 Sau (4) => 64
+			if((aufteilung[0] > 1 && aufteilung[1] > 1 && wert >= 57) ||
+					(aufteilung[0] == 1 && aufteilung[1] > 2 && wert >= 64)) {
 				mod = "SOLO" + farbe(farbe);
 				this.farbe = Karte.farbe.valueOf(farbe(farbe).toUpperCase());
 				return modus.valueOf(mod);
