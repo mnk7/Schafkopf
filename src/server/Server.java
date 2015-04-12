@@ -383,7 +383,7 @@ public class Server extends Thread {
         		for(int i = 0; i < 4; i++) {
         			weristdran(i);
         			if(i != spielt && spieler.get(i).hochzeit()) {
-        				if(hochzeitAnnehmen(i, angebot)) {
+        				if(hochzeitAnnehmen(i, angebot, hochzeit)) {
         					return true;
         				}
         			} else {
@@ -397,11 +397,12 @@ public class Server extends Thread {
     		return false;
         }
         
-        	private boolean hochzeitAnnehmen(int mitspieler, Karte angebot) throws InterruptedException {
+        	private boolean hochzeitAnnehmen(int mitspieler, Karte angebot, Hochzeit hochzeit) throws InterruptedException {
         		//Wenn die Hochzeit angenommen wird
 				Karte k = spieler.get(mitspieler).gibKarte();
-				
-				Hochzeit hochzeit = new Hochzeit();
+				if(k == null) {
+					return false;
+				}
 				
 				//Wenn die Karte kein Trumpf ist
     			if(!hochzeit.istTrumpf(k.gibWert(), k.gibFarbe())) {

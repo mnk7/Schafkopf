@@ -211,7 +211,7 @@ public class Hochzeit implements Control {
 	}
 	
 	public int laufende(int spieler, int mitspieler, Model model) {
-		ArrayList<Karte> spielerkarten = model.gibSpielerKarten(spieler);
+		ArrayList<Karte> spielerkarten = (ArrayList<Karte>) model.gibSpielerKarten(spieler).clone();
 		spielerkarten.addAll(model.gibSpielerKarten(mitspieler));
 		
 		//Für jeden enthaltenen Trumpf gibt es ein Feld

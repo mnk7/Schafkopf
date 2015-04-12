@@ -8,10 +8,7 @@ import lib.Model.modus;
 
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 public class Regelwahl {
-	
 	
 	public Control wahl(modus mod) {
 		switch (mod) {

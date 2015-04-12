@@ -302,26 +302,34 @@ public class Model {
      * @param angenommen
      */
 	public void hochzeit(int spielt, int mitspieler, Karte angebot, Karte angenommen) {
-		Karte test;
+		//Position von angebotener und angenommener Karte
+		int an = -1;
+		int bn = -1;
+		
+		Karte a = new Karte(angebot.gibFarbe(), angebot.gibWert());
+		Karte test = new Karte(null, null);
 		for(int i = 0; i < 6; i++) {
-			test = spielerhand.get(spielt).get(i);
-			if(test.vergleiche(angebot)) {
+			test = new Karte(spielerhand.get(spielt).get(i).gibFarbe(), spielerhand.get(spielt).get(i).gibWert());
+			if(test.vergleiche(a)) {
 				//Karte von der Hand des Spielers nehmen
-				spielerhand.get(spielt).remove(i);
-				spielerhand.get(mitspieler).add(test);
+				an = i;
 				break;
 			}
 		}
-		Karte gegenTest;
+		
+		Karte b = new Karte(angenommen.gibFarbe(), angenommen.gibWert());
+		Karte gegenTest = new Karte(null, null);
 		for(int i = 0; i < 6; i++) {
-			gegenTest = spielerhand.get(mitspieler).get(i);
-			if(gegenTest.vergleiche(angenommen)) {
+			gegenTest = new Karte(spielerhand.get(mitspieler).get(i).gibFarbe(), spielerhand.get(mitspieler).get(i).gibWert());
+			if(gegenTest.vergleiche(b)) {
 				//Karte von der Hand des Spielers nehmen
-				spielerhand.get(mitspieler).remove(i);
-				spielerhand.get(spielt).add(gegenTest);
+				bn = i;
 				break;
 			}
 		}
+		
+		spielerhand.get(spielt).set(an, gegenTest);
+		spielerhand.get(mitspieler).set(bn, test);
 	}
 	
 	/**
