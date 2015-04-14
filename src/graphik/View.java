@@ -33,7 +33,7 @@ public interface View {
 	 * Spielzug des Spielers durchführen
 	 * @throws Exception 
 	 */
-	public Model spiel() throws Exception;
+	public void spiel() throws Exception;
 	
 	/**
 	 * Ändert den Modus des Spiels und ändert die Controll
@@ -86,9 +86,8 @@ public interface View {
 	 * Gibt die Karte zurück, die der Spieler bei der Hochzeit tauschen will
 	 * Wird aufgerufen, wenn jmd. eine Hochzeit anbietet und wenn eine angenommen
 	 * wird
-	 * @return
 	 */
-	public Karte hochzeitKarte();
+	public void hochzeitKarte();
 
 	/**
 	 * Empfängt, wer spielt. Wird keine Hochzeit gespielt ist mitspieler gleich 4

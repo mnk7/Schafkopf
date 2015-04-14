@@ -53,8 +53,6 @@ public class Client{
 		
 		//Vorerst leeres Model erzeugen
 		model = new Model();
-				
-		graphik = menu.gibGraphik();
 		
 		listener = new Thread() {
 			public void run() {
@@ -138,6 +136,10 @@ public class Client{
 		}
 	}
 	
+	public void graphik(View view) {
+		graphik = view;
+	}
+	
 	private void bestesspiel(Object[] data) {
 		//zeigt dem Spieler an, welches Spiel das bisher höchste ist
 		graphik.bestesspiel(modus.valueOf(data[1].toString()));
@@ -168,7 +170,16 @@ public class Client{
 	private synchronized void spiel(Object[] data) throws Exception {
 		//Model empfangen
 		graphikUpdate((Model) data[1]);
-		netzwerk.printModel("!SPIEL", graphik.spiel());
+		graphik.spiel();
+	}
+	
+	/**
+	 * Wird aufgerufen, wenn eine Karte gespielt wurde
+	 * @param model
+	 * @throws Exception
+	 */
+	public void gespielt(Model model) throws Exception {
+		netzwerk.printModel("!SPIEL", model);
 	}
 	
 	private synchronized void spielstdu(Object[] data) throws Exception {
@@ -180,13 +191,16 @@ public class Client{
 		
 		//Wenn eine Hochzeit gespielt werden soll, wird die angebotene Karte gesendet
 		if(antwort.equals("HOCHZEIT")) {
-			Karte k = graphik.hochzeitKarte();
-			String[] output = new String[] {
-				k.gibFarbe().toString(), 
-				k.gibWert().toString()
-			};
-			netzwerk.print("!KARTE", output);
+			graphik.hochzeitKarte();
 		}
+	}
+	
+	public void hochzeitKarteGespielt(Karte angebot) throws Exception {
+		String[] output = new String[] {
+			angebot.gibFarbe().toString(), 
+			angebot.gibWert().toString()
+		};
+		netzwerk.print("!KARTE", output);
 	}
 	
 	private synchronized void modus(Object[] data) throws Exception {
@@ -224,12 +238,7 @@ public class Client{
 		
 		if(antwort.equals("JA")) {
 			netzwerk.print("!HOCHZEIT", antwort);
-			Karte k = graphik.hochzeitKarte();
-			String[] output = new String[] {
-				k.gibFarbe().toString(), 
-				k.gibWert().toString()
-			};
-			netzwerk.print("!KARTE", output);
+			graphik.hochzeitKarte();
 		} else {
 			netzwerk.print("!HOCHZEIT", antwort);
 		}
@@ -308,5 +317,4 @@ public class Client{
 		}
 		beenden();
 	}
-
 }

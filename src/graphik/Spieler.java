@@ -13,11 +13,18 @@ public class Spieler extends JPanel {
 	//Buttons mit Bildern der Karten
 	private ArrayList<KartenButton> karten;
 	
-	//speichert die gespielte Karte
-	private Karte gespielt;
+	//Die Hauptklasse der Graphik
+	private Graphik graphik;
 	
-	public Spieler(int breite, int hoehe) {
+	//Zeigt an, ob eine Karte für eine Hochzeit ausgesucht wird oder nicht
+	private boolean hochzeit;
+	
+	public Spieler(int breite, int hoehe, Graphik graphik) {
 		super(true);
+		
+		this.graphik = graphik;
+		
+		hochzeit = false;
 		
 		this.setLayout(null);
 		this.setOpaque(false);
@@ -75,22 +82,28 @@ public class Spieler extends JPanel {
 		KartenButton k = (KartenButton) evt.getSource();
 		
 		//Speichert die gewählte Karte und lässt keine neue Auswahl zu
-		gespielt = k.gibKarte();
+		if(hochzeit) {
+			graphik.hochzeitKarteGespielt(k.gibKarte());
+		} else {
+			graphik.karteGespielt(k.gibKarte());
+		}
 		aktiviert(false);
 	}
 	
-	public Karte spiel() {
-		gespielt = null;
+	/**
+	 * Keine Hochzeit
+	 */
+	public void spiel() {
+		spiel(false);
+	}
+	
+	/**
+	 * Sorgt dafür, dass der Spieler eine Karte auswählen kann
+	 * @param hochzeit
+	 */
+	public void spiel(boolean hochzeit) {
+		this.hochzeit = hochzeit;
 		aktiviert(true);
-		while(gespielt == null) {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		return gespielt;
 	}
 	
 	private void aktiviert(boolean an) {

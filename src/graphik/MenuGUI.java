@@ -68,6 +68,7 @@ public class MenuGUI extends JFrame implements Menu {
 					javax.swing.JOptionPane.showMessageDialog(null, "Geben sie einen Namen an!");
 				} else {
 					client = new Client(IPtf.getText(), NAMEtf.getText(), this);
+					client.graphik(this.gibGraphik());
 					//unsichtbar machen
 					this.setVisible(false);
 				}

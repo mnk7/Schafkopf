@@ -30,6 +30,8 @@ public class Graphik extends JFrame implements View{
 	private String logo = "graphik/karten/Logo.gif";
 	private String hintergrundbild = "graphik/karten/hintergrund1.jpg";
 	
+	private Client client;
+	
 	private Model model;
 	
 	//Enthält die Controll -> kontrolliert einen Spielzug
@@ -63,8 +65,10 @@ public class Graphik extends JFrame implements View{
 	//Hintergrund
 	private JLabel hintergrund;	
 	
-	public Graphik(Model model, final Client client) {
+	public Graphik(Model model, Client client) {
 		super();
+		this.client = client;
+		
 		//Vorerst keine ID setzen
 		ID = -1;
 		
@@ -95,7 +99,7 @@ public class Graphik extends JFrame implements View{
 			public void windowActivated(WindowEvent e) {
 			}
 			public void windowClosed(WindowEvent e) {
-				client.abmelden(); 
+				abmelden(); 
 			}
 			public void windowDeactivated(WindowEvent e) {
 			}
@@ -162,7 +166,7 @@ public class Graphik extends JFrame implements View{
 			gegenspielerKarten[2].nachricht("Spieler 3");
 			
 			//Anzeige der Karten der Spieler
-			spielerKarten = new Spieler(440, 120);
+			spielerKarten = new Spieler(440, 120, this);
 			hintergrund.add(spielerKarten);
 			//Unterhalb der eigenen Meldungen platziert
 			spielerKarten.setLocation(this.getWidth() / 2 - 220, hoehe*2 + 90);
@@ -341,26 +345,33 @@ public class Graphik extends JFrame implements View{
 		}
 	}
 
-	public Model spiel() throws Exception {
+	public void spiel() throws Exception {
 		this.toFront();
 		//Nochmal Anzeige aktualisieren
 		this.update();
-		Karte gespielt = spielerKarten.spiel();
+		spielerKarten.spiel();
+	}
+	
+	public void karteGespielt(Karte gespielt) {
 		boolean ok = false;
 		
-		do {
-			spielerKarten.update(model.setTisch(ID, gespielt));
-			if(control.erlaubt(model, ID)) {
-				ok = true;
-			} else {
-				model.undo(ID);
-				this.update();
-				JOptionPane.showMessageDialog(this, "Diese Karte ist nicht erlaubt");
-				gespielt = spielerKarten.spiel();
-			}
-		} while(!ok);
-		
-		return model;
+		try {
+			do {
+				spielerKarten.update(model.setTisch(ID, gespielt));
+				if(control.erlaubt(model, ID)) {
+					ok = true;
+				} else {
+					model.undo(ID);
+					this.update();
+					JOptionPane.showMessageDialog(this, "Diese Karte ist nicht erlaubt");
+					spielerKarten.spiel();
+				}
+			} while(!ok);
+	
+			client.gespielt(model);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void setzeModus(modus mod) {
@@ -449,10 +460,18 @@ public class Graphik extends JFrame implements View{
 		return "NEIN";
 	}
 
-	public Karte hochzeitKarte() {
+	public void hochzeitKarte() {
 		this.toFront();
 		JOptionPane.showMessageDialog(this, "Welche gibst du her?");
-		return spielerKarten.spiel();
+		spielerKarten.spiel(true);
+	} 
+	
+	public void hochzeitKarteGespielt(Karte angebot) {
+		try {
+			client.hochzeitKarteGespielt(angebot);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void spielt(int spielt, int mitspieler) { 
@@ -487,6 +506,10 @@ public class Graphik extends JFrame implements View{
 	public void konto(int kontostand, int stock) {
 		konto.setzeKontostand(kontostand);
 		konto.setzetStock(stock);
+	}
+	
+	public void abmelden() {
+		client.abmelden();
 	}
 	
 	public void beenden() {
