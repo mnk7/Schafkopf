@@ -89,9 +89,10 @@ public class SpielmodusDialog extends JPanel {
 		//Wartet solange, bis ein Wert ausgewählt wurde
 		while(rueckgabe == null) {
 			try {
-				Thread.sleep(500);
+				Thread.sleep(800);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+				continue;
 			}
 		}
 		return rueckgabe;

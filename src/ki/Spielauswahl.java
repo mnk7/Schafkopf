@@ -128,8 +128,9 @@ public class Spielauswahl {
 			for(int i = 0; i < 4; i++) {
 				//Kein Herz
 				if(i == 2) break;
-				//Sauf darf der Spieler nicht selbst haben
+				//Sau darf der Spieler nicht selbst haben
 				if(karten[2][i]) break;
+				
 				for(int j = 3; j < 6; j++) {
 					if(karten[j][i]) {
 						farbzahl++;
@@ -181,12 +182,8 @@ public class Spielauswahl {
 		if(karten[0][0] && karten[0][1] && aufteilung[4] == 0 && aufteilung[5] == 0 && wert >= 29) {
 			return modus.GEIERdu;
 		} else {
-			//Geier nicht mehr bei 2 Geiern (7 + 6) und 2 Sau (4x2) und 1 einzelnem Zehner (2) => 23
-			if(aufteilung[0] > 1 && wert >= 24) {
-				return modus.GEIER;
-			}
-			//Geier nicht mehr bei 1 Geier (9) und 2 Sau (4x2) und 1 passenem Zehner (4) => 21
-			if(aufteilung[0] == 1 && wert >= 22) {
+			//Geier nicht mehr bei 2(1) Geiern (7 + 6) und 2 Sau (4x2) und 1 passenenden Zehner (4) => 25
+			if(aufteilung[0] >= 1 && wert > 25) {
 				return modus.GEIER;
 			}
 		}
@@ -222,12 +219,8 @@ public class Spielauswahl {
 		if(karten[1][0] && karten[1][1] && aufteilung[4] == 0 && aufteilung[5] == 0&& wert >= 29) {
 			return modus.WENZdu;
 		} else {
-			//Wenz nicht mehr bei 2 Wenzen (7 + 6) und 2 Sau (4x2) und 1 einzelnem Zehner (2) => 23
-			if(aufteilung[1] > 1 && wert >= 24) {
-				return modus.WENZ;
-			}
-			//Wenz nicht mehr bei 1 Wenz (9) und 2 Sau (4x2) und 1 passenem Zehner (4) => 21
-			if(aufteilung[1] == 1 && wert >= 22) {
+			//Wenz nicht mehr bei 2(1) Wenzen (7 + 6) und 2 Sau (4x2) und 1 passendem Zehner (4) => 25
+			if(aufteilung[1] >= 1 && wert > 25) {
 				return modus.WENZ;
 			}
 		}
@@ -249,7 +242,7 @@ public class Spielauswahl {
 		//Welche Farbe?
 		for(int i = 0; i < 4; i++) {
 			//Karten ohne Ober und Unter
-			for(int j = 1; j < 6; j++) {
+			for(int j = 2; j < 6; j++) {
 				if(karten[j][i]) {
 					anzahl++;
 				}
