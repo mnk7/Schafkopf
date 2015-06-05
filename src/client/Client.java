@@ -10,7 +10,7 @@ import graphik.Menu;
 import graphik.MenuGUI;
 import graphik.View;
 
-public class Client{
+public class Client {
 
 	//Enthält die Verbindung zum Server
 	private Netzwerk netzwerk;
@@ -40,7 +40,7 @@ public class Client{
 	private boolean beenden;
 	
 	
-	public Client(String IP, String name, Menu menu) throws Exception{				
+	public Client(String IP, String name, Menu menu) throws Exception {				
 		this.IP = IP;
 		this.name = name;
 		ID = -1;

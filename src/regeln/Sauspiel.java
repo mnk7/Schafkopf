@@ -145,7 +145,7 @@ public class Sauspiel implements Control {
 			if(istTrumpf(tisch[ID].gibWert(), tisch[ID].gibFarbe())) {
 				return true;
 			} else {
-				if(keinTrumpf(m, ID)) {
+				if(keinTrumpf(m, ID) && !tisch[ID].vergleiche(rufsau)) {
 					return true;
 				}
 			}
