@@ -1,6 +1,7 @@
 package server;
 
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
@@ -820,15 +821,15 @@ public class Server extends Thread {
 	        	    while (ee.hasMoreElements()) {
 	        	        InetAddress i = (InetAddress) ee.nextElement();
 	        	        //Filtert nach IPv4 Addressen
-	        	        if(!i.isLoopbackAddress() || !i.isLinkLocalAddress() || !i.isAnyLocalAddress()) {
-	        	        	if(i.getHostAddress().length() < 15) {
+	        	        if(!i.isLoopbackAddress() || !i.isLinkLocalAddress()) {
+	        	        	if(i instanceof Inet4Address && i.isSiteLocalAddress()) {
 	        	        		addresses.add(i.getHostAddress());
 	        	        	}
 	        	        }
 	        	    }
 	        	}
 	        	
-	        	return addresses.get(2);
+	        	return addresses.get(addresses.size() - 1);
         	} catch(Exception e) {
         		e.printStackTrace();
         		return server.getLocalSocketAddress().toString();
