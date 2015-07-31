@@ -209,6 +209,11 @@ public class Graphik extends JFrame {
 		server.setzeTarif(tarifWert);
 	}
 	
+	public void speichern() {
+		clear();
+		PlayerLabel[1].setText("Speichere Datenbanken");
+	}
+	
 	public void beenden() {
 		clear();
 		spielerzahl = 0;

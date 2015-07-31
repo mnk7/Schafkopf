@@ -3,6 +3,8 @@ package ki;
 import java.util.ArrayList;
 import java.util.Random;
 
+import ki.data.Datenbank;
+import ki.data.Spielzug;
 import regeln.Control;
 import lib.Karte;
 import lib.Model;
@@ -13,6 +15,9 @@ public abstract class KI {
 	protected int spielt;
 	protected int mitspieler;
 	protected Control regeln;
+	protected Datenbank db;
+	//Speichert den Spielzug und gibt ihn an die Datenbank zurück
+	protected Spielzug letzerSpielzug;
 	
 	//Gibt an, welches Risiko der Spieler bereit ist einzugehen
 	//Je niedriger der Wert, desto mehr Risiko wird eingegangen, wobei gilt:
@@ -33,6 +38,11 @@ public abstract class KI {
 		spielt = -1;
 		mitspieler = -1;
 		risiko = 0;
+	}
+	
+	//gibt der KI ihre Datenbank
+	public void setzeDB(Datenbank db) {
+		this.db = db;
 	}
 	
 	/**
@@ -115,6 +125,9 @@ public abstract class KI {
 		
 		return m;
 	}
-
+	
+	public void stich(Model model) {
+		//Empfängt model nach jedem Stich
+	}
 }
  

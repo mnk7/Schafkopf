@@ -303,6 +303,10 @@ public class Mensch implements Spieler {
 			e.printStackTrace();
 		}
 	}
+	
+	public void stich(Model model) {
+		//Model wird nach jedem Stich an Bots weitergegeben
+	}
 	 
 	public void rundeZuende(int kontostand, int stock) {
 		String[] data = new String[] {

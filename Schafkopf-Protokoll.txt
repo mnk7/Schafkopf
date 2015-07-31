@@ -48,16 +48,16 @@ Wert  = "§"
       | "ZEHN"
       | "KONIG"
       | "NEUN";
-Modus = SAUSPIELeichel| SAUSPIELgras| SAUSPIELherz| SAUSPIELschellen|
-	HOCHZEIT|
-	GEIER|
-	WENZ|
-	SOLOeichel| SOLOgras| SOLOherz| SOLOschellen|
-	GEIERdu|
-	WENZdu|
-	SOLOeichelDU| SOLOgrasDU| SOLOherzDU| SOLOschellenDU|
-	SI|
-	NICHTS;
+Modus = "SAUSPIELeichel"| "SAUSPIELgras"| "SAUSPIELherz"| "SAUSPIELschellen"|
+	"HOCHZEIT"|
+	"GEIER"|
+	"WENZ"|
+	"SOLOeichel"| "SOLOgras"| "SOLOherz"| "SOLOschellen"|
+	"GEIERdu"|
+	"WENZdu"|
+	"SOLOeichelDU"| "SOLOgrasDU"| "SOLOherzDU"| "SOLOschellenDU"|
+	"SI"|
+	"NICHTS";
 Konto = {("0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9")};
 
 Sieger = Integer 
@@ -104,16 +104,16 @@ Wert  = "§"
       | "ZEHN"
       | "KONIG"
       | "NEUN";
-Modus = SAUSPIELeichel| SAUSPIELgras| SAUSPIELherz| SAUSPIELschellen|
-	HOCHZEIT|
-	GEIER|
-	WENZ|
-	SOLOeichel| SOLOgras| SOLOherz| SOLOschellen|
-	GEIERdu|
-	WENZdu|
-	SOLOeichelDU| SOLOgrasDU| SOLOherzDU| SOLOschellenDU|
-	SI|
-	NICHTS;
+Modus = "SAUSPIELeichel"| "SAUSPIELgras"| "SAUSPIELherz"| "SAUSPIELschellen"|
+	"HOCHZEIT"|
+	"GEIER"|
+	"WENZ"|
+	"SOLOeichel"| "SOLOgras"| "SOLOherz"| "SOLOschellen"|
+	"GEIERdu"|
+	"WENZdu"|
+	"SOLOeichelDU"| "SOLOgrasDU"| "SOLOherzDU"| "SOLOschellenDU"|
+	"SI"|
+	"NICHTS";
 
 Sieger = Integer 
        | "4"

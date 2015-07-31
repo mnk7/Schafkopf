@@ -13,6 +13,7 @@ import java.util.Enumeration;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import ki.Spielauswahl;
 import regeln.Hochzeit;
 import regeln.Control;
 import regeln.Regelwahl;
@@ -57,6 +58,8 @@ public class Server extends Thread {
         private Control regeln;
         private Regelwahl regelwahl;
         
+        private Spielauswahl spielauswahl;
+        
         private int spielt;
         private int mitspieler;
         
@@ -77,6 +80,7 @@ public class Server extends Thread {
          * Erstellt einen neuen Server
          * @param graphik
          * @param port
+         * @throws Exception 
          **/
         public Server(Graphik graphik, int port) {
         	super();
@@ -114,8 +118,12 @@ public class Server extends Thread {
         	
         	try {
 				server = new ServerSocket(PORT);
+				
+				spielauswahl = new Spielauswahl();
         		
 			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
         	
@@ -161,7 +169,7 @@ public class Server extends Thread {
     			nocheins = false;
     			//Mit Bots auffüllen
     			for(int i = 4; i > spielerzahl; i--) {
-    				spieler.add(new Bot(this, 4 - i, wartezeit, handicap));
+    				spieler.add(new Bot(this, 4 - i, spielauswahl, wartezeit, handicap));
     			}
     			ViewTextSetzen();
     			
@@ -472,6 +480,7 @@ public class Server extends Thread {
         		int sieger = regeln.sieger(model, start);
         		start = sieger;
         		model.Stich(sieger);
+        		stichInfo();
         	} 
         	
         	} catch(Exception e) {
@@ -493,6 +502,12 @@ public class Server extends Thread {
         	private void spielModelEmpfangen(int spielerID) {
         		//...empfängt das aktualisierte
     			model = spieler.get(spielerID).gibModel();
+        	}
+        	
+        	private void stichInfo() {
+        		for(int i = 0; i < 4; i++) {
+        			spieler.get(i).stich(model);
+        		}
         	}
         
         /**
@@ -840,6 +855,9 @@ public class Server extends Thread {
          * Beendet den Server
          */
 		public void beenden() {
+			//Speichert die Datenbanken der KI
+			spielauswahl.beenden();
+			graphik.speichern();
         	try {
         		ArrayList<Spieler> s = (ArrayList<Spieler>) spieler.clone();
         		

@@ -155,4 +155,10 @@ public interface Spieler{
 	 */
 	public void weristdran(int iD);
 
+	/**
+	 * Verteilt das Model nach jedem Stich
+	 * @param model
+	 */
+	public void stich(Model model);
+
 }

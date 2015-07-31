@@ -2,6 +2,7 @@ package ki;
 
 import java.util.ArrayList;
 
+import ki.data.Datenbank;
 import lib.Karte;
 import lib.Model;
 import lib.Model.modus;
@@ -9,6 +10,20 @@ import lib.Model.modus;
 public class Spielauswahl {
 	
 	private Karte.farbe farbe;
+	
+	private Datenbank hochzeit;
+	private Datenbank sauspiel;
+	private Datenbank geier;
+	private Datenbank wenz;
+	private Datenbank solo;
+	
+	public Spielauswahl() throws Exception {
+		hochzeit = new Datenbank("ki/data/Hochzeit.dt");
+		sauspiel = new Datenbank("ki/data/Sauspiel.dt");
+		geier = new Datenbank("ki/data/Geier.dt");
+		wenz = new Datenbank("ki/data/Wenz.dt");
+		solo = new Datenbank("ki/data/Solo.dt");
+	}
 	
 	/**
 	 * Gibt an, was die KI spielen will
@@ -353,50 +368,61 @@ public class Spielauswahl {
 		switch(m) {
 		case HOCHZEIT:
 			ki = new Hochzeit(ID, handicap);
+			ki.setzeDB(hochzeit);
 			break;
 		case SAUSPIELeichel:
 			ki = new Sauspiel(ID, handicap);
 			ki.setzeFarbe(lib.Karte.farbe.EICHEL);
+			ki.setzeDB(sauspiel);
 			break;
 		case SAUSPIELgras:
 			ki = new Sauspiel(ID, handicap);
 			ki.setzeFarbe(lib.Karte.farbe.GRAS);
+			ki.setzeDB(sauspiel);
 			break;
 		case SAUSPIELherz:
 			ki = new Sauspiel(ID, handicap);
 			ki.setzeFarbe(lib.Karte.farbe.HERZ);
+			ki.setzeDB(sauspiel);
 			break;
 		case SAUSPIELschellen:
 			ki = new Sauspiel(ID, handicap);
 			ki.setzeFarbe(lib.Karte.farbe.SCHELLEN);
+			ki.setzeDB(sauspiel);
 			break;
 		case GEIER:
 		case GEIERdu:
 			ki = new Geier(ID, handicap);
+			ki.setzeDB(geier);
 			break;
 		case WENZ:
 		case WENZdu:
 			ki = new Wenz(ID, handicap);
+			ki.setzeDB(wenz);
 			break;
 		case SOLOeichel:
 		case SOLOeichelDU:
 			ki = new Solo(ID, handicap);
 			ki.setzeFarbe(lib.Karte.farbe.EICHEL);
+			ki.setzeDB(solo);
 			break;
 		case SOLOgras:
 		case SOLOgrasDU:
 			ki = new Solo(ID, handicap);
 			ki.setzeFarbe(lib.Karte.farbe.GRAS);
+			ki.setzeDB(solo);
 			break;
 		case SOLOherz:
 		case SOLOherzDU:
 			ki = new Solo(ID, handicap);
 			ki.setzeFarbe(lib.Karte.farbe.HERZ);
+			ki.setzeDB(solo);
 			break;
 		case SOLOschellen:
 		case SOLOschellenDU:
 			ki = new Solo(ID, handicap);
 			ki.setzeFarbe(lib.Karte.farbe.SCHELLEN);
+			ki.setzeDB(solo);
 			break;
 		case SI:
 			//Wird nicht gespielt
@@ -440,5 +466,16 @@ public class Spielauswahl {
 				return false;
 			}
 		}
+	}
+	
+	/**
+	 * Spiel wird beendet
+	 */
+	public void beenden() {
+		hochzeit.speichern();
+		sauspiel.speichern();
+		geier.speichern();
+		wenz.speichern();
+		solo.speichern();
 	}
 }

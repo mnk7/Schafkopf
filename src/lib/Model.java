@@ -41,6 +41,8 @@ public class Model {
 	
 	//Speichert den letzten Stich
 	private Karte[] letzterStich;
+	private int letzterStichGewinner;
+	private int letzterStichPunkte;
 	
 	private ArrayList<Integer> punkte;
 	
@@ -65,6 +67,8 @@ public class Model {
 		tisch = new Karte[4];
 		
 		letzterStich = new Karte[4];
+		letzterStichGewinner = -1;
+		letzterStichPunkte = 0;
 		
 		//Erstellt den Punktezaehler
 		punkte = new ArrayList<Integer>();
@@ -239,6 +243,9 @@ public class Model {
 		
 		//Der Gewinner bekommt die Punkte
 		punkte.set(gewinnerID, punkte.get(gewinnerID) + punkteStich);
+		
+		letzterStichGewinner = gewinnerID;
+		letzterStichPunkte = punkteStich;
 	}
 	
 	/**
@@ -247,6 +254,21 @@ public class Model {
 	 */
 	public Karte[] gibLetztenStich(){
 		return letzterStich;
+	}
+	/**
+	 * Gibt den Gewinner des letzten Stichs zurück
+	 * @return ID Gewinner
+	 */
+	public int gibLetzterStichGewinner() {
+		return letzterStichGewinner;
+	}
+	
+	/**
+	 * Gibt die Punkte des letzten Stichs zurück
+	 * @return Punkte Gewinner
+	 */
+	public int gibLetzterStichPunkte() {
+		return letzterStichPunkte;
 	}
 	
 	/**

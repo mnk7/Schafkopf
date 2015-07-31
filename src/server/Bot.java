@@ -25,10 +25,10 @@ public class Bot implements Spieler {
 	private Spielauswahl spielauswahl;
 	private Server server;
 	
-	public Bot(Server server, int botnr, int wartezeit, int handicap) {
+	public Bot(Server server, int botnr, Spielauswahl spielauswahl, int wartezeit, int handicap) {
 		name = "[BOT]-" + botnr;
 		
-		spielauswahl = new Spielauswahl();
+		this.spielauswahl = spielauswahl;
 		this.server = server;
 		
 		spielt = -1;
@@ -133,6 +133,10 @@ public class Bot implements Spieler {
 
 	public void name() {
 		//Der Server weist den Spieler an einen Namen einzugeben (CLIENT)
+	}
+	
+	public void stich(Model model) {
+		ki.stich(model);
 	}
 
 	public void beenden() {
