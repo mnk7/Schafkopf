@@ -107,18 +107,9 @@ public class Hochzeit implements Control {
 		
 		Karte[] tisch = m.gibTisch();
 		Karte angespielt;
+		int spieler0 = m.gibAusspieler();
 		
 		//Findet die Karte, die zuerst gespielt wurde
-		int zahlGespielteKarten = 0;
-		for(int i = 0; i < 4; i++) {
-			if(tisch[i] != null) {
-				zahlGespielteKarten++;
-			}
-		}
-		int spieler0 = ID + 1 - zahlGespielteKarten;
-		if(spieler0 < 0) {
-			spieler0 += 4;
-		}
 		angespielt = tisch[spieler0];
 		
 		//Es wurde nichts angespielt

@@ -66,4 +66,12 @@ public class Karte {
 		}			
 		return false;
 	}
+
+	/**
+	 * Gibt einen String aus Farbe + Wert zurück
+	 * @return
+	 */
+	public String gibString() {
+		return f.toString() + w.toString();
+	}
 }

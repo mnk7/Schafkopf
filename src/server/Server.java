@@ -457,31 +457,31 @@ public class Server extends Thread {
         private void spiel() throws Exception {
         	try {
         		
-        	//Spielen
-        	//Speichert, wer zuerst auskartet
-        	int start = 0;
-        	for(int i = 0; i < 6; i++) {
-        		for(int j = 0; j < 4; j++) {
-        			//Es ist immer derjenige zuerst mit auskarten dran, der den letzten Stich gewonnen hat
-        			int spielerID = start + j;
-        			spielerID %= 4;
-        			
-        			spielModelSenden(spielerID);
-        			spielModelEmpfangen(spielerID);
-        		}
-        		
-        		//Allen alle Karten noch einmal zeigen
-        		for(int k = 0; k < 4; k++) {
-        			spieler.get(k).update(model);
-        		}
-        		Thread.sleep(wartezeit);
-        		
-        		//einen Stich zuteilen
-        		int sieger = regeln.sieger(model, start);
-        		start = sieger;
-        		model.Stich(sieger);
-        		stichInfo();
-        	} 
+	        	//Spielen
+	        	//Speichert, wer zuerst auskartet
+	        	int start = 0;
+	        	for(int i = 0; i < 6; i++) {
+	        		for(int j = 0; j < 4; j++) {
+	        			//Es ist immer derjenige zuerst mit auskarten dran, der den letzten Stich gewonnen hat
+	        			int spielerID = start + j;
+	        			spielerID %= 4;
+	        			
+	        			spielModelSenden(spielerID);
+	        			spielModelEmpfangen(spielerID);
+	        		}
+	        		
+	        		//Allen alle Karten noch einmal zeigen
+	        		for(int k = 0; k < 4; k++) {
+	        			spieler.get(k).update(model);
+	        		}
+	        		Thread.sleep(wartezeit);
+	        		
+	        		//einen Stich zuteilen
+	        		int sieger = regeln.sieger(model, start);
+	        		start = sieger;
+	        		model.Stich(sieger);
+	        		stichInfo();
+	        	} 
         	
         	} catch(Exception e) {
         		e.printStackTrace();
@@ -855,10 +855,11 @@ public class Server extends Thread {
          * Beendet den Server
          */
 		public void beenden() {
-			//Speichert die Datenbanken der KI
-			spielauswahl.beenden();
-			graphik.speichern();
         	try {
+        		//Speichert die Datenbanken der KI
+    			spielauswahl.beenden();
+    			graphik.speichern();
+        		
         		ArrayList<Spieler> s = (ArrayList<Spieler>) spieler.clone();
         		
         		beenden = true;

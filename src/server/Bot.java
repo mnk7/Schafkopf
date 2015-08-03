@@ -70,6 +70,7 @@ public class Bot implements Spieler {
 
 	public void sieger(int s1, int s2) {
 		//Der Sieger wird festgestellt
+		ki.sieger(s1, s2);
 	}
 	
 	public String gibIP() {

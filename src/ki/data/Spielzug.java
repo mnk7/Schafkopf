@@ -22,40 +22,55 @@ public class Spielzug {
 	private int			ausspieler;
 	//Position des Spielers am Tisch
 	private int    		position;
-	//Positionen der Spielenden
-	private int[] 		spielende;
+	//Positionen der Spielenden (1 und 3 spielen -> spielende = 13)
+	private int 		spielende;
 	//Karten des Spielers
 	private String[] 	spielerhand;
-	//Ist der Modus ein Tout?
+	//Ist der Modus ein Tout? (Vorerst nicht berücksichtigt)
 	private boolean 	du;
 	//Die gespielten Trümpfe in sortierte Reihenfolge
-	private String 		gespielteTrümpfe;
+	private String 		gespielteKarten;
 	//Karten auf dem Tisch
 	private String		tisch;
 	//Karten, die früher gespielt wurden und der erreichte Erfolg
 	private ArrayList<String> 	getesteteKarten;
 	private ArrayList<Integer>  getestetePunktzahl;
 	private ArrayList<Integer>	getestetesSpielGewonnen;
+	private ArrayList<Integer>  getestetesSpielVerloren;
 	
+	private String primaerschluessel;
 	
-	public Spielzug(BufferedWriter 	 printer,
-					Karte 			 angespielt,
+	//Speichert zu erinnernde Wert zwischen
+	private Karte gespielt;
+	private int punkte;
+	
+	/**
+	 * Erstellt einen neuen Datensatz
+	 * @param angespielt
+	 * @param ausspieler
+	 * @param positionSpieler
+	 * @param spielende
+	 * @param spielerhand
+	 * @param du
+	 * @param gespielte
+	 * @param tisch
+	 */
+	public Spielzug(Karte 			 angespielt,
 					int				 ausspieler,
 					int 			 positionSpieler,
-					int[] 			 spielende,
+					int 			 spielende,
 					ArrayList<Karte> spielerhand,
 					boolean 		 du,
 					ArrayList<Karte> gespielte,
 					Karte[]			 tisch) {
-		this.printer = printer;
 		
-		this.angespielt    =    identifiziereKarte(angespielt);
+		this.angespielt    =    angespielt.gibString();
 		this.ausspieler    =    ausspieler;
 		this.position      =    positionSpieler;
 		this.spielende     =    spielende;
 		
 		for(int i = 0; i < spielerhand.size(); i++) {
-			this.spielerhand[i] = identifiziereKarte(spielerhand.get(i));
+			this.spielerhand[i] = spielerhand.get(i).gibString();
 		}
 		
 		this.du            =    du;
@@ -76,21 +91,26 @@ public class Spielzug {
 			}
 		}
 		for(int i = 0; i < gespielte.size(); i++) {
-			this.gespielteTrümpfe += identifiziereKarte(gespielte.get(i));
+			this.gespielteKarten += gespielte.get(i).gibString();
 		}
 		
 		for(int i = 0; i < tisch.length; i++) {
-			this.tisch += identifiziereKarte(tisch[i]);
+			this.tisch += tisch[i].gibString();
 		}
 		
 		getesteteKarten = new ArrayList<String>();
 		getestetePunktzahl = new ArrayList<Integer>();
 		getestetesSpielGewonnen = new ArrayList<Integer>();
+		getestetesSpielVerloren = new ArrayList<Integer>();
+		
+		generierePS();
 	}
 	
-	public Spielzug(String data, BufferedWriter printer) {
-		
-		this.printer = printer;
+	/**
+	 * Öffnet einen gespeicherten Datensatz
+	 * @param data
+	 */
+	public Spielzug(String data) {
 		
 		//-----------------------angespielte Karte
 		int pos = data.indexOf(trenner);
@@ -109,17 +129,8 @@ public class Spielzug {
 		
 		//-----------------------Positionen der Spielenden
 		pos = data.indexOf(trenner);
-		spielende = new int[2];
-		spielende[0] = Integer.parseInt(data.substring(0, pos));
+		spielende = Integer.parseInt(data.substring(0, pos));
 		data = data.substring(pos + 1, data.length());
-			if(data.charAt(0) == trenner) {
-				spielende[1] = -1;
-				data = data.substring(1, data.length());
-			} else {
-				pos = data.indexOf(trenner);
-				spielende[1] = Integer.parseInt(data.substring(0, pos));
-				data = data.substring(pos + 1, data.length());
-			}
 			
 		//-----------------------Karten des Spielers
 		spielerhand = new String[6];
@@ -140,7 +151,7 @@ public class Spielzug {
 		
 		//-----------------------Gespielte Karten
 		pos = data.indexOf(trenner);
-		gespielteTrümpfe = data.substring(0, pos);
+		gespielteKarten = data.substring(0, pos);
 		data = data.substring(pos + 1, data.length());
 		
 		//-----------------------Karten auf dem Tisch
@@ -165,7 +176,13 @@ public class Spielzug {
 			pos = data.indexOf(trenner);
 			getestetesSpielGewonnen.add(Integer.parseInt(data.substring(0, pos)));
 			data = data.substring(pos + 1, data.length());
+			
+			pos = data.indexOf(trenner);
+			getestetesSpielVerloren.add(Integer.parseInt(data.substring(0, pos)));
+			data = data.substring(pos + 1, data.length());
 		}
+		
+		generierePS();
 	}
 	
 	/**
@@ -174,11 +191,11 @@ public class Spielzug {
 	 */
 	public String welcheSpielen() {
 		int zu_spielende = 0;
-		int punkte = getestetesSpielGewonnen.get(0);
-		int vergleich;
+		float punkte = getestetesSpielGewonnen.get(0) / getestetesSpielVerloren.get(0);
+		float vergleich;
 				
 		for(int i = 0; i < getesteteKarten.size(); i++) {
-			vergleich = getestetesSpielGewonnen.get(i);
+			vergleich = getestetesSpielGewonnen.get(i) / getestetesSpielVerloren.get(i);
 			
 			//Vergleich mit welcher Karte mehr Spiele gewonnen wurden
 			if(vergleich > punkte) {
@@ -201,20 +218,30 @@ public class Spielzug {
 	  * @param punkte
 	  * @param gewonnen
 	  */
-	public void erinnern(Karte gespielt, int punkte, boolean gewonnen) {
-		String karte = identifiziereKarte(gespielt);
+	public void erinnern(Karte gespielt, int punkte) {
+		this.gespielt = gespielt;
+		this.punkte = punkte;
+	}
+	
+	/**
+	 * Speichert, ob das Spiel gewonnen wurde
+	 * @param gewonnen
+	 */
+	public void erinnereGewonnen(boolean gewonnen) {
+		String karte = gespielt.gibString();
 		boolean schon_getestet = false;
-		
-		//Addiert ein gewonnenes oder subtrahiert ein verlorenes Spiel
-		int g = -1;
-		if(gewonnen) g = 1;
 		
 		for(int i = 0; i < getesteteKarten.size(); i++) {
 			if(getesteteKarten.get(i).equals(karte)) {
 				schon_getestet = true;
 				//Addiert Gewinne oder Verluste auf die Punktzahl
 				getestetePunktzahl.set(i, getestetePunktzahl.get(i) + punkte);
-				getestetesSpielGewonnen.set(i, getestetesSpielGewonnen.get(i) + g);
+				
+				if(gewonnen) {
+					getestetesSpielGewonnen.set(i, getestetesSpielGewonnen.get(i) + 1);
+				} else {
+					getestetesSpielVerloren.set(i, getestetesSpielVerloren.get(i) + 1);
+				}
 				
 				break;
 			}
@@ -223,12 +250,21 @@ public class Spielzug {
 		if(!schon_getestet) {
 			getesteteKarten.add(karte);
 			getestetePunktzahl.add(punkte);
-			getestetesSpielGewonnen.add(g);
+			
+			if(gewonnen) {
+				getestetesSpielGewonnen.add(1);
+			} else {
+				getestetesSpielVerloren.add(1);
+			}
 		}
 	}
 	
-	private String identifiziereKarte(Karte k) {
-		return k.gibFarbe().toString() + k.gibWert().toString();
+	/**
+	 * Setzt den Printer auf eine andere Datei
+	 * @param printer
+	 */
+	public void setzePrinter(BufferedWriter printer) {
+		this.printer = printer;
 	}
 	
 	/**
@@ -259,7 +295,7 @@ public class Spielzug {
 	 * Gibt an, wer spielt
 	 * @return
 	 */
-	public int[] gibSpielende() {
+	public int gibSpielende() {
 		return spielende;
 	}
 	
@@ -275,8 +311,32 @@ public class Spielzug {
 	 * Gibt an, welche Trümpfe schon gespielt wurden
 	 * @return
 	 */
-	public String gibgespielteTrümpfe() {
-		return gespielteTrümpfe;
+	public String gibGespielteKarten() {
+		return gespielteKarten;
+	}
+	
+	/**
+	 * Liefert den Primärschlüssel des Objekts
+	 * @return PS
+	 */
+	public String gibPS() {
+		return primaerschluessel;
+	}
+	
+	/**
+	 * Generiert den Primärschlüssel des Spielzugs
+	 */
+	private void generierePS() {
+		primaerschluessel = angespielt;
+		primaerschluessel += String.valueOf(ausspieler);
+		primaerschluessel += String.valueOf(position);
+		primaerschluessel += String.valueOf(spielende);
+		for(int i = 0; i < spielerhand.length; i++) {
+			primaerschluessel += String.valueOf(spielerhand[i]);
+		}
+		primaerschluessel += String.valueOf(du);
+		primaerschluessel += tisch;
+		primaerschluessel += gespielteKarten;
 	}
 	
 	/**
@@ -287,8 +347,7 @@ public class Spielzug {
 		printer.write(angespielt + trenner);
 		printer.write(String.valueOf(ausspieler) + trenner);
 		printer.write(String.valueOf(position) + trenner);
-		printer.write(String.valueOf(spielende[0]) + trenner);
-		printer.write(String.valueOf(spielende[1]) + trenner);
+		printer.write(String.valueOf(spielende) + trenner);
 		
 		for(int i = 0; i < spielerhand.length; i++) {
 			printer.write(spielerhand[i] + trenner);
@@ -300,13 +359,14 @@ public class Spielzug {
 			printer.write("FALSCH" + trenner);
 		}
 
-		printer.write(gespielteTrümpfe + trenner);
+		printer.write(gespielteKarten + trenner);
 		printer.write(tisch + trenner);
 		
 		for(int i = 0; i < getesteteKarten.size(); i++) {
 			printer.write(getesteteKarten.get(i) 
 					+ String.valueOf(getestetePunktzahl.get(i)) 
-					+ String.valueOf(getestetesSpielGewonnen.get(i)) 
+					+ String.valueOf(getestetesSpielGewonnen.get(i))
+					+ String.valueOf(getestetesSpielVerloren.get(i))
 					+ trenner);
 		}
 		

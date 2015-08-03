@@ -48,6 +48,9 @@ public class Model {
 	
 	private int laufende;
 	
+	//Ausspieler
+	private int spieler0;
+	
 	
 	/**
 	 * Initialisiert alle Listen und befüllt das Kartendeck
@@ -77,6 +80,8 @@ public class Model {
 		}
 		
 		laufende = 0;
+		
+		spieler0 = -1;
 		
 		initKarten();
 	}
@@ -191,6 +196,11 @@ public class Model {
 	 * @throws Exception
 	 */
 	public ArrayList<Karte> setTisch(int spielerID, Karte karte) throws Exception {
+		//speichert den Ausspieler
+		if(spieler0 == -1) {
+			spieler0 = spielerID;
+		}
+		
 		//Eine Vorsichtsmaßnahme um falsche Züge zu verhindern
 		int stelleKarte = -1;
 		for(int i = 0; i < spielerhand.get(spielerID).size(); i++) {
@@ -246,6 +256,9 @@ public class Model {
 		
 		letzterStichGewinner = gewinnerID;
 		letzterStichPunkte = punkteStich;
+		
+		//Runde beenden
+		spieler0 = -1;
 	}
 	
 	/**
@@ -269,6 +282,14 @@ public class Model {
 	 */
 	public int gibLetzterStichPunkte() {
 		return letzterStichPunkte;
+	}
+	
+	/**
+	 * Gibt die ID des Ausspielers zurück
+	 * @return
+	 */
+	public int gibAusspieler() {
+		return spieler0;
 	}
 	
 	/**

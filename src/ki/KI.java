@@ -17,7 +17,10 @@ public abstract class KI {
 	protected Control regeln;
 	protected Datenbank db;
 	//Speichert den Spielzug und gibt ihn an die Datenbank zurück
-	protected Spielzug letzerSpielzug;
+	protected Spielzug letzterSpielzug;
+	protected ArrayList<Spielzug> gespielteSpielzuege;
+	protected ArrayList<Karte> gespielteTruempfe;
+	protected boolean neuerSpielzug;
 	
 	//Gibt an, welches Risiko der Spieler bereit ist einzugehen
 	//Je niedriger der Wert, desto mehr Risiko wird eingegangen, wobei gilt:
@@ -35,6 +38,9 @@ public abstract class KI {
 	
 	public KI(int ID) {
 		this.ID = ID;
+		gespielteTruempfe = new ArrayList<Karte>();
+		gespielteSpielzuege = new ArrayList<Spielzug>();
+		neuerSpielzug = true;
 		spielt = -1;
 		mitspieler = -1;
 		risiko = 0;
@@ -96,7 +102,22 @@ public abstract class KI {
 	 * @return
 	 */
 	public Model spiel(Model model) {
-		
+		if(handicap > 2) {
+			return spieleZufaellig(model);
+		} else if(handicap == 1) {
+			return spieleMitDB(model);
+		} else {
+			spieleMitKI(model);
+		}
+		return null;
+	}
+	
+	/**
+	 * Spielt zufällig Karten
+	 * @param model
+	 * @return
+	 */
+	private Model spieleZufaellig(Model model) {
 		Model m = model;
 		//Arbeitet nach dem DAB-Prinzip (Dümmster anzunehmender Bot) und spielt zufällig eine Karte
 		ArrayList<Karte> spielerkarten = m.gibSpielerKarten(ID);
@@ -126,8 +147,119 @@ public abstract class KI {
 		return m;
 	}
 	
+	/**
+	 * Spielt aufgrund der Datenbank
+	 * @param model
+	 * @return
+	 */
+	private Model spieleMitDB(Model model) {
+		ArrayList<Karte> hand = model.gibSpielerKarten(ID);
+		
+		String zu_spielende = db.welcheSpielen(model.gibTisch()[model.gibAusspieler()],
+				ID,
+				spielt,
+				mitspieler,
+				hand,
+				model.gibAusspieler(),
+				false, //Tout vorerst nicht berücksichtigt
+				gespielteTruempfe,
+				model.gibTisch());
+		
+		if(zu_spielende == null) {
+			neuerSpielzug = true;
+			//Noch keine Daten vorhanden -> zufällige Karte spielen
+			spieleZufaellig(model);
+		} else {
+			neuerSpielzug = false;
+			//Schon Daten zum Spielzug vorhanden
+			for(int i = 0; i < hand.size(); i++) {
+				if(hand.get(i).gibString().equals(zu_spielende)) {
+					//Entsprechende Karte spielen
+					Karte[] tisch = model.gibTisch();
+					tisch[ID] = hand.get(i);
+					hand.remove(i);
+					break;
+				}
+			}
+		}
+		
+		gespielteSpielzuege.add(db.gibLetztenSpielzug());
+		
+		return model;
+	}
+	
+	/**
+	 * Nutzt die KI (in späteren Versionen)
+	 * @param model
+	 * @return
+	 */
+	private Model spieleMitKI(Model model) {
+		return spieleMitDB(model);
+	}
+	
+	/**
+	 * Speichert nach jeder Runde die gespielten Truempfe
+	 * @param model
+	 */
 	public void stich(Model model) {
 		//Empfängt model nach jedem Stich
+		Karte[] tisch = model.gibTisch();
+		for(int i = 0; i < tisch.length; i++) {
+			if(regeln.istTrumpf(tisch[i].gibWert(), tisch[i].gibFarbe())) {
+				gespielteTruempfe.add(tisch[i]);
+			}
+		}
+		
+		int punkte = model.gibLetzterStichPunkte();
+		int sieger = model.gibLetzterStichGewinner();
+		
+		if(ID == spielt || ID == mitspieler) {
+			if(sieger != spielt && sieger != mitspieler) {
+				punkte *= -1;
+			}
+		} else {
+			if(sieger == spielt || sieger == mitspieler) {
+				punkte *= -1;
+			}
+		}
+		
+		if(neuerSpielzug) {
+			ArrayList<Karte> spielerhand = model.gibSpielerKarten(ID);
+			spielerhand.add(tisch[ID]);
+			
+			letzterSpielzug = new Spielzug(tisch[model.gibAusspieler()],
+					model.gibAusspieler(),
+					ID,
+					(spielt*10 + mitspieler),
+					spielerhand,
+					false,
+					gespielteTruempfe,
+					tisch);
+			
+			db.einfuegen(letzterSpielzug);
+			letzterSpielzug.erinnern(tisch[ID], punkte);
+			letzterSpielzug = null;
+		}
+		
+		gespielteSpielzuege.get(gespielteSpielzuege.size() - 1)
+					.erinnern(model.gibTisch()[ID], punkte);
+	}
+
+	/**
+	 * Empfängt die Sieger IDs
+	 * @param s1
+	 * @param s2
+	 */
+	public void sieger(int s1, int s2) {
+		boolean gewonnen = false;
+		
+		if(s1 == ID || s2 == ID) {
+			gewonnen = true;
+		}
+		
+		for(Spielzug s: gespielteSpielzuege) {
+			s.erinnereGewonnen(gewonnen);
+		}
 	}
 }
  

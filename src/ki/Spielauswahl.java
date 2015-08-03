@@ -1,5 +1,6 @@
 package ki;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import ki.data.Datenbank;
@@ -17,7 +18,7 @@ public class Spielauswahl {
 	private Datenbank wenz;
 	private Datenbank solo;
 	
-	public Spielauswahl() throws Exception {
+	public Spielauswahl() throws Exception {		
 		hochzeit = new Datenbank("ki/data/Hochzeit.dt");
 		sauspiel = new Datenbank("ki/data/Sauspiel.dt");
 		geier = new Datenbank("ki/data/Geier.dt");
@@ -470,8 +471,9 @@ public class Spielauswahl {
 	
 	/**
 	 * Spiel wird beendet
+	 * @throws IOException 
 	 */
-	public void beenden() {
+	public void beenden() throws IOException {
 		hochzeit.speichern();
 		sauspiel.speichern();
 		geier.speichern();
