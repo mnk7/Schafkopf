@@ -43,6 +43,8 @@ public class MenuGUI extends JFrame implements Menu {
 	private JTextField IPtf;
 	private JTextField NAMEtf;
 	
+	private server.Graphik server;
+	
 	private String logo = "graphik/karten/Logo.gif";
 	
 	public MenuGUI() {
@@ -69,8 +71,10 @@ public class MenuGUI extends JFrame implements Menu {
 				} else {
 					client = new Client(IPtf.getText(), NAMEtf.getText(), this);
 					client.graphik(this.gibGraphik());
-					//unsichtbar machen
-					this.setVisible(false);
+					//unsichtbar machen wenn der Client nicht auch Server ist
+					if(!IPtf.getText().equals("localhost")) {
+						this.setVisible(false);
+					}
 				}
 			}
 		} catch(Exception e) {
@@ -89,7 +93,7 @@ public class MenuGUI extends JFrame implements Menu {
 	 */
 	public void initGUI() {		
 		//Fenster
-		this.setSize(330, 150);
+		this.setSize(330, 520);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("SCHAFKOPF-APP");
 		this.setResizable(false);
@@ -137,17 +141,12 @@ public class MenuGUI extends JFrame implements Menu {
 		NAMEtf.setBounds(200, 50, 120, 30);
 		NAMEtf.addKeyListener(new KeyListener() {
 			public void keyPressed(KeyEvent arg0) {
-				if(arg0.getKeyCode() == KeyEvent.VK_ENTER) 
-					enter();
 			}
 			public void keyReleased(KeyEvent arg0) {
 				if(arg0.getKeyCode() == KeyEvent.VK_ENTER)
 					enter();
-				
 			}
 			public void keyTyped(KeyEvent arg0) {
-				if(arg0.getKeyCode() == KeyEvent.VK_ENTER)
-					enter();
 			}	
 			
 		});
@@ -155,7 +154,7 @@ public class MenuGUI extends JFrame implements Menu {
 		NAMEtf.setVisible(true);
 		
 		//Knopf
-		connect = new JButton();
+		connect = new JButton(); 
 		hintergrund.add(connect);
 		connect.setBounds(10, 90, 310, 30);
 		connect.setText("Verbinde mit Server");
@@ -165,6 +164,11 @@ public class MenuGUI extends JFrame implements Menu {
 			}
 		});
 		connect.setVisible(true);
+		
+		//Kann einen Server hosten
+		server = new server.Graphik(this);
+		hintergrund.add(server);
+		server.setBounds(0, 150, server.getWidth(), server.getHeight());
 		
 		repaint();
 	}

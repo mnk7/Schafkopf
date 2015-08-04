@@ -1,5 +1,6 @@
 package server;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -9,23 +10,14 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
 
-public class Graphik extends JFrame {
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				Graphik inst = new Graphik();
-			}
-		});
-	}
+public class Graphik extends JPanel {
 	
 	private JButton start;
 	private JButton end;
@@ -37,18 +29,16 @@ public class Graphik extends JFrame {
 	
 	private Server server;
 	private Graphik g = this;
+	private JFrame fenster;
 	
 	private String logo = "graphik/karten/logo.gif";
 	
 	private int spielerzahl;
 	
-	public Graphik(){
+	public Graphik(JFrame fenster){
 		super();
 		
-		Graphik.class.getResource(logo);
-		//Icon der Anwendung setzen
-		ImageIcon icon = new ImageIcon(logo);
-		this.setIconImage(icon.getImage());
+		this.fenster = fenster;
 				
 		PlayerLabel = new JLabel [4];
 		
@@ -64,11 +54,9 @@ public class Graphik extends JFrame {
 	
 	public void initGUI() {
 		this.setSize(330, 370);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setTitle("SCHAFKOPF-SERVER");
-		this.setResizable(false);
 		
 		this.setLayout(null);
+		this.setBorder(new LineBorder(Color.gray, 3, false));
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -76,19 +64,18 @@ public class Graphik extends JFrame {
 			e.printStackTrace();
 		}
 		
-		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		
 		for(int i = 0; i < 4; i++){
 			PlayerLabel [i] = new JLabel();
-			getContentPane().add(PlayerLabel [i]);
+			this.add(PlayerLabel [i]);
 			PlayerLabel [i].setText("");
 			PlayerLabel [i].setBounds(10, 50 + i*40, getWidth()-20, 30);
 			PlayerLabel [i].setVisible(true);
 		}
 		
 		start = new JButton();
-		getContentPane().add(start);
+		this.add(start);
 		start.setBounds(10, 10, getWidth()/2 - 15, 30);
 		start.setText("Server starten");
 		start.addActionListener(new ActionListener() {
@@ -104,7 +91,7 @@ public class Graphik extends JFrame {
 					clear();
 					PlayerLabel[0].setText("Server gestartet");
 					startAktualisieren();
-					g.setTitle("Schafkopf: " + server.gibIP());
+					fenster.setTitle("Schafkopf: " + server.gibIP());
 				} else {
 					//Startet den Server mit den Spielern, die anwesend sind und füllt den Rest mit Bots auf
 					setzeTarif();
@@ -115,7 +102,7 @@ public class Graphik extends JFrame {
 		start.setVisible(true);
 		
 		end = new JButton();
-		getContentPane().add(end);
+		this.add(end);
 		end.setBounds(getWidth()/2 + 5, 10, getWidth()/2 - 15, 30);
 		end.setText("Server stoppen");
 		end.addActionListener(new ActionListener() {
@@ -130,24 +117,24 @@ public class Graphik extends JFrame {
 		end.setVisible(true);
 		
 		tarifLabel = new JLabel();
-		getContentPane().add(tarifLabel);
+		this.add(tarifLabel);
 		tarifLabel.setBounds(10, this.getHeight() - 130, (int) (this.getWidth() - 20) / 2, 30);
 		tarifLabel.setText("Tarif des Spiels:");
 		tarifLabel.setVisible(true);
 		
 		tarif = new JTextField();
-		getContentPane().add(tarif);
+		this.add(tarif);
 		tarif.setBounds(this.getWidth() - 80, this.getHeight() - 130, 70, 30);
 		tarif.setVisible(true);
 		
 		wartezeitLabel = new JLabel();
-		getContentPane().add(wartezeitLabel);
+		this.add(wartezeitLabel);
 		wartezeitLabel.setBounds(10, this.getHeight() - 90, this.getWidth() - 20, 30);
-		wartezeitLabel.setText("Geschwindigkeit des Spiels:");
+		wartezeitLabel.setText("Verzögerung des Spiels (ms):");
 		wartezeitLabel.setVisible(true);
 		
 		wartezeit = new JSlider(100, 5000);
-		getContentPane().add(wartezeit);
+		this.add(wartezeit);
 		wartezeit.setBounds(10, this.getHeight() - 60, this.getWidth() - 20, 40);
 		wartezeit.setValue(2000);
 		wartezeit.setVisible(true);

@@ -76,7 +76,7 @@ public class Graphik extends JFrame implements View{
 		
 		this.model = model;
 		
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		this.setTitle("Schafkopf-App");
 		//Icon der Anwendung setzen

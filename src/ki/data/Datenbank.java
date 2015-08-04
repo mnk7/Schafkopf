@@ -26,7 +26,7 @@ public class Datenbank {
 	 * @throws Exception
 	 */
 	public Datenbank(String data) throws Exception {
-		getClass().getClassLoader().getResource(data);
+		Datenbank.class.getResource(data);
 		if(data.endsWith(".dt")) {
 			reader = new BufferedReader(new FileReader(data));
 			printer = new BufferedWriter(new FileWriter(data, false));
