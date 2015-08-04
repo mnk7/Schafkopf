@@ -69,6 +69,7 @@ public class Spielzug {
 		this.position      =    positionSpieler;
 		this.spielende     =    spielende;
 		
+		this.spielerhand = new String[spielerhand.size()];
 		for(int i = 0; i < spielerhand.size(); i++) {
 			this.spielerhand[i] = spielerhand.get(i).gibString();
 		}

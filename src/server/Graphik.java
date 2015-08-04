@@ -1,5 +1,7 @@
 package server;
 
+import graphik.MenuGUI;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,13 +31,13 @@ public class Graphik extends JPanel {
 	
 	private Server server;
 	private Graphik g = this;
-	private JFrame fenster;
+	private MenuGUI fenster;
 	
 	private String logo = "graphik/karten/logo.gif";
 	
 	private int spielerzahl;
 	
-	public Graphik(JFrame fenster){
+	public Graphik(MenuGUI fenster){
 		super();
 		
 		this.fenster = fenster;
@@ -111,6 +113,7 @@ public class Graphik extends JPanel {
 					start.setText("Server starten");
 					server.beenden();
 					server = null;
+					fenster.beenden();
 				}
 			}
 		});

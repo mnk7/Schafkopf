@@ -353,22 +353,17 @@ public class Graphik extends JFrame implements View{
 	}
 	
 	public void karteGespielt(Karte gespielt) {
-		boolean ok = false;
 		
 		try {
-			do {
-				spielerKarten.update(model.setTisch(ID, gespielt));
-				if(control.erlaubt(model, ID)) {
-					ok = true;
-				} else {
-					model.undo(ID);
-					this.update();
-					JOptionPane.showMessageDialog(this, "Diese Karte ist nicht erlaubt");
-					spielerKarten.spiel();
-				}
-			} while(!ok);
-	
-			client.gespielt(model);
+			spielerKarten.update(model.setTisch(ID, gespielt));
+			if(!control.erlaubt(model, ID)) {
+				model.undo(ID);
+				this.update();
+				JOptionPane.showMessageDialog(this, "Diese Karte ist nicht erlaubt");
+				spielerKarten.spiel();
+			} else {
+				client.gespielt(model);
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

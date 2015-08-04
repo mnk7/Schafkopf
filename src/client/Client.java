@@ -317,4 +317,10 @@ public class Client {
 		}
 		beenden();
 	}
+
+	public void dispose() {
+		graphik.beenden();
+		beenden = true;
+		netzwerk = null;
+	}
 }

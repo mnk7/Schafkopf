@@ -19,11 +19,11 @@ public class Spielauswahl {
 	private Datenbank solo;
 	
 	public Spielauswahl() throws Exception {		
-		hochzeit = new Datenbank("ki/data/Hochzeit.dt");
-		sauspiel = new Datenbank("ki/data/Sauspiel.dt");
-		geier = new Datenbank("ki/data/Geier.dt");
-		wenz = new Datenbank("ki/data/Wenz.dt");
-		solo = new Datenbank("ki/data/Solo.dt");
+		hochzeit = new Datenbank("Hochzeit.dt");
+		sauspiel = new Datenbank("Sauspiel.dt");
+		geier = new Datenbank("Geier.dt");
+		wenz = new Datenbank("Wenz.dt");
+		solo = new Datenbank("Solo.dt");
 	}
 	
 	/**

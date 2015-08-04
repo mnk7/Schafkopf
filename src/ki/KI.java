@@ -168,7 +168,7 @@ public abstract class KI {
 		if(zu_spielende == null) {
 			neuerSpielzug = true;
 			//Noch keine Daten vorhanden -> zufällige Karte spielen
-			spieleZufaellig(model);
+			return spieleZufaellig(model);
 		} else {
 			neuerSpielzug = false;
 			//Schon Daten zum Spielzug vorhanden
@@ -181,9 +181,9 @@ public abstract class KI {
 					break;
 				}
 			}
+			
+			gespielteSpielzuege.add(db.gibLetztenSpielzug());
 		}
-		
-		gespielteSpielzuege.add(db.gibLetztenSpielzug());
 		
 		return model;
 	}
@@ -203,7 +203,7 @@ public abstract class KI {
 	 */
 	public void stich(Model model) {
 		//Empfängt model nach jedem Stich
-		Karte[] tisch = model.gibTisch();
+		Karte[] tisch = model.gibLetztenStich();
 		for(int i = 0; i < tisch.length; i++) {
 			if(regeln.istTrumpf(tisch[i].gibWert(), tisch[i].gibFarbe())) {
 				gespielteTruempfe.add(tisch[i]);
@@ -239,10 +239,10 @@ public abstract class KI {
 			db.einfuegen(letzterSpielzug);
 			letzterSpielzug.erinnern(tisch[ID], punkte);
 			letzterSpielzug = null;
-		}
-		
-		gespielteSpielzuege.get(gespielteSpielzuege.size() - 1)
+		} else {
+			gespielteSpielzuege.get(gespielteSpielzuege.size() - 1)
 					.erinnern(model.gibTisch()[ID], punkte);
+		}
 	}
 
 	/**

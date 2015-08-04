@@ -2,6 +2,7 @@ package ki.data;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,6 +16,7 @@ public class Datenbank {
 	
 	private BufferedReader reader;
 	private BufferedWriter printer;
+	private File data;
 	
 	private Spielzug gespielt;
 	
@@ -26,13 +28,21 @@ public class Datenbank {
 	 * @throws Exception
 	 */
 	public Datenbank(String data) throws Exception {
+		data = "src/ki/data/" + data;
 		Datenbank.class.getResource(data);
-		if(data.endsWith(".dt")) {
-			reader = new BufferedReader(new FileReader(data));
-			printer = new BufferedWriter(new FileWriter(data, false));
-		} else {
-			throw new Exception("Datenbank wurde nicht passende Datei übergeben");
+		this.data = new File(data);
+		
+		if(!this.data.isDirectory()) {
+			System.out.println(this.data.getPath());
+			this.data.mkdir();
 		}
+		if(!this.data.exists()) {
+			System.out.println(this.data.getAbsolutePath());
+			this.data.createNewFile();
+		}
+			
+		reader = new BufferedReader(new FileReader(data));
+		printer = new BufferedWriter(new FileWriter(data, false));
 		
 		/*
 		 * Initialisiert die Datenbank

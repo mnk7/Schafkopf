@@ -36,7 +36,7 @@ public class MenuGUI extends JFrame implements Menu {
 	private Client client; 
 	
 	//GUI
-	private JButton connect;
+	private JButton connect; 
 	private JLabel IPlabel;
 	private JLabel NAMElabel; 
 	private JLabel hintergrund;
@@ -184,6 +184,7 @@ public class MenuGUI extends JFrame implements Menu {
 	}
 	
 	public void beenden() {
+		client.dispose();
 		client = null;
 		this.setVisible(true);
 	}
