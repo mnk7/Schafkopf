@@ -111,9 +111,9 @@ public class Graphik extends JPanel {
 			public void actionPerformed(ActionEvent evt) {
 				if(server != null) {
 					start.setText("Server starten");
+					fenster.beenden();
 					server.beenden();
 					server = null;
-					fenster.beenden();
 				}
 			}
 		});
@@ -195,6 +195,7 @@ public class Graphik extends JPanel {
 		} catch(Exception e) {
 			tarifWert = 10;
 			JOptionPane.showMessageDialog(g, "Keine Tarifangabe. Der Tarif ist jetzt 10");
+			tarif.setText(String.valueOf(tarifWert));
 		}
 		server.setzeTarif(tarifWert);
 	}
@@ -209,6 +210,7 @@ public class Graphik extends JPanel {
 		spielerzahl = 0;
 		PlayerLabel[0].setText("Server beendet");
 		start.setText("Server starten");
+		fenster.beenden();
 	}
 }
 

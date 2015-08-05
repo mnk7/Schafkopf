@@ -96,7 +96,7 @@ public class MenuGUI extends JFrame implements Menu {
 		this.setSize(330, 520);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("SCHAFKOPF-APP");
-		this.setResizable(false);
+		this.setResizable(true);
 		
 		//Icon der Anwendung setzen
 		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(logo));

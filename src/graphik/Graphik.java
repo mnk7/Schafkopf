@@ -42,6 +42,8 @@ public class Graphik extends JFrame implements View{
 	
 	private boolean keinKontra;
 	
+	private Thread spielen;
+	
 	//GUI
 	//Karten des Spielers
 	private Spieler spielerKarten;
@@ -89,7 +91,6 @@ public class Graphik extends JFrame implements View{
 		this.setLayout(null);
 		this.setLocationRelativeTo(null);
 		this.initGUI(); 
-		this.setSize(1130, 720);
 		this.setVisible(true);
 		
 		this.addWindowListener(new WindowListener() {
@@ -347,22 +348,36 @@ public class Graphik extends JFrame implements View{
 
 	public void spiel() throws Exception {
 		this.toFront();
-		//Nochmal Anzeige aktualisieren
 		this.update();
-		spielerKarten.spiel();
+		
+		//Thread, der gestartet wird, sobald eine Karte
+		spielen = new Thread() {
+			public void run() {
+				while(true) {
+					spielerKarten.spiel();
+					try {
+						spielerKarten.spiel();
+						wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+		spielen.start();
 	}
 	
 	public void karteGespielt(Karte gespielt) {
-		
 		try {
 			spielerKarten.update(model.setTisch(ID, gespielt));
 			if(!control.erlaubt(model, ID)) {
 				model.undo(ID);
-				this.update();
 				JOptionPane.showMessageDialog(this, "Diese Karte ist nicht erlaubt");
-				spielerKarten.spiel();
+				this.update();
+				spielen.notify();
 			} else {
 				client.gespielt(model);
+				spielen.interrupt();
 			}
 		} catch(Exception e) {
 			e.printStackTrace();

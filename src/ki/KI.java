@@ -21,6 +21,8 @@ public abstract class KI {
 	protected ArrayList<Spielzug> gespielteSpielzuege;
 	protected ArrayList<Karte> gespielteTruempfe;
 	protected boolean neuerSpielzug;
+	//Die ID desjenigen, der in einer Runde ausgespielt hat
+	protected int ausspieler;
 	
 	//Gibt an, welches Risiko der Spieler bereit ist einzugehen
 	//Je niedriger der Wert, desto mehr Risiko wird eingegangen, wobei gilt:
@@ -40,6 +42,7 @@ public abstract class KI {
 		this.ID = ID;
 		gespielteTruempfe = new ArrayList<Karte>();
 		gespielteSpielzuege = new ArrayList<Spielzug>();
+		ausspieler = -1;
 		neuerSpielzug = true;
 		spielt = -1;
 		mitspieler = -1;
@@ -102,6 +105,8 @@ public abstract class KI {
 	 * @return
 	 */
 	public Model spiel(Model model) {
+		ausspieler = model.gibAusspieler(ID);
+		
 		if(handicap > 2) {
 			return spieleZufaellig(model);
 		} else if(handicap == 1) {
@@ -118,33 +123,32 @@ public abstract class KI {
 	 * @return
 	 */
 	private Model spieleZufaellig(Model model) {
-		Model m = model;
 		//Arbeitet nach dem DAB-Prinzip (Dümmster anzunehmender Bot) und spielt zufällig eine Karte
-		ArrayList<Karte> spielerkarten = m.gibSpielerKarten(ID);
+		ArrayList<Karte> spielerkarten = model.gibSpielerKarten(ID);
 		//Speichert alle erlaubten Karten
 		ArrayList<Karte> erlaubt = new ArrayList<Karte>();
 		
 		try {
 			for(int i = spielerkarten.size() - 1; i >= 0; i--) {
 				//Legt eine Karte auf den Tisch
-				m.setTisch(ID, spielerkarten.get(i));
+				model.setTisch(ID, spielerkarten.get(i));
 				
-				if(regeln.erlaubt(m, ID)) {
+				if(regeln.erlaubt(model, ID)) {
 					//Prüft, ob der Zug legal ist
-					erlaubt.add(m.gibTisch()[ID]);
+					erlaubt.add(model.gibTisch()[ID]);
 					//Karte gefunden
 				}
-				m.undo(ID);
+				model.undo(ID);
 				//Die zurückgelegte Karte wird nach ganz hinten gerückt, der Rest rückt auf
-				spielerkarten = m.gibSpielerKarten(ID);
+				spielerkarten = model.gibSpielerKarten(ID);
 			}
 			//Vorerst einfach die erste erlaubte spielen
-			m.setTisch(ID, erlaubt.get(0));
+			model.setTisch(ID, erlaubt.get(0));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
-		return m;
+		return model;
 	}
 	
 	/**
@@ -153,17 +157,17 @@ public abstract class KI {
 	 * @return
 	 */
 	private Model spieleMitDB(Model model) {
-		ArrayList<Karte> hand = model.gibSpielerKarten(ID);
+		ArrayList<Karte> hand = (ArrayList<Karte>) model.gibSpielerKarten(ID).clone();
 		
-		String zu_spielende = db.welcheSpielen(model.gibTisch()[model.gibAusspieler()],
-				ID,
-				spielt,
-				mitspieler,
-				hand,
-				model.gibAusspieler(),
-				false, //Tout vorerst nicht berücksichtigt
-				gespielteTruempfe,
-				model.gibTisch());
+		String zu_spielende = db.welcheSpielen(model.gibTisch()[ausspieler],
+											ID,
+											spielt,
+											mitspieler,
+											hand,
+											ausspieler,
+											false, //Tout vorerst nicht berücksichtigt
+											gespielteTruempfe,
+											model.gibTisch().clone());
 		
 		if(zu_spielende == null) {
 			neuerSpielzug = true;
@@ -174,11 +178,13 @@ public abstract class KI {
 			//Schon Daten zum Spielzug vorhanden
 			for(int i = 0; i < hand.size(); i++) {
 				if(hand.get(i).gibString().equals(zu_spielende)) {
-					//Entsprechende Karte spielen
-					Karte[] tisch = model.gibTisch();
-					tisch[ID] = hand.get(i);
-					hand.remove(i);
-					break;
+					try {
+						//Entsprechende Karte spielen
+						model.setTisch(ID, hand.get(i));
+						break;
+					} catch(Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			
@@ -224,11 +230,11 @@ public abstract class KI {
 		}
 		
 		if(neuerSpielzug) {
-			ArrayList<Karte> spielerhand = model.gibSpielerKarten(ID);
+			ArrayList<Karte> spielerhand = (ArrayList<Karte>) model.gibSpielerKarten(ID).clone();
 			spielerhand.add(tisch[ID]);
 			
-			letzterSpielzug = new Spielzug(tisch[model.gibAusspieler()],
-					model.gibAusspieler(),
+			letzterSpielzug = new Spielzug(tisch[ausspieler],
+					ausspieler,
 					ID,
 					(spielt*10 + mitspieler),
 					spielerhand,

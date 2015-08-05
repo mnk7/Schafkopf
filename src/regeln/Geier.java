@@ -81,7 +81,7 @@ public class Geier implements Control {
 	public boolean erlaubt(Model m, int ID) {
 		Karte[] tisch = m.gibTisch();
 		Karte angespielt;
-		int spieler0 = m.gibAusspieler();
+		int spieler0 = m.gibAusspieler(ID);
 		
 		//Findet die Karte, die zuerst gespielt wurde
 		angespielt = tisch[spieler0];

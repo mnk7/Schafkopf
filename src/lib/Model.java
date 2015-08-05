@@ -157,8 +157,6 @@ public class Model {
 	 * Gibt die ersten drei Karten
 	 */
 	public void ersteKartenGeben() {
-		//Am Anfang des Spiels den Ausspieler zurücksetzen
-		spieler0 = -1;
 		for(int i = 0; i < 12; i++) {
 			spielerhand.get(i % 4).add(kartendeck.get(i));
 		}
@@ -258,6 +256,8 @@ public class Model {
 		
 		letzterStichGewinner = gewinnerID;
 		letzterStichPunkte = punkteStich;
+		
+		spieler0 = -1;
 	}
 	
 	/**
@@ -287,7 +287,11 @@ public class Model {
 	 * Gibt die ID des Ausspielers zurück
 	 * @return
 	 */
-	public int gibAusspieler() {
+	public int gibAusspieler(int ID) {
+		//Hat noch niemand ausgespielt, ist ID Ausspieler
+		if(spieler0 == -1) {
+			return ID;
+		}
 		return spieler0;
 	}
 	
