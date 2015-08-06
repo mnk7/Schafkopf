@@ -196,7 +196,6 @@ public class Model {
 	 * @throws Exception
 	 */
 	public ArrayList<Karte> setTisch(int spielerID, Karte karte) throws Exception {
-		//speichert den Ausspieler
 		if(spieler0 == -1) {
 			spieler0 = spielerID;
 		}
@@ -288,7 +287,6 @@ public class Model {
 	 * @return
 	 */
 	public int gibAusspieler(int ID) {
-		//Hat noch niemand ausgespielt, ist ID Ausspieler
 		if(spieler0 == -1) {
 			return ID;
 		}

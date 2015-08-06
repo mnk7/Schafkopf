@@ -30,7 +30,7 @@ public class Spielzug {
 	private boolean 	du;
 	//Die gespielten Trümpfe in sortierte Reihenfolge
 	private String 		gespielteKarten;
-	//Karten auf dem Tisch
+	//Karten auf dem Tisch 
 	private String		tisch;
 	//Karten, die früher gespielt wurden und der erreichte Erfolg
 	private ArrayList<String> 	getesteteKarten;

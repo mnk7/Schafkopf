@@ -106,7 +106,6 @@ public class Spieler extends JPanel {
 	}
 	
 	private void aktiviert(boolean an) {
-		System.out.println(an);
 		for(int i = 0; i < karten.size(); i++) {
 			karten.get(i).setEnabled(an);
 		}

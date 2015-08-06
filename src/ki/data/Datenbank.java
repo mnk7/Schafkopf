@@ -28,17 +28,11 @@ public class Datenbank {
 	 * @throws Exception
 	 */
 	public Datenbank(String data) throws Exception {
-		data = "src/ki/data/" + data;
-		Datenbank.class.getResource(data);
+		Datenbank.class.getClassLoader().getResource(data);
 		this.data = new File(data);
-		
-		if(!this.data.isDirectory()) {
-			System.out.println(this.data.getPath());
-			this.data.mkdir();
-		}
+
 		if(!this.data.exists()) {
-			System.out.println(this.data.getAbsolutePath());
-			this.data.createNewFile();
+			this.data.createNewFile(); 
 		}
 			
 		reader = new BufferedReader(new FileReader(data));
@@ -47,7 +41,7 @@ public class Datenbank {
 		/*
 		 * Initialisiert die Datenbank
 		 */
-		spielzuege = new HashMap<String, Spielzug>();
+		spielzuege = new HashMap<String, Spielzug>(); 
 	}
 	
 	/**
