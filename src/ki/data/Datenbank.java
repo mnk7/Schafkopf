@@ -30,6 +30,13 @@ public class Datenbank {
 	public Datenbank(String data) throws Exception {
 		Datenbank.class.getClassLoader().getResource(data);
 		this.data = new File(data);
+		//Datei im Notfall neu erstellen
+		if(!this.data.exists()) {
+			this.data.createNewFile();
+		}
+		//Und vollen Zugriff gewähren
+		this.data.setWritable(true);
+		this.data.setReadable(true);
 			
 		reader = new BufferedReader(new FileReader(data));
 		printer = new BufferedWriter(new FileWriter(data, false));

@@ -24,6 +24,8 @@ import lib.Model.modus;
 public class Server extends Thread {
 	
 	    private static int PORT = 35555;
+	    
+	    private String configdir;
 	
 		//Server, der die Verbindungen verwaltet
 		private ServerSocket server;
@@ -72,8 +74,8 @@ public class Server extends Thread {
          * Erstellt einen Server auf dem Standardport
          * @param graphik
          */
-        public Server(Graphik graphik) {
-        	this(graphik, PORT);
+        public Server(Graphik graphik, String configdir) {
+        	this(graphik, PORT, configdir);
         }
                 
         /**
@@ -82,7 +84,7 @@ public class Server extends Thread {
          * @param port
          * @throws Exception 
          **/
-        public Server(Graphik graphik, int port) {
+        public Server(Graphik graphik, int port, String configdir) {
         	super();
         	this.setName("Schafkopf-Server");
         	
@@ -119,7 +121,7 @@ public class Server extends Thread {
         	try {
 				server = new ServerSocket(PORT);
 				
-				spielauswahl = new Spielauswahl();
+				spielauswahl = new Spielauswahl(configdir);
         		
 			} catch (IOException e) {
 				e.printStackTrace();

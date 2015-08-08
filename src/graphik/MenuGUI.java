@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -26,12 +27,22 @@ public class MenuGUI extends JFrame implements Menu {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		if(args.length == 0) {
+			//Config-Verzeichnis erstellen
+			configdir = System.getProperty("user.home");
+			configdir += "/.schafkopf/";
+			new File(configdir).mkdir();
+		} else {
+			configdir = args[0];
+		}
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() { 
 				MenuGUI inst = new MenuGUI();
 			}
 		});  
 	}
+	
+	private static String configdir;
 	
 	private Client client; 
 	
@@ -166,7 +177,7 @@ public class MenuGUI extends JFrame implements Menu {
 		connect.setVisible(true);
 		
 		//Kann einen Server hosten
-		server = new server.Graphik(this);
+		server = new server.Graphik(this, configdir);
 		hintergrund.add(server);
 		server.setBounds(0, 150, server.getWidth(), server.getHeight());
 		

@@ -35,13 +35,17 @@ public class Graphik extends JPanel {
 	
 	private String logo = "graphik/karten/logo.gif";
 	
+	private String configdir;
+	
 	private int spielerzahl;
 	
-	public Graphik(MenuGUI fenster){
+	public Graphik(MenuGUI fenster, String configdir){
 		super();
 		
 		this.fenster = fenster;
 				
+		this.configdir = configdir;
+		
 		PlayerLabel = new JLabel [4];
 		
 		spielerzahl = 0;
@@ -83,7 +87,7 @@ public class Graphik extends JPanel {
 		start.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				if(server == null) {
-					server = new Server(g);
+					server = new Server(g, configdir);
 					server.setzeWartezeit(wartezeit.getValue());
 					
 					setzeTarif();

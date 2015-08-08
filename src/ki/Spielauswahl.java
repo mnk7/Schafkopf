@@ -18,12 +18,12 @@ public class Spielauswahl {
 	private Datenbank wenz;
 	private Datenbank solo;
 	
-	public Spielauswahl() throws Exception {		
-		hochzeit = new Datenbank("Hochzeit.dt");
-		sauspiel = new Datenbank("Sauspiel.dt");
-		geier = new Datenbank("Geier.dt");
-		wenz = new Datenbank("Wenz.dt");
-		solo = new Datenbank("Solo.dt");
+	public Spielauswahl(String configdir) throws Exception {		
+		hochzeit = new Datenbank(configdir + "Hochzeit.dt");
+		sauspiel = new Datenbank(configdir + "Sauspiel.dt");
+		geier = new Datenbank(configdir + "Geier.dt");
+		wenz = new Datenbank(configdir + "Wenz.dt");
+		solo = new Datenbank(configdir + "Solo.dt");
 	}
 	
 	/**
