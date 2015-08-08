@@ -104,8 +104,9 @@ public abstract class KI {
 	 * @param model
 	 * @return
 	 */
-	public Model spiel(Model model) {
-		ausspieler = model.gibAusspieler(ID);
+	public Model spiel(Model model) {	
+		//Sollte erst aufgerufen werden nachdem man gespielt hat
+		ausspieler = model.gibAusspieler(ID) - 1;
 		
 		if(handicap > 2) {
 			return spieleZufaellig(model);
@@ -208,6 +209,8 @@ public abstract class KI {
 	 * @param model
 	 */
 	public void stich(Model model) {
+		ausspieler = model.gibAusspieler(ID);
+		
 		//Empfängt model nach jedem Stich
 		Karte[] tisch = model.gibLetztenStich();
 		for(int i = 0; i < tisch.length; i++) {

@@ -42,8 +42,6 @@ public class Graphik extends JFrame implements View{
 	
 	private boolean keinKontra;
 	
-	private Thread spielen;
-	
 	//GUI
 	//Karten des Spielers
 	private Spieler spielerKarten;
@@ -167,7 +165,7 @@ public class Graphik extends JFrame implements View{
 			gegenspielerKarten[2].nachricht("Spieler 3");
 			
 			//Anzeige der Karten der Spieler
-			spielerKarten = new Spieler(440, 120, this);
+			spielerKarten = new Spieler(440, 120);
 			hintergrund.add(spielerKarten);
 			//Unterhalb der eigenen Meldungen platziert
 			spielerKarten.setLocation(this.getWidth() / 2 - 220, hoehe*2 + 90);
@@ -349,39 +347,24 @@ public class Graphik extends JFrame implements View{
 	public void spiel() throws Exception {
 		this.toFront();
 		this.update();
+		boolean erlaubt = false;
 		
-		//Thread, der gestartet wird, sobald eine Karte
-		spielen = new Thread() {
-			public void run() {
-				while(true) {
-					spielerKarten.spiel();
-					try {
-						spielerKarten.spiel();
-						wait();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		};
-		spielen.start();
-	}
-	
-	public void karteGespielt(Karte gespielt) {
-		try {
-			spielerKarten.update(model.setTisch(ID, gespielt));
+		do {
+			Karte gespielt = spielerKarten.spiel();
+			model.setTisch(ID, gespielt);
+			//Graphik aktualisieren
+			tisch.setzeKarten(model.gibTisch());
+			spielerKarten.update(model.gibSpielerKarten(ID));
+			
 			if(!control.erlaubt(model, ID)) {
 				model.undo(ID);
 				JOptionPane.showMessageDialog(this, "Diese Karte ist nicht erlaubt");
 				this.update();
-				spielen.notify();
 			} else {
+				erlaubt = true;
 				client.gespielt(model);
-				spielen.interrupt();
 			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		} while(!erlaubt);
 	}
 	
 	public void setzeModus(modus mod) {
@@ -473,7 +456,12 @@ public class Graphik extends JFrame implements View{
 	public void hochzeitKarte() {
 		this.toFront();
 		JOptionPane.showMessageDialog(this, "Welche gibst du her?");
-		spielerKarten.spiel(true);
+		try {
+			client.hochzeitKarteGespielt(spielerKarten.spiel());
+		} catch (Exception e) {
+			e.printStackTrace();
+			client.abmelden();
+		}
 	} 
 	
 	public void hochzeitKarteGespielt(Karte angebot) {

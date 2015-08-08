@@ -93,10 +93,10 @@ public class MenuGUI extends JFrame implements Menu {
 	 */
 	public void initGUI() {		
 		//Fenster
-		this.setSize(330, 520);
+		this.setSize(330, 530);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("SCHAFKOPF-APP");
-		this.setResizable(true);
+		this.setResizable(false);
 		
 		//Icon der Anwendung setzen
 		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(logo));
@@ -184,8 +184,12 @@ public class MenuGUI extends JFrame implements Menu {
 	}
 	
 	public void beenden() {
-		client.dispose();
-		client = null;
+		try {
+			client.dispose();
+			client = null;
+		} catch(Exception e) {
+			//kein Client - nur Server
+		}
 		this.setVisible(true);
 	}
 }

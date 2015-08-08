@@ -364,11 +364,10 @@ public class Spielzug {
 		printer.write(tisch + trenner);
 		
 		for(int i = 0; i < getesteteKarten.size(); i++) {
-			printer.write(getesteteKarten.get(i) 
-					+ String.valueOf(getestetePunktzahl.get(i)) 
-					+ String.valueOf(getestetesSpielGewonnen.get(i))
-					+ String.valueOf(getestetesSpielVerloren.get(i))
-					+ trenner);
+			printer.write(getesteteKarten.get(i) + trenner
+					+ String.valueOf(getestetePunktzahl.get(i)) + trenner 
+					+ String.valueOf(getestetesSpielGewonnen.get(i)) + trenner
+					+ String.valueOf(getestetesSpielVerloren.get(i)) + trenner);
 		}
 		
 		printer.write("\n");

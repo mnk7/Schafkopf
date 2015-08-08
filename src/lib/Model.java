@@ -48,9 +48,6 @@ public class Model {
 	
 	private int laufende;
 	
-	//Ausspieler
-	private int spieler0;
-	
 	
 	/**
 	 * Initialisiert alle Listen und befüllt das Kartendeck
@@ -80,8 +77,6 @@ public class Model {
 		}
 		
 		laufende = 0;
-		
-		spieler0 = -1;
 		
 		initKarten();
 	}
@@ -196,9 +191,6 @@ public class Model {
 	 * @throws Exception
 	 */
 	public ArrayList<Karte> setTisch(int spielerID, Karte karte) throws Exception {
-		if(spieler0 == -1) {
-			spieler0 = spielerID;
-		}
 		
 		//Eine Vorsichtsmaßnahme um falsche Züge zu verhindern
 		int stelleKarte = -1;
@@ -255,8 +247,6 @@ public class Model {
 		
 		letzterStichGewinner = gewinnerID;
 		letzterStichPunkte = punkteStich;
-		
-		spieler0 = -1;
 	}
 	
 	/**
@@ -287,9 +277,20 @@ public class Model {
 	 * @return
 	 */
 	public int gibAusspieler(int ID) {
-		if(spieler0 == -1) {
-			return ID;
+		int zahlGespielteKarten = 0;
+		for(int i = 0; i < 4; i++) {
+			if(tisch[i] != null) {
+				zahlGespielteKarten++;
+			}
 		}
+		int spieler0 = ID + 1 - zahlGespielteKarten;
+		if(spieler0 < 0) {
+			spieler0 += 4;
+		}
+		if(spieler0 > 3) {
+			spieler0 -= 4;
+		}
+		
 		return spieler0;
 	}
 	
