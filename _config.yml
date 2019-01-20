@@ -1,0 +1,8 @@
+title: Schafkopf
+description: Eine Multi-/Singleplayer Schafkopf Anwendung
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-tactile
+
+gems:
+  - jekyll-mentions
