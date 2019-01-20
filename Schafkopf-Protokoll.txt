@@ -1,0 +1,128 @@
+===============================================================================
+| Schafkopf-Protokoll					                    	   22.03.2015 |
+| Version 1.0						                                          |
+| GPLv2									                                      |
+===============================================================================
+
+EBNF:
+Client-seitig: (Client empfängt)
+
+Paket = "!MODEL" Flag Model;
+Paket = Daten "!END";
+
+Flag  = "!UPDATE" 
+      | "!ERSTE3"
+      | "!SPIELSTDU"
+      | "!SPIEL";
+Model = Spielerhand Tisch LetzterStich;
+Spielerhand = Karte Karte Karte Karte Karte Karte;
+Tisch = Karte Karte Karte Karte;
+LetzterStich = Karte Karte Karte Karte;
+
+Daten = "!NAME" String
+      | "!MITSPIELER" String String String String
+      | "!MODUS" Modus
+      | "!BESTESSPIEL" Modus
+      | "!KONTRA" Boolean Boolean Boolean Boolean
+      | "!GEKLOPFT" Boolean Boolean Boolean Boolean
+      | "!ID" Integer
+      | "!SPIELT" Integer Integer
+      | "!SIEGER" Sieger Sieger
+      | "!HOCHZEIT"
+      | "!DRAN" Integer
+      | "!KONTO" Konto
+      | "!STOCK" Konto
+      | "!ENDE" Konto
+      | "!BEENDEN";
+
+Karte = Farbe Wert;
+Farbe = "§" 
+      | "EICHEL"
+      | "GRAS"
+      |	"HERZ"
+      | "SCHELLEN";
+Wert  = "§"
+      | "OBER"
+      | "UNTER"
+      | "SAU"
+      | "ZEHN"
+      | "KONIG"
+      | "NEUN";
+Modus = "SAUSPIELeichel"| "SAUSPIELgras"| "SAUSPIELherz"| "SAUSPIELschellen"|
+	"HOCHZEIT"|
+	"GEIER"|
+	"WENZ"|
+	"SOLOeichel"| "SOLOgras"| "SOLOherz"| "SOLOschellen"|
+	"GEIERdu"|
+	"WENZdu"|
+	"SOLOeichelDU"| "SOLOgrasDU"| "SOLOherzDU"| "SOLOschellenDU"|
+	"SI"|
+	"NICHTS";
+Konto = {("0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9")};
+
+Sieger = Integer 
+       | "4"
+       | "1" Integer;
+Integer = "0"
+        | "1"
+        | "2"
+        | "3";
+Boolean = "JA"
+        | "NEIN";
+String = {Zeichen};
+Zeichen = UTF_8
+
+===============================================================================
+Server-seitig: (Server empfängt)
+
+Paket = "!MODEL" "!SPIEL" Model;
+Paket = Daten "!END";
+
+Model = Spielerhand Tisch LetzterStich;
+Spielerhand = Karte Karte Karte Karte Karte Karte;
+Tisch = Karte Karte Karte Karte;
+LetzterStich = Karte Karte Karte Karte;
+
+Daten = "!NAME" String
+      | "!SPIELSTDU" Modus
+      | "!KONTRA" Boolean
+      | "!ERSTE3" Boolean
+      | "!HOCHZEIT" ("JA" Karte | "NEIN")
+      | "!KARTE" Karte
+      | "!BEENDEN";
+
+Karte = Farbe Wert;
+Farbe = "§" 
+      | "EICHEL"
+      | "GRAS"
+      |	"HERZ"
+      | "SCHELLEN";
+Wert  = "§"
+      | "OBER"
+      | "UNTER"
+      | "SAU"
+      | "ZEHN"
+      | "KONIG"
+      | "NEUN";
+Modus = "SAUSPIELeichel"| "SAUSPIELgras"| "SAUSPIELherz"| "SAUSPIELschellen"|
+	"HOCHZEIT"|
+	"GEIER"|
+	"WENZ"|
+	"SOLOeichel"| "SOLOgras"| "SOLOherz"| "SOLOschellen"|
+	"GEIERdu"|
+	"WENZdu"|
+	"SOLOeichelDU"| "SOLOgrasDU"| "SOLOherzDU"| "SOLOschellenDU"|
+	"SI"|
+	"NICHTS";
+
+Sieger = Integer 
+       | "4"
+       | "1" Integer;
+Integer = "0"
+        | "1"
+        | "2"
+        | "3"
+Boolean = "JA"
+        | "NEIN";
+String = {Zeichen};
+Zeichen = UTF_8
